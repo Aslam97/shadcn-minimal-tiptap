@@ -1,8 +1,12 @@
-# Minimal Tiptap Editor
+<a href="https://shadcn.com/minimal-tiptap" target="_blank">
+  <img src="https://i.imgur.com/b7DJM4K.png" alt="Minimal Tiptap Editor" />
+</a>
 
 This is a Minimal Tiptap Editor component built for [Shadcn](https://shadcn.com). It provides a simple and clean editor for users to write and format text.
 
-[View the demo](https://shadcn-minimal-tiptap.vercel.app)
+<a href="https://shadcn-minimal-tiptap.vercel.app/" target="_blank">
+  View Demo
+</a>
 
 ## Installation
 
