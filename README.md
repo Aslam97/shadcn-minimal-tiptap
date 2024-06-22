@@ -1,4 +1,4 @@
-# Minimal Tiptap Editor Component
+# Minimal Tiptap Editor
 
 This is a Minimal Tiptap Editor component built for [Shadcn](https://shadcn.com). It provides a simple and clean editor for users to write and format text.
 
