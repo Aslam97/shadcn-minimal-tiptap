@@ -3,7 +3,7 @@ import { ToolbarButton } from '../toolbar-button'
 import { CopyIcon, ExternalLinkIcon, LinkBreak2Icon } from '@radix-ui/react-icons'
 import { useState } from 'react'
 
-const LinkViewBlock = ({
+const LinkPopoverBlock = ({
   link,
   onClear,
   onEdit
@@ -56,4 +56,4 @@ const LinkViewBlock = ({
   )
 }
 
-export { LinkViewBlock }
+export { LinkPopoverBlock }
