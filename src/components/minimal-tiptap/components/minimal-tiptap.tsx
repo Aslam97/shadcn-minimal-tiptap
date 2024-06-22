@@ -14,6 +14,7 @@ import { LinkBubbleMenu } from './bubble-menu/link-bubble-menu'
 import { Plugin, TextSelection } from '@tiptap/pm/state'
 import { getMarkRange } from '@tiptap/core'
 import { getOutput } from '../utils'
+import { ImageBubbleMenu } from './bubble-menu/image-bubble-menu'
 
 export interface MinimalTiptapProps extends React.HTMLAttributes<HTMLDivElement> {
   value: string
@@ -104,6 +105,7 @@ const MinimalTiptapEditor = ({
       {editor && (
         <>
           <LinkBubbleMenu editor={editor} />
+          <ImageBubbleMenu editor={editor} />
           <Toolbar editor={editor} />
         </>
       )}

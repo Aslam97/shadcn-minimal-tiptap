@@ -1,7 +1,7 @@
 import type { Editor } from '@tiptap/core'
 import { useState } from 'react'
 import { LinkEditBlock } from '../link/link-edit-block'
-import { LinkViewBlock } from '../link/link-view-block'
+import { LinkPopoverBlock } from '../link/link-popover-block'
 import { BubbleMenu } from '@tiptap/react'
 import { LinkProps } from '../../types'
 import { EditorView } from '@tiptap/pm/view'
@@ -79,7 +79,7 @@ const LinkBubbleMenu = ({ editor }: { editor: Editor }) => {
           className="w-full min-w-80 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-none"
         />
       ) : (
-        <LinkViewBlock onClear={unSetLink} link={editor.getAttributes('link')} onEdit={() => setShowEdit(true)} />
+        <LinkPopoverBlock onClear={unSetLink} link={editor.getAttributes('link')} onEdit={() => setShowEdit(true)} />
       )}
     </BubbleMenu>
   )

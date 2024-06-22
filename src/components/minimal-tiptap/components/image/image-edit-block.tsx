@@ -34,11 +34,12 @@ const ImageEditBlock = ({ editor, className, close, ...props }: ImageEditBlockPr
     }
 
     reader.readAsDataURL(files[0])
+
     close()
   }
 
   return (
-    <div className={cn('space-y-4', className)} {...props}>
+    <div className={cn('space-y-6', className)} {...props}>
       <div className="space-y-1">
         <Label>Attach an image link</Label>
         <div className="flex">
@@ -55,7 +56,7 @@ const ImageEditBlock = ({ editor, className, close, ...props }: ImageEditBlockPr
           </Button>
         </div>
       </div>
-      <Button className="mt-6 w-full" onClick={handleClick}>
+      <Button className="w-full" onClick={handleClick}>
         Upload from your computer
       </Button>
       <input type="file" accept="image/*" ref={fileInputRef} multiple className="hidden" onChange={handleFile} />

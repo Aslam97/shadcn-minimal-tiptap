@@ -6,10 +6,6 @@ import { cn } from '@/lib/utils'
 const ImageViewBlock = ({ editor, node, getPos }: NodeViewProps) => {
   const imgSize = useImageLoad(node.attrs.src)
 
-  const focusImage = () => {
-    editor.commands.setNodeSelection(getPos())
-  }
-
   const paddingBottom = useMemo(() => {
     if (!imgSize.width || !imgSize.height) {
       return 0
@@ -19,7 +15,7 @@ const ImageViewBlock = ({ editor, node, getPos }: NodeViewProps) => {
   }, [imgSize.width, imgSize.height])
 
   return (
-    <NodeViewWrapper apper="true" className="image" style={{ textAlign: node.attrs.textAlign }}>
+    <NodeViewWrapper>
       <div draggable="true" data-drag-handle>
         <figure>
           <div className="relative w-full" style={{ paddingBottom: `${isNumber(paddingBottom) ? paddingBottom : 0}%` }}>
@@ -34,17 +30,7 @@ const ImageViewBlock = ({ editor, node, getPos }: NodeViewProps) => {
                   <img
                     alt={node.attrs.alt}
                     src={node.attrs.src}
-                    onClick={focusImage}
-                    className="m-0 max-w-full"
-                    style={{
-                      position: 'absolute',
-                      left: '50%',
-                      top: '50%',
-                      objectFit: 'contain',
-                      imageOrientation: 'none',
-                      transform: 'translate(-50%, -50%)',
-                      height: '100%'
-                    }}
+                    className="absolute left-2/4 top-2/4 m-0 h-full max-w-full -translate-x-2/4 -translate-y-2/4 transform object-contain"
                   />
                 </div>
               </div>
