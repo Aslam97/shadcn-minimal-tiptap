@@ -6,6 +6,12 @@ This is a Minimal Tiptap Editor component built for [Shadcn](https://shadcn.com)
 
 ## Installation
 
+Before you can use the Minimal Tiptap Editor Component, you will need to install the following packages:
+
+```bash
+npm i @tiptap/extension-image @tiptap/extension-link @tiptap/pm @tiptap/react @tiptap/starter-kit
+```
+
 The Minimal Tiptap Editor Component is depends on the following components from shadcn:
 
 - [Button](https://ui.shadcn.com/docs/components/button)
@@ -20,7 +26,7 @@ The Minimal Tiptap Editor Component is depends on the following components from 
 
 The Minimal Tiptap Editor uses [icons from Radix UI](https://icons.radix-ui.com) so you will need to install that or update the component to use a different library.
 
-```
+```bash
 npm install @radix-ui/react-icons
 ```
 
