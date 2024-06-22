@@ -9,7 +9,7 @@ This is a Minimal Tiptap Editor component built for [Shadcn](https://shadcn.com)
 Before you can use the Minimal Tiptap Editor Component, you will need to install the following packages:
 
 ```bash
-npm i @tiptap/extension-image @tiptap/extension-link @tiptap/pm @tiptap/react @tiptap/starter-kit
+npm install @tiptap/extension-image @tiptap/extension-link @tiptap/pm @tiptap/react @tiptap/starter-kit
 npm install @radix-ui/react-icons
 npm install -D @tailwindcss/typography
 ```
