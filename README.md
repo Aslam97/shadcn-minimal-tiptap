@@ -10,6 +10,8 @@ Before you can use the Minimal Tiptap Editor Component, you will need to install
 
 ```bash
 npm i @tiptap/extension-image @tiptap/extension-link @tiptap/pm @tiptap/react @tiptap/starter-kit
+npm install @radix-ui/react-icons
+npm install -D @tailwindcss/typography
 ```
 
 The Minimal Tiptap Editor Component is depends on the following components from shadcn:
@@ -23,12 +25,6 @@ The Minimal Tiptap Editor Component is depends on the following components from 
 - [Switch](https://ui.shadcn.com/docs/components/switch)
 - [Toggle](https://ui.shadcn.com/docs/components/toggle)
 - [Tooltip](https://ui.shadcn.com/docs/components/tooltip)
-
-The Minimal Tiptap Editor uses [icons from Radix UI](https://icons.radix-ui.com) so you will need to install that or update the component to use a different library.
-
-```bash
-npm install @radix-ui/react-icons
-```
 
 Next, copy and paste the code from the `src` directory for `minimal-tiptap` into your project and customize to your needs. The code is yours.
 
