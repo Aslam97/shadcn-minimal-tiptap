@@ -1,5 +1,5 @@
 import type { Editor } from '@tiptap/core'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
@@ -19,54 +19,40 @@ import { Input } from '@/components/ui/input'
 import { ToolbarButton } from './toolbar-button'
 import { activeItemClass } from '../utils'
 import { ShortcutKey } from './shortcut-key'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 
 export default function SectionFour({ editor }: { editor: Editor }) {
-  const [open, setOpen] = useState(false)
-  const setLink = (link: string, text?: string, openInNewTab?: boolean) => {
-    editor
-      .chain()
-      .focus()
-      .extendMarkRange('link')
-      .insertContent({
-        type: 'text',
-        text: text || link,
-        marks: [
-          {
-            type: 'link',
-            attrs: {
-              href: link,
-              target: openInNewTab ? '_blank' : ''
-            }
-          }
-        ]
-      })
-      .setLink({ href: link })
-      .focus()
-      .run()
-  }
-
-  const close = () => {
-    setOpen(false)
-  }
+  const [openLink, setOpenLink] = useState(false)
+  const [openImage, setOpenImage] = useState(false)
 
   return (
     <>
       {/* LINK */}
-      <Popover open={open} onOpenChange={setOpen}>
+      <Popover open={openLink} onOpenChange={setOpenLink}>
         <PopoverTrigger asChild>
           <ToolbarButton isActive={editor.isActive('link')} tooltip="Link">
             <Link2Icon className="size-5" />
           </ToolbarButton>
         </PopoverTrigger>
         <PopoverContent className="w-full min-w-80" align="start" side="bottom">
-          <LinkEditBlock editor={editor} onSetLink={setLink} close={close} />
+          <LinkEditBlock editor={editor} close={() => setOpenLink(false)} />
         </PopoverContent>
       </Popover>
 
       {/* IMAGE */}
-      <ToolbarButton isActive={editor.isActive('image')} tooltip="Image" aria-label="Image">
-        <ImageIcon className="size-5" />
-      </ToolbarButton>
+      <Dialog open={openImage} onOpenChange={setOpenImage}>
+        <DialogTrigger asChild>
+          <ToolbarButton isActive={editor.isActive('image')} tooltip="Image" aria-label="Image">
+            <ImageIcon className="size-5" />
+          </ToolbarButton>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Select image</DialogTitle>
+          </DialogHeader>
+          <ImageBlock editor={editor} close={() => setOpenImage(false)} />
+        </DialogContent>
+      </Dialog>
 
       {/* INSERT ELEMENTS */}
       <DropdownMenu>
@@ -111,15 +97,7 @@ export default function SectionFour({ editor }: { editor: Editor }) {
   )
 }
 
-const LinkEditBlock = ({
-  editor,
-  onSetLink,
-  close
-}: {
-  editor: Editor
-  onSetLink: (link: string, text?: string, openInNewTab?: boolean) => void
-  close: () => void
-}) => {
+const LinkEditBlock = ({ editor, close }: { editor: Editor; close: () => void }) => {
   const [field, setField] = useState<{
     text?: string
     link: string
@@ -129,11 +107,6 @@ const LinkEditBlock = ({
     link: '',
     openInNewTab: false
   })
-
-  const setLink = (e: React.MouseEvent) => {
-    e.preventDefault()
-    onSetLink(field.link, field.text, field.openInNewTab)
-  }
 
   const { href, target } = editor.getAttributes('link')
   const { from, to } = editor.state.selection
@@ -151,6 +124,29 @@ const LinkEditBlock = ({
   useEffect(() => {
     setField(data)
   }, [data])
+
+  const setLink = () => {
+    editor
+      .chain()
+      .focus()
+      .extendMarkRange('link')
+      .insertContent({
+        type: 'text',
+        text: field.text ?? field.link,
+        marks: [
+          {
+            type: 'link',
+            attrs: {
+              href: field.link,
+              target: field.openInNewTab ? '_blank' : null
+            }
+          }
+        ]
+      })
+      .setLink({ href: field.link })
+      .focus()
+      .run()
+  }
 
   return (
     <div className="space-y-4">
@@ -187,8 +183,61 @@ const LinkEditBlock = ({
         <Button variant="ghost" type="button" onClick={close}>
           Cancel
         </Button>
-        <Button onClick={setLink}>Insert</Button>
+        <Button onClick={() => setLink()}>Insert</Button>
       </div>
+    </div>
+  )
+}
+
+const ImageBlock = ({ editor, close }: { editor: Editor; close: () => void }) => {
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [link, setLink] = useState<string>('')
+
+  const handleClick = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleLink = () => {
+    editor.chain().focus().setImage({ src: link }).run()
+    close()
+  }
+
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (!files) return
+
+    const reader = new FileReader()
+    reader.onload = e => {
+      const src = e.target?.result as string
+      editor.chain().setImage({ src }).focus().run()
+    }
+
+    reader.readAsDataURL(files[0])
+    close()
+  }
+
+  return (
+    <div>
+      <div className="space-y-1">
+        <Label>Attach an image link</Label>
+        <div className="flex">
+          <Input
+            type="url"
+            required
+            placeholder="https://example.com"
+            value={link}
+            className="grow"
+            onChange={e => setLink(e.target.value)}
+          />
+          <Button className="ml-2 inline-block" onClick={handleLink}>
+            Submit
+          </Button>
+        </div>
+      </div>
+      <Button className="mt-6 w-full" onClick={handleClick}>
+        Upload from your computer
+      </Button>
+      <input type="file" accept="image/*" ref={fileInputRef} multiple className="hidden" onChange={handleFile} />
     </div>
   )
 }

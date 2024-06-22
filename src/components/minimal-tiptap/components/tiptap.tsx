@@ -1,4 +1,4 @@
-import { useEditor, EditorContent } from '@tiptap/react'
+import { useEditor, EditorContent, ReactNodeViewRenderer } from '@tiptap/react'
 import type { Editor as TiptapEditor } from '@tiptap/core'
 import StarterKit from '@tiptap/starter-kit'
 import { Link } from '@tiptap/extension-link'
@@ -9,6 +9,7 @@ import SectionFour from './sectoin-4'
 import SectionThree from './section-3'
 import SectionOne from './section-1'
 import SectionTwo from './section-2'
+import ImageView from './image-view'
 
 interface TiptapProps extends React.HTMLAttributes<HTMLDivElement> {
   value: string
@@ -44,7 +45,11 @@ const MinimalTiptapEditor = ({
       StarterKit.configure({
         hardBreak: false
       }),
-      Image,
+      Image.extend({
+        addNodeView() {
+          return ReactNodeViewRenderer(ImageView)
+        }
+      }),
       Link.configure({
         openOnClick: false
       })
