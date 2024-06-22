@@ -1,43 +1,24 @@
 import type { Editor } from '@tiptap/core'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
-import {
-  CaretDownIcon,
-  CodeIcon,
-  DividerHorizontalIcon,
-  ImageIcon,
-  Link2Icon,
-  PlusIcon,
-  QuoteIcon
-} from '@radix-ui/react-icons'
+import React, { useRef, useState } from 'react'
+import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { Switch } from '@/components/ui/switch'
 import { Input } from '@/components/ui/input'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { CaretDownIcon, CodeIcon, DividerHorizontalIcon, ImageIcon, PlusIcon, QuoteIcon } from '@radix-ui/react-icons'
 import { ToolbarButton } from './toolbar-button'
 import { activeItemClass } from '../utils'
 import { ShortcutKey } from './shortcut-key'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { LinkEditPopover } from './link/link-edit-popover'
 
 export default function SectionFour({ editor }: { editor: Editor }) {
-  const [openLink, setOpenLink] = useState(false)
   const [openImage, setOpenImage] = useState(false)
 
   return (
     <>
       {/* LINK */}
-      <Popover open={openLink} onOpenChange={setOpenLink}>
-        <PopoverTrigger asChild>
-          <ToolbarButton isActive={editor.isActive('link')} tooltip="Link">
-            <Link2Icon className="size-5" />
-          </ToolbarButton>
-        </PopoverTrigger>
-        <PopoverContent className="w-full min-w-80" align="start" side="bottom">
-          <LinkEditBlock editor={editor} close={() => setOpenLink(false)} />
-        </PopoverContent>
-      </Popover>
+      <LinkEditPopover editor={editor} />
 
       {/* IMAGE */}
       <Dialog open={openImage} onOpenChange={setOpenImage}>
@@ -94,98 +75,6 @@ export default function SectionFour({ editor }: { editor: Editor }) {
         </DropdownMenuContent>
       </DropdownMenu>
     </>
-  )
-}
-
-const LinkEditBlock = ({ editor, close }: { editor: Editor; close: () => void }) => {
-  const [field, setField] = useState<{
-    text?: string
-    link: string
-    openInNewTab?: boolean
-  }>({
-    text: '',
-    link: '',
-    openInNewTab: false
-  })
-
-  const { href, target } = editor.getAttributes('link')
-  const { from, to } = editor.state.selection
-  const text = editor.state.doc.textBetween(from, to, ' ')
-
-  const data = useMemo(() => {
-    return {
-      text,
-      link: href,
-      openInNewTab: target === '_blank' ? true : false
-    }
-  }, [href, target, text])
-
-  // on mount, set the field values to the current link
-  useEffect(() => {
-    setField(data)
-  }, [data])
-
-  const setLink = () => {
-    editor
-      .chain()
-      .focus()
-      .extendMarkRange('link')
-      .insertContent({
-        type: 'text',
-        text: field.text ?? field.link,
-        marks: [
-          {
-            type: 'link',
-            attrs: {
-              href: field.link,
-              target: field.openInNewTab ? '_blank' : null
-            }
-          }
-        ]
-      })
-      .setLink({ href: field.link })
-      .focus()
-      .run()
-  }
-
-  return (
-    <div className="space-y-4">
-      <div className="space-y-1">
-        <Label>Link</Label>
-        <Input
-          type="url"
-          required
-          placeholder="Paste a link"
-          value={field.link ?? ''}
-          onChange={e => setField({ ...field, link: e.target.value })}
-        />
-      </div>
-
-      <div className="space-y-1">
-        <Label>Display text (optional)</Label>
-        <Input
-          type="text"
-          placeholder="Text to display"
-          value={field.text ?? ''}
-          onChange={e => setField({ ...field, text: e.target.value })}
-        />
-      </div>
-
-      <div className="flex items-center space-x-2">
-        <Label>Open in New Tab</Label>
-        <Switch
-          checked={field.openInNewTab}
-          onCheckedChange={() => setField({ ...field, openInNewTab: !field.openInNewTab })}
-        />
-      </div>
-
-      <div className="flex justify-end space-x-2">
-        <Button variant="ghost" type="button" onClick={close}>
-          Cancel
-        </Button>
-        <Button onClick={() => setLink()}>Insert</Button>
-      </div>
-    </div>
   )
 }
 

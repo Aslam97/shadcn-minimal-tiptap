@@ -1,5 +1,5 @@
-import { useEditor, EditorContent, ReactNodeViewRenderer } from '@tiptap/react'
 import type { Editor as TiptapEditor } from '@tiptap/core'
+import { useEditor, EditorContent, ReactNodeViewRenderer } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { Link } from '@tiptap/extension-link'
 import { Image } from '@tiptap/extension-image'
@@ -10,6 +10,9 @@ import SectionThree from './section-3'
 import SectionOne from './section-1'
 import SectionTwo from './section-2'
 import ImageView from './image-view'
+import { LinkBubbleMenu } from './bubble-menu/link-bubble-menu'
+import { Plugin, TextSelection } from '@tiptap/pm/state'
+import { getMarkRange } from '@tiptap/core'
 
 interface TiptapProps extends React.HTMLAttributes<HTMLDivElement> {
   value: string
@@ -52,6 +55,40 @@ const MinimalTiptapEditor = ({
       }),
       Link.configure({
         openOnClick: false
+      }).extend({
+        inclusive: false,
+
+        addProseMirrorPlugins() {
+          return [
+            new Plugin({
+              // make the link
+              props: {
+                handleClick(view, pos) {
+                  const { schema, doc, tr } = view.state
+                  const range = getMarkRange(doc.resolve(pos), schema.marks.link)
+
+                  if (!range) {
+                    return
+                  }
+
+                  const { from, to } = range
+                  const start = Math.min(from, to)
+                  const end = Math.max(from, to)
+
+                  if (pos < start || pos > end) {
+                    return
+                  }
+
+                  const $start = doc.resolve(start)
+                  const $end = doc.resolve(end)
+                  const transaction = tr.setSelection(new TextSelection($start, $end))
+
+                  view.dispatch(transaction)
+                }
+              }
+            })
+          ]
+        }
       })
     ],
     editorProps: {
@@ -74,7 +111,12 @@ const MinimalTiptapEditor = ({
       )}
       {...props}
     >
-      {editor && <Toolbar editor={editor} />}
+      {editor && (
+        <>
+          <LinkBubbleMenu editor={editor} />
+          <Toolbar editor={editor} />
+        </>
+      )}
       <div className="h-full" onClick={() => editor?.chain().focus().run()}>
         <EditorContent editor={editor} className={cn('p-5', contentClass)} />
       </div>

@@ -11,7 +11,7 @@ interface ToolbarButtonProps extends React.ComponentPropsWithoutRef<typeof Toggl
 }
 
 const ToolbarButton = forwardRef<HTMLButtonElement, ToolbarButtonProps>(function ToolbarButton(
-  { isActive, children, tooltip, className, ...props },
+  { isActive, children, tooltip, className, tooltipOptions, ...props },
   ref
 ) {
   return (
@@ -34,8 +34,8 @@ const ToolbarButton = forwardRef<HTMLButtonElement, ToolbarButtonProps>(function
           </Toggle>
         </TooltipTrigger>
         {tooltip && (
-          <TooltipContent {...props.tooltipOptions}>
-            <div className="flex max-w-24 flex-col items-center text-center">{tooltip}</div>
+          <TooltipContent {...tooltipOptions}>
+            <div className="flex flex-col items-center text-center">{tooltip}</div>
           </TooltipContent>
         )}
       </Tooltip>
