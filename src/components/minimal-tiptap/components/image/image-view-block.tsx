@@ -1,9 +1,9 @@
 import { isNumber, NodeViewProps, NodeViewWrapper } from '@tiptap/react'
 import { useMemo } from 'react'
-import { useImageLoad } from '../hooks/use-image-load'
+import { useImageLoad } from '../../hooks/use-image-load'
 import { cn } from '@/lib/utils'
 
-export default function ImageView({ editor, node, getPos }: NodeViewProps) {
+const ImageViewBlock = ({ editor, node, getPos }: NodeViewProps) => {
   const imgSize = useImageLoad(node.attrs.src)
 
   const focusImage = () => {
@@ -56,3 +56,5 @@ export default function ImageView({ editor, node, getPos }: NodeViewProps) {
     </NodeViewWrapper>
   )
 }
+
+export { ImageViewBlock }

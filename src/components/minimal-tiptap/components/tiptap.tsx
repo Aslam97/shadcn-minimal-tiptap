@@ -9,7 +9,7 @@ import SectionFour from './sectoin-4'
 import SectionThree from './section-3'
 import SectionOne from './section-1'
 import SectionTwo from './section-2'
-import ImageView from './image-view'
+import { ImageViewBlock } from './image/image-view-block'
 import { LinkBubbleMenu } from './bubble-menu/link-bubble-menu'
 import { Plugin, TextSelection } from '@tiptap/pm/state'
 import { getMarkRange } from '@tiptap/core'
@@ -50,7 +50,7 @@ const MinimalTiptapEditor = ({
       }),
       Image.extend({
         addNodeView() {
-          return ReactNodeViewRenderer(ImageView)
+          return ReactNodeViewRenderer(ImageViewBlock)
         }
       }),
       Link.configure({
