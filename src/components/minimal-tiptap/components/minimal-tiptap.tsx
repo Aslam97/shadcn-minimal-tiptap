@@ -13,25 +13,14 @@ import { ImageViewBlock } from './image/image-view-block'
 import { LinkBubbleMenu } from './bubble-menu/link-bubble-menu'
 import { Plugin, TextSelection } from '@tiptap/pm/state'
 import { getMarkRange } from '@tiptap/core'
+import { getOutput } from '../utils'
 
-interface TiptapProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface MinimalTiptapProps extends React.HTMLAttributes<HTMLDivElement> {
   value: string
   outputValue?: 'html' | 'json' | 'text'
   disabled?: boolean
   contentClass?: string
   onValueChange: React.Dispatch<React.SetStateAction<string>>
-}
-
-function getOutput(editor: TiptapEditor, format: TiptapProps['outputValue']) {
-  if (format === 'json') {
-    return JSON.stringify(editor.getJSON())
-  }
-
-  if (format === 'text') {
-    return editor.getHTML()
-  }
-
-  return editor.getHTML()
 }
 
 const MinimalTiptapEditor = ({
@@ -42,7 +31,7 @@ const MinimalTiptapEditor = ({
   onValueChange,
   className,
   ...props
-}: TiptapProps) => {
+}: MinimalTiptapProps) => {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -56,12 +45,13 @@ const MinimalTiptapEditor = ({
       Link.configure({
         openOnClick: false
       }).extend({
+        // https://github.com/ueberdosis/tiptap/issues/2571
         inclusive: false,
 
         addProseMirrorPlugins() {
           return [
             new Plugin({
-              // make the link
+              // mark the link
               props: {
                 handleClick(view, pos) {
                   const { schema, doc, tr } = view.state
@@ -131,17 +121,11 @@ const Toolbar = ({ editor }: { editor: TiptapEditor }) => {
     <div className="border-b border-border p-2">
       <div className="flex w-full flex-wrap items-center">
         <SectionOne editor={editor} />
-
         <Separator orientation="vertical" className="mx-2 h-7" />
-
         <SectionTwo editor={editor} />
-
         <Separator orientation="vertical" className="mx-2 h-7" />
-
         <SectionThree editor={editor} />
-
         <Separator orientation="vertical" className="mx-2 h-7" />
-
         <SectionFour editor={editor} />
       </div>
     </div>

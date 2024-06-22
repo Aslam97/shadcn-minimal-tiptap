@@ -1,3 +1,6 @@
+import type { Editor } from '@tiptap/core'
+import type { MinimalTiptapProps } from './components/minimal-tiptap'
+
 export const activeItemClass = 'bg-primary/10 hover:bg-primary/10 focus:bg-primary/10'
 
 let isMac: boolean | undefined
@@ -59,4 +62,16 @@ export function getShortcutKey(key: string) {
 
 export function getShortcutKeys(keys: string[]) {
   return keys.map(key => getShortcutKey(key)).join('')
+}
+
+export function getOutput(editor: Editor, format: MinimalTiptapProps['outputValue']) {
+  if (format === 'json') {
+    return JSON.stringify(editor.getJSON())
+  }
+
+  if (format === 'text') {
+    return editor.getHTML()
+  }
+
+  return editor.getHTML()
 }

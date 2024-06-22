@@ -10,7 +10,6 @@ const ImageViewBlock = ({ editor, node, getPos }: NodeViewProps) => {
     editor.commands.setNodeSelection(getPos())
   }
 
-  // get image height represen as padding-bottom
   const paddingBottom = useMemo(() => {
     if (!imgSize.width || !imgSize.height) {
       return 0
