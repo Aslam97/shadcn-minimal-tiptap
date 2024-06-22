@@ -1,5 +1,4 @@
-export const activeItemClass =
-  'bg-primary/10 hover:bg-primary/10 focus:bg-primary/10'
+export const activeItemClass = 'bg-primary/10 hover:bg-primary/10 focus:bg-primary/10'
 
 let isMac: boolean | undefined
 
@@ -24,13 +23,11 @@ function getPlatform(): string {
       return nav.userAgentData.platform
     }
 
-    nav.userAgentData
-      .getHighEntropyValues(['platform'])
-      .then((highEntropyValues) => {
-        if (highEntropyValues.platform) {
-          return highEntropyValues.platform
-        }
-      })
+    nav.userAgentData.getHighEntropyValues(['platform']).then(highEntropyValues => {
+      if (highEntropyValues.platform) {
+        return highEntropyValues.platform
+      }
+    })
   }
 
   if (typeof navigator.platform === 'string') {
@@ -61,5 +58,5 @@ export function getShortcutKey(key: string) {
 }
 
 export function getShortcutKeys(keys: string[]) {
-  return keys.map((key) => getShortcutKey(key)).join('')
+  return keys.map(key => getShortcutKey(key)).join('')
 }

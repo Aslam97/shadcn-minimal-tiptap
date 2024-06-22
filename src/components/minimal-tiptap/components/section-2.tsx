@@ -1,16 +1,7 @@
 import type { Editor } from '@tiptap/core'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { cn } from '@/lib/utils'
-import {
-  DotsHorizontalIcon,
-  FontBoldIcon,
-  FontItalicIcon
-} from '@radix-ui/react-icons'
+import { DotsHorizontalIcon, FontBoldIcon, FontItalicIcon } from '@radix-ui/react-icons'
 import { ToolbarButton } from './toolbar-button'
 import { ShortcutKey } from './shortcut-key'
 import { activeItemClass } from '../utils'

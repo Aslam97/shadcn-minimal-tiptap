@@ -1,10 +1,5 @@
 import type { Editor } from '@tiptap/core'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { cn } from '@/lib/utils'
 import { ToolbarButton } from './toolbar-button'
 import { CaretDownIcon, ListBulletIcon } from '@radix-ui/react-icons'
@@ -16,9 +11,7 @@ export default function SectionThree({ editor }: { editor: Editor }) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <ToolbarButton
-          isActive={
-            editor.isActive('bulletList') || editor.isActive('orderedList')
-          }
+          isActive={editor.isActive('bulletList') || editor.isActive('orderedList')}
           tooltip="Lists"
           className="w-12"
         >

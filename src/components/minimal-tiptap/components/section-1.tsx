@@ -1,9 +1,4 @@
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import type { Editor } from '@tiptap/core'
 import type { Level } from '@tiptap/extension-heading'
 import { cn } from '@/lib/utils'
@@ -20,11 +15,7 @@ export default function SectionOne({ editor }: { editor: Editor }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <ToolbarButton
-          isActive={editor.isActive('heading')}
-          tooltip="Text styles"
-          className="w-12"
-        >
+        <ToolbarButton isActive={editor.isActive('heading')} tooltip="Text styles" className="w-12">
           <LetterCaseCapitalizeIcon className="size-5" />
           <CaretDownIcon className="size-5" />
         </ToolbarButton>

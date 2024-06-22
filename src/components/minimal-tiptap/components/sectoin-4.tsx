@@ -1,17 +1,8 @@
 import type { Editor } from '@tiptap/core'
 import React, { useEffect, useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from '@/components/ui/popover'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
 import {
   CaretDownIcon,
@@ -73,11 +64,7 @@ export default function SectionFour({ editor }: { editor: Editor }) {
       </Popover>
 
       {/* IMAGE */}
-      <ToolbarButton
-        isActive={editor.isActive('image')}
-        tooltip="Image"
-        aria-label="Image"
-      >
+      <ToolbarButton isActive={editor.isActive('image')} tooltip="Image" aria-label="Image">
         <ImageIcon className="size-5" />
       </ToolbarButton>
 
@@ -85,9 +72,7 @@ export default function SectionFour({ editor }: { editor: Editor }) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <ToolbarButton
-            isActive={
-              editor.isActive('codeBlock') || editor.isActive('blockquote')
-            }
+            isActive={editor.isActive('codeBlock') || editor.isActive('blockquote')}
             tooltip="Insert elements"
             className="w-12"
           >
@@ -116,9 +101,7 @@ export default function SectionFour({ editor }: { editor: Editor }) {
             Blockquote
             <ShortcutKey keys={['>']} withBg />
           </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => editor.chain().focus().setHorizontalRule().run()}
-          >
+          <DropdownMenuItem onClick={() => editor.chain().focus().setHorizontalRule().run()}>
             <DividerHorizontalIcon className="mr-2 size-4" />
             Divider
           </DropdownMenuItem>
@@ -178,7 +161,7 @@ const LinkEditBlock = ({
           required
           placeholder="Paste a link"
           value={field.link ?? ''}
-          onChange={(e) => setField({ ...field, link: e.target.value })}
+          onChange={e => setField({ ...field, link: e.target.value })}
         />
       </div>
 
@@ -188,7 +171,7 @@ const LinkEditBlock = ({
           type="text"
           placeholder="Text to display"
           value={field.text ?? ''}
-          onChange={(e) => setField({ ...field, text: e.target.value })}
+          onChange={e => setField({ ...field, text: e.target.value })}
         />
       </div>
 
@@ -196,9 +179,7 @@ const LinkEditBlock = ({
         <Label>Open in New Tab</Label>
         <Switch
           checked={field.openInNewTab}
-          onCheckedChange={() =>
-            setField({ ...field, openInNewTab: !field.openInNewTab })
-          }
+          onCheckedChange={() => setField({ ...field, openInNewTab: !field.openInNewTab })}
         />
       </div>
 

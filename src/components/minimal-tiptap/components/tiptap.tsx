@@ -51,11 +51,10 @@ const MinimalTiptapEditor = ({
     ],
     editorProps: {
       attributes: {
-        class:
-          'prose mx-auto focus:outline-none max-w-none prose-stone dark:prose-invert'
+        class: 'prose mx-auto focus:outline-none max-w-none prose-stone dark:prose-invert'
       }
     },
-    onUpdate: (props) => {
+    onUpdate: props => {
       onValueChange(getOutput(props.editor, outputValue))
     },
     content: value,
@@ -82,8 +81,8 @@ MinimalTiptapEditor.displayName = 'MinimalTiptapEditor'
 
 const Toolbar = ({ editor }: { editor: TiptapEditor }) => {
   return (
-    <div className="p-2 border-b border-border">
-      <div className="flex w-full items-center flex-wrap">
+    <div className="border-b border-border p-2">
+      <div className="flex w-full flex-wrap items-center">
         <SectionOne editor={editor} />
 
         <Separator orientation="vertical" className="mx-2 h-7" />

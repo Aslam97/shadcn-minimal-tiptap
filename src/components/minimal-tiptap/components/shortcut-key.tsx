@@ -6,20 +6,12 @@ interface ShortcutKeyProps extends React.HTMLAttributes<HTMLSpanElement> {
   withBg?: boolean
 }
 
-const ShortcutKey = ({
-  className,
-  keys,
-  withBg,
-  ...props
-}: ShortcutKeyProps) => {
+const ShortcutKey = ({ className, keys, withBg, ...props }: ShortcutKeyProps) => {
   return (
-    <span
-      className={cn('ml-auto text-xs tracking-widest opacity-60', className)}
-      {...props}
-    >
+    <span className={cn('ml-auto text-xs tracking-widest opacity-60', className)} {...props}>
       <span
         className={cn('ml-4', {
-          'bg-accent rounded p-1 leading-3 self-end': withBg
+          'self-end rounded bg-accent p-1 leading-3': withBg
         })}
       >
         {getShortcutKeys(keys)}
