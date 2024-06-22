@@ -2,7 +2,7 @@
 
 This is a Minimal Tiptap Editor component built for [Shadcn](https://shadcn.com). It provides a simple and clean editor for users to write and format text.
 
-[View the demo](https://shadcn.github.io/tiptap-editor-component/)
+[View the demo](https://shadcn-minimal-tiptap.vercel.app)
 
 ## Installation
 
