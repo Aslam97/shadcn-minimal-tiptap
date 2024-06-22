@@ -25,6 +25,7 @@ The Minimal Tiptap Editor Component is depends on the following components from 
 - [Switch](https://ui.shadcn.com/docs/components/switch)
 - [Toggle](https://ui.shadcn.com/docs/components/toggle)
 - [Tooltip](https://ui.shadcn.com/docs/components/tooltip)
+- [Dialog](https://ui.shadcn.com/docs/components/dialog)
 
 Next, copy and paste the code from the `src` directory for `minimal-tiptap` into your project and customize to your needs. The code is yours.
 
