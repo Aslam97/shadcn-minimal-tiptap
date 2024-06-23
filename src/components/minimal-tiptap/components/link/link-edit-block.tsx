@@ -36,47 +36,55 @@ const LinkEditBlock = ({ editor, onSetLink, close, className, ...props }: LinkEd
     setField(data)
   }, [data])
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    onSetLink(field)
+    close?.()
+  }
+
   return (
-    <div className={cn('space-y-4', className)} {...props}>
-      <div className="space-y-1">
-        <Label>Link</Label>
-        <Input
-          type="url"
-          required
-          placeholder="Paste a link"
-          value={field.url ?? ''}
-          onChange={e => setField({ ...field, url: e.target.value })}
-        />
-      </div>
+    <form onSubmit={handleSubmit}>
+      <div className={cn('space-y-4', className)} {...props}>
+        <div className="space-y-1">
+          <Label>Link</Label>
+          <Input
+            type="url"
+            required
+            placeholder="Paste a link"
+            value={field.url ?? ''}
+            onChange={e => setField({ ...field, url: e.target.value })}
+          />
+        </div>
 
-      <div className="space-y-1">
-        <Label>Display text (optional)</Label>
-        <Input
-          type="text"
-          placeholder="Text to display"
-          value={field.text ?? ''}
-          onChange={e => setField({ ...field, text: e.target.value })}
-        />
-      </div>
+        <div className="space-y-1">
+          <Label>Display text (optional)</Label>
+          <Input
+            type="text"
+            placeholder="Text to display"
+            value={field.text ?? ''}
+            onChange={e => setField({ ...field, text: e.target.value })}
+          />
+        </div>
 
-      <div className="flex items-center space-x-2">
-        <Label>Open in New Tab</Label>
-        <Switch
-          checked={field.openInNewTab}
-          onCheckedChange={() => setField({ ...field, openInNewTab: !field.openInNewTab })}
-        />
-      </div>
+        <div className="flex items-center space-x-2">
+          <Label>Open in new tab</Label>
+          <Switch
+            checked={field.openInNewTab}
+            onCheckedChange={() => setField({ ...field, openInNewTab: !field.openInNewTab })}
+          />
+        </div>
 
-      <div className="flex justify-end space-x-2">
-        {close && (
-          <Button variant="ghost" type="button" onClick={close}>
-            Cancel
-          </Button>
-        )}
+        <div className="flex justify-end space-x-2">
+          {close && (
+            <Button variant="ghost" type="button" onClick={close}>
+              Cancel
+            </Button>
+          )}
 
-        <Button onClick={() => onSetLink(field)}>Insert</Button>
+          <Button type="submit">Insert</Button>
+        </div>
       </div>
-    </div>
+    </form>
   )
 }
 

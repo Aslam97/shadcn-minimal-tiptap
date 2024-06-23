@@ -15,6 +15,7 @@ import { Plugin, TextSelection } from '@tiptap/pm/state'
 import { getMarkRange } from '@tiptap/core'
 import { getOutput } from '../utils'
 import { ImageBubbleMenu } from './bubble-menu/image-bubble-menu'
+import { forwardRef } from 'react'
 
 export interface MinimalTiptapProps extends React.HTMLAttributes<HTMLDivElement> {
   value: string
@@ -24,97 +25,92 @@ export interface MinimalTiptapProps extends React.HTMLAttributes<HTMLDivElement>
   onValueChange: React.Dispatch<React.SetStateAction<string>>
 }
 
-const MinimalTiptapEditor = ({
-  value,
-  outputValue = 'html',
-  disabled,
-  contentClass,
-  onValueChange,
-  className,
-  ...props
-}: MinimalTiptapProps) => {
-  const editor = useEditor({
-    extensions: [
-      StarterKit.configure({
-        hardBreak: false
-      }),
-      Image.extend({
-        addNodeView() {
-          return ReactNodeViewRenderer(ImageViewBlock)
-        }
-      }),
-      Link.configure({
-        openOnClick: false
-      }).extend({
-        // https://github.com/ueberdosis/tiptap/issues/2571
-        inclusive: false,
+const MinimalTiptapEditor = forwardRef<HTMLDivElement, MinimalTiptapProps>(
+  ({ value, outputValue = 'html', disabled, contentClass, onValueChange, className, ...props }, ref) => {
+    const editor = useEditor({
+      extensions: [
+        StarterKit.configure({
+          hardBreak: false
+        }),
+        Image.extend({
+          addNodeView() {
+            return ReactNodeViewRenderer(ImageViewBlock)
+          }
+        }),
+        Link.configure({
+          openOnClick: false
+        }).extend({
+          // https://github.com/ueberdosis/tiptap/issues/2571
+          inclusive: false,
 
-        addProseMirrorPlugins() {
-          return [
-            new Plugin({
-              // mark the link
-              props: {
-                handleClick(view, pos) {
-                  const { schema, doc, tr } = view.state
-                  const range = getMarkRange(doc.resolve(pos), schema.marks.link)
+          addProseMirrorPlugins() {
+            return [
+              new Plugin({
+                // mark the link
+                props: {
+                  handleClick(view, pos) {
+                    const { schema, doc, tr } = view.state
+                    const range = getMarkRange(doc.resolve(pos), schema.marks.link)
 
-                  if (!range) {
-                    return
+                    if (!range) {
+                      return
+                    }
+
+                    const { from, to } = range
+                    const start = Math.min(from, to)
+                    const end = Math.max(from, to)
+
+                    if (pos < start || pos > end) {
+                      return
+                    }
+
+                    const $start = doc.resolve(start)
+                    const $end = doc.resolve(end)
+                    const transaction = tr.setSelection(new TextSelection($start, $end))
+
+                    view.dispatch(transaction)
                   }
-
-                  const { from, to } = range
-                  const start = Math.min(from, to)
-                  const end = Math.max(from, to)
-
-                  if (pos < start || pos > end) {
-                    return
-                  }
-
-                  const $start = doc.resolve(start)
-                  const $end = doc.resolve(end)
-                  const transaction = tr.setSelection(new TextSelection($start, $end))
-
-                  view.dispatch(transaction)
                 }
-              }
-            })
-          ]
+              })
+            ]
+          }
+        })
+      ],
+      editorProps: {
+        attributes: {
+          class: 'prose mx-auto focus:outline-none max-w-none prose-stone dark:prose-invert'
         }
-      })
-    ],
-    editorProps: {
-      attributes: {
-        class: 'prose mx-auto focus:outline-none max-w-none prose-stone dark:prose-invert'
-      }
-    },
-    onUpdate: props => {
-      onValueChange(getOutput(props.editor, outputValue))
-    },
-    content: value,
-    editable: !disabled
-  })
+      },
+      onUpdate: props => {
+        onValueChange(getOutput(props.editor, outputValue))
+      },
+      content: value,
+      editable: !disabled
+    })
 
-  return (
-    <div
-      className={cn(
-        'flex h-auto min-h-72 w-full flex-col rounded-md border border-input shadow-sm focus-within:border-primary',
-        className
-      )}
-      {...props}
-    >
-      {editor && (
-        <>
-          <LinkBubbleMenu editor={editor} />
-          <ImageBubbleMenu editor={editor} />
-          <Toolbar editor={editor} />
-        </>
-      )}
-      <div className="h-full" onClick={() => editor?.chain().focus().run()}>
-        <EditorContent editor={editor} className={cn('p-5', contentClass)} />
+    return (
+      <div
+        className={cn(
+          'flex h-auto min-h-72 w-full flex-col rounded-md border border-input shadow-sm focus-within:border-primary',
+          className
+        )}
+        {...props}
+        ref={ref}
+      >
+        {editor && (
+          <>
+            <LinkBubbleMenu editor={editor} />
+            <ImageBubbleMenu editor={editor} />
+            <Toolbar editor={editor} />
+          </>
+        )}
+        <div className="h-full grow" onClick={() => editor?.chain().focus().run()}>
+          <EditorContent editor={editor} className={cn('p-5', contentClass)} />
+        </div>
       </div>
-    </div>
-  )
-}
+    )
+  }
+)
 
 MinimalTiptapEditor.displayName = 'MinimalTiptapEditor'
 

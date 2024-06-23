@@ -69,9 +69,9 @@ export function getOutput(editor: Editor, format: MinimalTiptapProps['outputValu
     return JSON.stringify(editor.getJSON())
   }
 
-  if (format === 'text') {
-    return editor.getHTML()
+  if (format === 'html') {
+    return editor.getText() ? editor.getHTML() : ''
   }
 
-  return editor.getHTML()
+  return editor.getText()
 }
