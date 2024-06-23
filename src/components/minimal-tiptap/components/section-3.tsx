@@ -14,6 +14,7 @@ export default function SectionThree({ editor }: { editor: Editor }) {
           isActive={editor.isActive('bulletList') || editor.isActive('orderedList')}
           tooltip="Lists"
           className="w-12"
+          onFocus={() => editor.commands.focus()}
         >
           <ListBulletIcon className="size-5" />
           <CaretDownIcon className="size-5" />
@@ -24,6 +25,7 @@ export default function SectionThree({ editor }: { editor: Editor }) {
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
           className={cn({ [activeItemClass]: editor.isActive('orderedList') })}
           aria-label="Numbered list"
+          onPointerLeave={e => e.preventDefault()}
         >
           Numbered list
           <ShortcutKey keys={['mod', 'shift', '7']} />
