@@ -14,7 +14,9 @@ const ImageEditBlock = ({ editor, className, close, ...props }: ImageEditBlockPr
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [link, setLink] = useState<string>('')
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
     fileInputRef.current?.click()
   }
 
@@ -38,29 +40,36 @@ const ImageEditBlock = ({ editor, className, close, ...props }: ImageEditBlockPr
     close()
   }
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    handleLink()
+  }
+
   return (
-    <div className={cn('space-y-6', className)} {...props}>
-      <div className="space-y-1">
-        <Label>Attach an image link</Label>
-        <div className="flex">
-          <Input
-            type="url"
-            required
-            placeholder="https://example.com"
-            value={link}
-            className="grow"
-            onChange={e => setLink(e.target.value)}
-          />
-          <Button className="ml-2 inline-block" onClick={handleLink}>
-            Submit
-          </Button>
+    <form onSubmit={handleSubmit}>
+      <div className={cn('space-y-6', className)} {...props}>
+        <div className="space-y-1">
+          <Label>Attach an image link</Label>
+          <div className="flex">
+            <Input
+              type="url"
+              required
+              placeholder="https://example.com"
+              value={link}
+              className="grow"
+              onChange={e => setLink(e.target.value)}
+            />
+            <Button type="submit" className="ml-2 inline-block">
+              Submit
+            </Button>
+          </div>
         </div>
+        <Button className="w-full" onClick={handleClick}>
+          Upload from your computer
+        </Button>
+        <input type="file" accept="image/*" ref={fileInputRef} multiple className="hidden" onChange={handleFile} />
       </div>
-      <Button className="w-full" onClick={handleClick}>
-        Upload from your computer
-      </Button>
-      <input type="file" accept="image/*" ref={fileInputRef} multiple className="hidden" onChange={handleFile} />
-    </div>
+    </form>
   )
 }
 
