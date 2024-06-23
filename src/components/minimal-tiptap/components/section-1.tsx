@@ -43,7 +43,7 @@ export default function SectionOne({ editor }: { editor: Editor }) {
           })}
           aria-label="Heading 1"
         >
-          <h1 className="grow text-3xl font-extrabold">Heading 1</h1>
+          <h1 className="m-0 grow text-3xl font-extrabold">Heading 1</h1>
           <ShortcutKey keys={['mod', 'alt', '1']} />
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -53,7 +53,7 @@ export default function SectionOne({ editor }: { editor: Editor }) {
           })}
           aria-label="Heading 2"
         >
-          <h2 className="grow text-xl font-bold">Heading 2</h2>
+          <h2 className="m-0 grow text-xl font-bold">Heading 2</h2>
           <ShortcutKey keys={['mod', 'alt', '2']} />
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -63,7 +63,7 @@ export default function SectionOne({ editor }: { editor: Editor }) {
           })}
           aria-label="Heading 3"
         >
-          <h3 className="grow text-lg font-semibold">Heading 3</h3>
+          <h3 className="m-0 grow text-lg font-semibold">Heading 3</h3>
           <ShortcutKey keys={['mod', 'alt', '3']} />
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -73,7 +73,7 @@ export default function SectionOne({ editor }: { editor: Editor }) {
           })}
           aria-label="Heading 4"
         >
-          <h4 className="grow text-base font-semibold">Heading 4</h4>
+          <h4 className="m-0 grow text-base font-semibold">Heading 4</h4>
           <ShortcutKey keys={['mod', 'alt', '4']} />
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -83,7 +83,7 @@ export default function SectionOne({ editor }: { editor: Editor }) {
           })}
           aria-label="Heading 5"
         >
-          <h5 className="grow text-sm font-normal">Heading 5</h5>
+          <h5 className="m-0 grow text-sm font-normal">Heading 5</h5>
           <ShortcutKey keys={['mod', 'alt', '5']} />
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -93,7 +93,7 @@ export default function SectionOne({ editor }: { editor: Editor }) {
           })}
           aria-label="Heading 6"
         >
-          <h6 className="grow text-sm font-normal">Heading 6</h6>
+          <h6 className="m-0 grow text-sm font-normal">Heading 6</h6>
           <ShortcutKey keys={['mod', 'alt', '6']} />
         </DropdownMenuItem>
       </DropdownMenuContent>
