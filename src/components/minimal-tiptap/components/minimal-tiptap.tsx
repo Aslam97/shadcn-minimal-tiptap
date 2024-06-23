@@ -29,9 +29,7 @@ const MinimalTiptapEditor = forwardRef<HTMLDivElement, MinimalTiptapProps>(
   ({ value, outputValue = 'html', disabled, contentClass, onValueChange, className, ...props }, ref) => {
     const editor = useEditor({
       extensions: [
-        StarterKit.configure({
-          hardBreak: false
-        }),
+        StarterKit,
         Image.extend({
           addNodeView() {
             return ReactNodeViewRenderer(ImageViewBlock)
