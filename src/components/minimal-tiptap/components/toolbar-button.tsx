@@ -23,7 +23,7 @@ const ToolbarButton = forwardRef<HTMLButtonElement, ToolbarButtonProps>(function
             {...props}
             ref={ref}
             className={cn(
-              'rounded data-[state=open]:bg-primary/10 data-[state=open]:text-primary',
+              'rounded disabled:pointer-events-auto disabled:cursor-not-allowed disabled:text-muted-foreground disabled:hover:bg-transparent data-[state=open]:bg-primary/10 data-[state=open]:text-primary',
               {
                 'bg-primary/10 text-primary hover:bg-primary/10 hover:text-primary': isActive
               },

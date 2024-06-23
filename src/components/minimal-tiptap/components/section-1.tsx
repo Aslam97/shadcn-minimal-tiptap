@@ -15,7 +15,12 @@ export default function SectionOne({ editor }: { editor: Editor }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <ToolbarButton isActive={editor.isActive('heading')} tooltip="Text styles" className="w-12">
+        <ToolbarButton
+          isActive={editor.isActive('heading')}
+          tooltip="Text styles"
+          className="w-12"
+          disabled={editor.isActive('codeBlock')}
+        >
           <LetterCaseCapitalizeIcon className="size-5" />
           <CaretDownIcon className="size-5" />
         </ToolbarButton>

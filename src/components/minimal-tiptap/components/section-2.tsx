@@ -12,7 +12,7 @@ export default function SectionTwo({ editor }: { editor: Editor }) {
       {/* BOLD */}
       <ToolbarButton
         onClick={() => editor.chain().focus().toggleBold().run()}
-        disabled={!editor.can().chain().focus().toggleBold().run()}
+        disabled={!editor.can().chain().focus().toggleBold().run() || editor.isActive('codeBlock')}
         isActive={editor.isActive('bold')}
         tooltip="Bold"
         aria-label="Bold"
@@ -23,7 +23,7 @@ export default function SectionTwo({ editor }: { editor: Editor }) {
       {/* ITALIC */}
       <ToolbarButton
         onClick={() => editor.chain().focus().toggleItalic().run()}
-        disabled={!editor.can().chain().focus().toggleItalic().run()}
+        disabled={!editor.can().chain().focus().toggleItalic().run() || editor.isActive('codeBlock')}
         isActive={editor.isActive('italic')}
         tooltip="Italic"
         aria-label="Italic"
@@ -45,7 +45,7 @@ export default function SectionTwo({ editor }: { editor: Editor }) {
         <DropdownMenuContent align="start" className="w-48">
           <DropdownMenuItem
             onClick={() => editor.chain().focus().toggleStrike().run()}
-            disabled={!editor.can().chain().focus().toggleStrike().run()}
+            disabled={!editor.can().chain().focus().toggleStrike().run() || editor.isActive('codeBlock')}
             className={cn({ [activeItemClass]: editor.isActive('strike') })}
             aria-label="Strikethrough"
           >
@@ -54,7 +54,7 @@ export default function SectionTwo({ editor }: { editor: Editor }) {
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => editor.chain().focus().toggleCode().run()}
-            disabled={!editor.can().chain().focus().toggleCode().run()}
+            disabled={!editor.can().chain().focus().toggleCode().run() || editor.isActive('codeBlock')}
             className={cn({ [activeItemClass]: editor.isActive('code') })}
             aria-label="Code"
           >
@@ -63,7 +63,7 @@ export default function SectionTwo({ editor }: { editor: Editor }) {
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => editor.chain().focus().unsetAllMarks().run()}
-            disabled={!editor.can().chain().focus().unsetAllMarks().run()}
+            disabled={!editor.can().chain().focus().unsetAllMarks().run() || editor.isActive('codeBlock')}
             aria-label="Clear formatting"
           >
             Clear formatting

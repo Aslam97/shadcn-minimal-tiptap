@@ -36,7 +36,7 @@ const LinkEditPopover = ({ editor }: { editor: Editor }) => {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <ToolbarButton isActive={editor.isActive('link')} tooltip="Link">
+        <ToolbarButton isActive={editor.isActive('link')} tooltip="Link" disabled={editor.isActive('codeBlock')}>
           <Link2Icon className="size-5" />
         </ToolbarButton>
       </PopoverTrigger>
