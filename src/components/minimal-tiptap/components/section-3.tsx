@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils'
 import { CaretDownIcon, ListBulletIcon } from '@radix-ui/react-icons'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { ToolbarButton } from './toolbar-button'
-import { activeItemClass } from '../utils'
+import { activeItemClass, DropdownMenuItemClass } from '../utils'
 import { ShortcutKey } from './shortcut-key'
 
 export default function SectionThree({ editor }: { editor: Editor }) {
@@ -19,22 +19,21 @@ export default function SectionThree({ editor }: { editor: Editor }) {
           <CaretDownIcon className="size-5" />
         </ToolbarButton>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-48">
+      <DropdownMenuContent align="start" className="w-full">
         <DropdownMenuItem
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={cn({ [activeItemClass]: editor.isActive('orderedList') })}
+          className={cn(DropdownMenuItemClass, { [activeItemClass]: editor.isActive('orderedList') })}
           aria-label="Numbered list"
-          onPointerLeave={e => e.preventDefault()}
         >
-          Numbered list
+          <span className="grow">Numbered list</span>
           <ShortcutKey keys={['mod', 'shift', '7']} />
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={cn({ [activeItemClass]: editor.isActive('bulletList') })}
+          className={cn(DropdownMenuItemClass, { [activeItemClass]: editor.isActive('bulletList') })}
           aria-label="Bullet list"
         >
-          Bullet list
+          <span className="grow">Bullet list</span>
           <ShortcutKey keys={['mod', 'shift', '8']} />
         </DropdownMenuItem>
       </DropdownMenuContent>

@@ -3,18 +3,7 @@ import { useState } from 'react'
 import { LinkEditBlock } from '../link/link-edit-block'
 import { LinkPopoverBlock } from '../link/link-popover-block'
 import { BubbleMenu } from '@tiptap/react'
-import { LinkProps } from '../../types'
-import { EditorView } from '@tiptap/pm/view'
-import { EditorState } from '@tiptap/pm/state'
-
-type ShouldShowProps = {
-  editor: Editor
-  view: EditorView
-  state: EditorState
-  oldState?: EditorState
-  from: number
-  to: number
-}
+import { LinkProps, ShouldShowProps } from '../../types'
 
 const LinkBubbleMenu = ({ editor }: { editor: Editor }) => {
   const [showEdit, setShowEdit] = useState(false)

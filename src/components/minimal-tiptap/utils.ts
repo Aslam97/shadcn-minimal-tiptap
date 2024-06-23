@@ -2,6 +2,7 @@ import type { Editor } from '@tiptap/core'
 import type { MinimalTiptapProps } from './components/minimal-tiptap'
 
 export const activeItemClass = 'bg-primary/10 hover:bg-primary/10 focus:bg-primary/10'
+export const DropdownMenuItemClass = 'flex flex-row items-center justify-between gap-4'
 
 let isMac: boolean | undefined
 

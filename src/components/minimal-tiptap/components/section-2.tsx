@@ -4,7 +4,7 @@ import { DotsHorizontalIcon, FontBoldIcon, FontItalicIcon } from '@radix-ui/reac
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { ToolbarButton } from './toolbar-button'
 import { ShortcutKey } from './shortcut-key'
-import { activeItemClass } from '../utils'
+import { activeItemClass, DropdownMenuItemClass } from '../utils'
 
 export default function SectionTwo({ editor }: { editor: Editor }) {
   return (
@@ -42,31 +42,32 @@ export default function SectionTwo({ editor }: { editor: Editor }) {
             <DotsHorizontalIcon className="size-5" />
           </ToolbarButton>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" className="w-48">
+        <DropdownMenuContent align="start" className="w-full">
           <DropdownMenuItem
             onClick={() => editor.chain().focus().toggleStrike().run()}
             disabled={!editor.can().chain().focus().toggleStrike().run() || editor.isActive('codeBlock')}
-            className={cn({ [activeItemClass]: editor.isActive('strike') })}
+            className={cn(DropdownMenuItemClass, { [activeItemClass]: editor.isActive('strike') })}
             aria-label="Strikethrough"
           >
-            Strikethrough
+            <span className="grow">Strikethrough</span>
             <ShortcutKey keys={['mod', 'shift', 'S']} />
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => editor.chain().focus().toggleCode().run()}
             disabled={!editor.can().chain().focus().toggleCode().run() || editor.isActive('codeBlock')}
-            className={cn({ [activeItemClass]: editor.isActive('code') })}
+            className={cn(DropdownMenuItemClass, { [activeItemClass]: editor.isActive('code') })}
             aria-label="Code"
           >
-            Code
+            <span className="grow">Code</span>
             <ShortcutKey keys={['mod', 'E']} />
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => editor.chain().focus().unsetAllMarks().run()}
             disabled={!editor.can().chain().focus().unsetAllMarks().run() || editor.isActive('codeBlock')}
+            className={cn(DropdownMenuItemClass)}
             aria-label="Clear formatting"
           >
-            Clear formatting
+            <span className="grow">Clear formatting</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
