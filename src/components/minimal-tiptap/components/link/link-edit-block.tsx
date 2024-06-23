@@ -74,7 +74,7 @@ const LinkEditBlock = ({ editor, onSetLink, close, className, ...props }: LinkEd
           </Button>
         )}
 
-        <Button onClick={() => onSetLink(field)}>Apply</Button>
+        <Button onClick={() => onSetLink(field)}>Insert</Button>
       </div>
     </div>
   )
