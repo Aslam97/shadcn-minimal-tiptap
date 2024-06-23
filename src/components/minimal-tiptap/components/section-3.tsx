@@ -14,7 +14,6 @@ export default function SectionThree({ editor }: { editor: Editor }) {
           isActive={editor.isActive('bulletList') || editor.isActive('orderedList')}
           tooltip="Lists"
           className="w-12"
-          onFocus={() => editor.commands.focus()}
         >
           <ListBulletIcon className="size-5" />
           <CaretDownIcon className="size-5" />

@@ -20,7 +20,6 @@ export default function SectionOne({ editor }: { editor: Editor }) {
           tooltip="Text styles"
           className="w-12"
           disabled={editor.isActive('codeBlock')}
-          onFocus={() => editor.commands.focus()}
         >
           <LetterCaseCapitalizeIcon className="size-5" />
           <CaretDownIcon className="size-5" />

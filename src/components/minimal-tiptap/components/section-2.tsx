@@ -38,7 +38,6 @@ export default function SectionTwo({ editor }: { editor: Editor }) {
             isActive={editor.isActive('strike') || editor.isActive('code')}
             tooltip="More formatting"
             aria-label="More formatting"
-            onFocus={() => editor.commands.focus()}
           >
             <DotsHorizontalIcon className="size-5" />
           </ToolbarButton>

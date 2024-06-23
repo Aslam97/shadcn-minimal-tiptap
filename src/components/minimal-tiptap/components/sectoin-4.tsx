@@ -24,7 +24,6 @@ export default function SectionFour({ editor }: { editor: Editor }) {
             isActive={editor.isActive('codeBlock') || editor.isActive('blockquote')}
             tooltip="Insert elements"
             className="w-12"
-            onFocus={() => editor.commands.focus()}
           >
             <PlusIcon className="size-5" />
             <CaretDownIcon className="size-5" />
