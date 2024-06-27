@@ -1,12 +1,8 @@
-<a href="https://shadcn.com/minimal-tiptap" target="_blank">
+<a href="https://shadcn-minimal-tiptap.vercel.app" target="_blank">
   <img src="https://i.imgur.com/b7DJM4K.png" alt="Minimal Tiptap Editor" />
 </a>
 
-This is a Minimal Tiptap Editor component built for [Shadcn](https://shadcn.com). It provides a simple and clean editor for users to write and format text.
-
-<a href="https://shadcn-minimal-tiptap.vercel.app/" target="_blank">
-  View Demo
-</a>
+This is a Minimal Tiptap Editor Component built for [Shadcn](https://shadcn.com). It provides a simple and clean editor for users to write and format text.
 
 ## Installation
 
@@ -47,7 +43,6 @@ The Minimal Tiptap Editor Component accepts the following props:
 
 ```jsx
 import React, { useState } from 'react'
-
 import { MinimalTiptapEditor } from './minimal-tiptap'
 
 export const App = () => {
@@ -64,3 +59,7 @@ export const App = () => {
   )
 }
 ```
+
+## Advanced Template
+
+Tiptap just released a new version 2 of their documentation with a advanced template. You can check it out [here](https://tiptap.dev/docs).
