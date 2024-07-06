@@ -30,7 +30,11 @@ export default function App() {
 
 const ExampleForm = () => {
   const formSchema = z.object({
-    description: z.string({ required_error: 'Description is required' }).min(1, 'Description is required')
+    description: z
+      .string({
+        required_error: 'Description is required'
+      })
+      .min(1, 'Description is required')
   })
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -57,6 +61,7 @@ const ExampleForm = () => {
                 <MinimalTiptapEditor
                   {...field}
                   onValueChange={field.onChange}
+                  outputValue="json"
                   className={cn('w-full', {
                     'border-red-500 focus-within:border-red-500': form.formState.errors.description
                   })}
