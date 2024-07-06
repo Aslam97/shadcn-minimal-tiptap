@@ -67,7 +67,8 @@ export function getShortcutKeys(keys: string[]) {
 
 export function getOutput(editor: Editor, format: MinimalTiptapProps['outputValue']) {
   if (format === 'json') {
-    return JSON.stringify(editor.getJSON())
+    const jsonValue = JSON.stringify(editor.getJSON())
+    return editor.isEmpty ? '' : jsonValue
   }
 
   if (format === 'html') {
