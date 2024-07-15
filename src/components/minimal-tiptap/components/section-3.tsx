@@ -13,6 +13,7 @@ export default function SectionThree({ editor }: { editor: Editor }) {
         <ToolbarButton
           isActive={editor.isActive('bulletList') || editor.isActive('orderedList')}
           tooltip="Lists"
+          aria-label="Lists"
           className="w-12"
         >
           <ListBulletIcon className="size-5" />

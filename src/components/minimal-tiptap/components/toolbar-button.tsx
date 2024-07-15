@@ -20,7 +20,6 @@ const ToolbarButton = forwardRef<HTMLButtonElement, ToolbarButtonProps>(function
         <TooltipTrigger asChild>
           <Toggle
             size="sm"
-            {...props}
             ref={ref}
             className={cn(
               'rounded disabled:pointer-events-auto disabled:cursor-not-allowed disabled:text-muted-foreground disabled:hover:bg-transparent data-[state=open]:bg-primary/10 data-[state=open]:text-primary',
@@ -29,6 +28,7 @@ const ToolbarButton = forwardRef<HTMLButtonElement, ToolbarButtonProps>(function
               },
               className
             )}
+            {...props}
           >
             {children}
           </Toggle>

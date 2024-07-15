@@ -4,6 +4,7 @@ import { LinkEditBlock } from '../link/link-edit-block'
 import { LinkPopoverBlock } from '../link/link-popover-block'
 import { BubbleMenu } from '@tiptap/react'
 import { LinkProps, ShouldShowProps } from '../../types'
+import { setLink } from '../../utils'
 
 const LinkBubbleMenu = ({ editor }: { editor: Editor }) => {
   const [showEdit, setShowEdit] = useState(false)
@@ -26,27 +27,8 @@ const LinkBubbleMenu = ({ editor }: { editor: Editor }) => {
     setShowEdit(false)
   }
 
-  function onSetLink({ url, text, openInNewTab }: LinkProps) {
-    editor
-      .chain()
-      .extendMarkRange('link')
-      .insertContent({
-        type: 'text',
-        text: text,
-        marks: [
-          {
-            type: 'link',
-            attrs: {
-              href: url,
-              target: openInNewTab ? '_blank' : ''
-            }
-          }
-        ]
-      })
-      .setLink({ href: url })
-      .focus()
-      .run()
-
+  function onSetLink(props: LinkProps) {
+    setLink(editor, props)
     setShowEdit(false)
   }
 

@@ -18,6 +18,7 @@ export default function SectionOne({ editor }: { editor: Editor }) {
         <ToolbarButton
           isActive={editor.isActive('heading')}
           tooltip="Text styles"
+          aria-label="Text styles"
           className="w-12"
           disabled={editor.isActive('codeBlock')}
         >

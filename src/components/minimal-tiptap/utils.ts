@@ -1,5 +1,6 @@
 import type { Editor } from '@tiptap/core'
 import type { MinimalTiptapProps } from './components/minimal-tiptap'
+import { LinkProps } from './types'
 
 export const activeItemClass = 'bg-primary/10 hover:bg-primary/10 focus:bg-primary/10'
 export const DropdownMenuItemClass = 'flex flex-row items-center justify-between gap-4'
@@ -67,13 +68,34 @@ export function getShortcutKeys(keys: string[]) {
 
 export function getOutput(editor: Editor, format: MinimalTiptapProps['outputValue']) {
   if (format === 'json') {
-    const jsonValue = JSON.stringify(editor.getJSON())
-    return editor.isEmpty ? '' : jsonValue
+    return JSON.stringify(editor.getJSON())
   }
 
   if (format === 'html') {
-    return editor.getText() ? editor.getHTML() : ''
+    return editor.getText() ? String(editor.getHTML()) : ''
   }
 
   return editor.getText()
+}
+
+export function setLink(editor: Editor, { url, text, openInNewTab }: LinkProps) {
+  editor
+    .chain()
+    .extendMarkRange('link')
+    .insertContent({
+      type: 'text',
+      text: text || url,
+      marks: [
+        {
+          type: 'link',
+          attrs: {
+            href: url,
+            target: openInNewTab ? '_blank' : ''
+          }
+        }
+      ]
+    })
+    .setLink({ href: url })
+    .focus()
+    .run()
 }

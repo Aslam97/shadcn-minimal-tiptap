@@ -23,6 +23,7 @@ export default function SectionFour({ editor }: { editor: Editor }) {
           <ToolbarButton
             isActive={editor.isActive('codeBlock') || editor.isActive('blockquote')}
             tooltip="Insert elements"
+            aria-label="Insert elements"
             className="w-12"
           >
             <PlusIcon className="size-5" />

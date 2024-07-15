@@ -18,7 +18,7 @@ import { ImageBubbleMenu } from './bubble-menu/image-bubble-menu'
 import { forwardRef } from 'react'
 
 export interface MinimalTiptapProps extends React.HTMLAttributes<HTMLDivElement> {
-  value: string | null | undefined
+  value?: string | null
   outputValue?: 'html' | 'json' | 'text'
   disabled?: boolean
   contentClass?: string
@@ -83,7 +83,12 @@ const MinimalTiptapEditor = forwardRef<HTMLDivElement, MinimalTiptapProps>(
         onValueChange(getOutput(props.editor, outputValue))
       },
       content: value,
-      editable: !disabled
+      editable: !disabled,
+      onCreate: ({ editor }) => {
+        if (value) {
+          editor.chain().setContent(value).run()
+        }
+      }
     })
 
     return (

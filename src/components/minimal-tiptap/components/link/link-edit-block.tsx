@@ -1,5 +1,5 @@
 import type { Editor } from '@tiptap/core'
-import { useEffect, useMemo, useState } from 'react'
+import * as React from 'react'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
@@ -14,13 +14,15 @@ interface LinkEditBlockProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const LinkEditBlock = ({ editor, onSetLink, close, className, ...props }: LinkEditBlockProps) => {
-  const [field, setField] = useState<LinkProps>({
+  const formRef = React.useRef<HTMLDivElement>(null)
+
+  const [field, setField] = React.useState<LinkProps>({
     url: '',
     text: '',
     openInNewTab: false
   })
 
-  const data = useMemo(() => {
+  const data = React.useMemo(() => {
     const { href, target } = editor.getAttributes('link')
     const { from, to } = editor.state.selection
     const text = editor.state.doc.textBetween(from, to, ' ')
@@ -32,18 +34,31 @@ const LinkEditBlock = ({ editor, onSetLink, close, className, ...props }: LinkEd
     }
   }, [editor])
 
-  useEffect(() => {
+  React.useEffect(() => {
     setField(data)
   }, [data])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleClick = (e: React.FormEvent) => {
     e.preventDefault()
-    onSetLink(field)
-    close?.()
+
+    if (formRef.current) {
+      const isValid = Array.from(formRef.current.querySelectorAll('input')).every(input => input.checkValidity())
+
+      if (isValid) {
+        onSetLink(field)
+        close?.()
+      } else {
+        formRef.current.querySelectorAll('input').forEach(input => {
+          if (!input.checkValidity()) {
+            input.reportValidity()
+          }
+        })
+      }
+    }
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div ref={formRef}>
       <div className={cn('space-y-4', className)} {...props}>
         <div className="space-y-1">
           <Label>Link</Label>
@@ -70,7 +85,7 @@ const LinkEditBlock = ({ editor, onSetLink, close, className, ...props }: LinkEd
           <Label>Open in new tab</Label>
           <Switch
             checked={field.openInNewTab}
-            onCheckedChange={() => setField({ ...field, openInNewTab: !field.openInNewTab })}
+            onCheckedChange={checked => setField({ ...field, openInNewTab: checked })}
           />
         </div>
 
@@ -81,10 +96,12 @@ const LinkEditBlock = ({ editor, onSetLink, close, className, ...props }: LinkEd
             </Button>
           )}
 
-          <Button type="submit">Insert</Button>
+          <Button type="button" onClick={handleClick}>
+            Insert
+          </Button>
         </div>
       </div>
-    </form>
+    </div>
   )
 }
 
