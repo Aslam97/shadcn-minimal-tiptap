@@ -47,6 +47,9 @@ importers:
       '@tiptap/extension-heading':
         specifier: ^2.5.8
         version: 2.5.8(@tiptap/core@2.5.8(@tiptap/pm@2.5.8))
+      '@tiptap/extension-horizontal-rule':
+        specifier: ^2.5.8
+        version: 2.5.8(@tiptap/core@2.5.8(@tiptap/pm@2.5.8))(@tiptap/pm@2.5.8)
       '@tiptap/extension-image':
         specifier: ^2.5.8
         version: 2.5.8(@tiptap/core@2.5.8(@tiptap/pm@2.5.8))

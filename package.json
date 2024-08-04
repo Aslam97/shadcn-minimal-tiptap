@@ -23,6 +23,7 @@
     "@radix-ui/react-tooltip": "^1.1.2",
     "@tiptap/core": "^2.5.8",
     "@tiptap/extension-heading": "^2.5.8",
+    "@tiptap/extension-horizontal-rule": "^2.5.8",
     "@tiptap/extension-image": "^2.5.8",
     "@tiptap/extension-link": "^2.5.8",
     "@tiptap/pm": "^2.5.8",

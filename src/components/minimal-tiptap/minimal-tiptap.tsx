@@ -13,6 +13,7 @@ import { ImageBubbleMenu } from './components/bubble-menu/image-bubble-menu'
 import { Link } from './extensions/link'
 import { getOutput } from './utils'
 import { Image } from './extensions/image'
+import { HorizontalRule } from './extensions/horizontal-rule'
 
 export interface MinimalTiptapProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
   value?: string | null
@@ -26,7 +27,14 @@ const useMinimalTiptapEditor = (props: MinimalTiptapProps) => {
   const { value, outputValue = 'html', disabled, onValueChange } = props
 
   return useEditor({
-    extensions: [StarterKit, Image, Link],
+    extensions: [
+      StarterKit.configure({
+        horizontalRule: false
+      }),
+      Link,
+      Image,
+      HorizontalRule
+    ],
     editorProps: {
       attributes: {
         class: 'prose mx-auto focus:outline-none max-w-none prose-stone dark:prose-invert'

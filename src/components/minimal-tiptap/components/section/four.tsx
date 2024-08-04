@@ -29,12 +29,13 @@ const insertElements: InsertElement[] = [
     icon: <QuoteIcon className="mr-2 size-4" />,
     action: editor => editor.chain().focus().toggleBlockquote().run(),
     isActive: editor => editor.isActive('blockquote'),
-    shortcut: ['>']
+    shortcut: ['mod', 'shift', 'B']
   },
   {
     label: 'Divider',
     icon: <DividerHorizontalIcon className="mr-2 size-4" />,
-    action: editor => editor.chain().focus().setHorizontalRule().run()
+    action: editor => editor.chain().focus().setHorizontalRule().run(),
+    shortcut: ['mod', 'alt', '-']
   }
 ]
 
