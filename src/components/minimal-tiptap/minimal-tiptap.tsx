@@ -17,8 +17,8 @@ import { HorizontalRule } from './extensions/horizontal-rule'
 import { CodeBlockLowlight } from './extensions/code-block-lowlight'
 import { Typography } from '@tiptap/extension-typography'
 import { Placeholder } from '@tiptap/extension-placeholder'
+import { Selection } from './extensions/selection'
 import './styles/index.css'
-
 export interface MinimalTiptapProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
   value?: string | null
   outputValue?: 'html' | 'json' | 'text'
@@ -69,6 +69,7 @@ const useMinimalTiptapEditor = (props: MinimalTiptapProps) => {
       }),
       Link,
       Image,
+      Selection,
       Typography,
       HorizontalRule,
       CodeBlockLowlight,
