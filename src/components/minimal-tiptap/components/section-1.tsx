@@ -5,12 +5,83 @@ import { CaretDownIcon, LetterCaseCapitalizeIcon } from '@radix-ui/react-icons'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { ToolbarButton } from './toolbar-button'
 import { ShortcutKey } from './shortcut-key'
-import { activeItemClass, DropdownMenuItemClass } from '../utils'
 
-export default function SectionOne({ editor }: { editor: Editor }) {
-  const toggleHeading = (level: Level) => {
-    editor.chain().focus().toggleHeading({ level }).run()
+interface TextStyle {
+  label: string
+  element: keyof JSX.IntrinsicElements
+  level?: Level
+  className: string
+  shortcut: string[]
+}
+
+const TEXT_STYLES: TextStyle[] = [
+  { label: 'Normal Text', element: 'span', className: 'grow', shortcut: ['mod', 'alt', '0'] },
+  {
+    label: 'Heading 1',
+    element: 'h1',
+    level: 1,
+    className: 'm-0 grow text-3xl font-extrabold',
+    shortcut: ['mod', 'alt', '1']
+  },
+  {
+    label: 'Heading 2',
+    element: 'h2',
+    level: 2,
+    className: 'm-0 grow text-xl font-bold',
+    shortcut: ['mod', 'alt', '2']
+  },
+  {
+    label: 'Heading 3',
+    element: 'h3',
+    level: 3,
+    className: 'm-0 grow text-lg font-semibold',
+    shortcut: ['mod', 'alt', '3']
+  },
+  {
+    label: 'Heading 4',
+    element: 'h4',
+    level: 4,
+    className: 'm-0 grow text-base font-semibold',
+    shortcut: ['mod', 'alt', '4']
+  },
+  {
+    label: 'Heading 5',
+    element: 'h5',
+    level: 5,
+    className: 'm-0 grow text-sm font-normal',
+    shortcut: ['mod', 'alt', '5']
+  },
+  {
+    label: 'Heading 6',
+    element: 'h6',
+    level: 6,
+    className: 'm-0 grow text-sm font-normal',
+    shortcut: ['mod', 'alt', '6']
   }
+]
+
+export const SectionOne = ({ editor }: { editor: Editor }) => {
+  const handleStyleChange = (level?: Level) => {
+    if (level) {
+      editor.chain().focus().toggleHeading({ level }).run()
+    } else {
+      editor.chain().focus().setParagraph().run()
+    }
+  }
+
+  const renderMenuItem = ({ label, element: Element, level, className, shortcut }: TextStyle) => (
+    <DropdownMenuItem
+      key={label}
+      onClick={() => handleStyleChange(level)}
+      className={cn('flex flex-row items-center justify-between gap-4', {
+        'bg-accent': level ? editor.isActive('heading', { level }) : editor.isActive('paragraph')
+      })}
+      aria-label={label}
+    >
+      <Element className={className}>{label}</Element>
+      <ShortcutKey keys={shortcut} />
+    </DropdownMenuItem>
+  )
 
   return (
     <DropdownMenu>
@@ -19,6 +90,7 @@ export default function SectionOne({ editor }: { editor: Editor }) {
           isActive={editor.isActive('heading')}
           tooltip="Text styles"
           aria-label="Text styles"
+          pressed={editor.isActive('heading')}
           className="w-12"
           disabled={editor.isActive('codeBlock')}
         >
@@ -26,78 +98,11 @@ export default function SectionOne({ editor }: { editor: Editor }) {
           <CaretDownIcon className="size-5" />
         </ToolbarButton>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-full">
-        <DropdownMenuItem
-          onClick={() => editor.chain().focus().setParagraph().run()}
-          className={cn(DropdownMenuItemClass, {
-            [activeItemClass]: editor.isActive('paragraph')
-          })}
-          aria-label="Normal text"
-        >
-          <span className="grow">Normal Text</span>
-          <ShortcutKey keys={['mod', 'alt', '0']} />
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => toggleHeading(1)}
-          className={cn(DropdownMenuItemClass, {
-            [activeItemClass]: editor.isActive('heading', { level: 1 })
-          })}
-          aria-label="Heading 1"
-        >
-          <h1 className="m-0 grow text-3xl font-extrabold">Heading 1</h1>
-          <ShortcutKey keys={['mod', 'alt', '1']} />
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => toggleHeading(2)}
-          className={cn(DropdownMenuItemClass, {
-            [activeItemClass]: editor.isActive('heading', { level: 2 })
-          })}
-          aria-label="Heading 2"
-        >
-          <h2 className="m-0 grow text-xl font-bold">Heading 2</h2>
-          <ShortcutKey keys={['mod', 'alt', '2']} />
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => toggleHeading(3)}
-          className={cn(DropdownMenuItemClass, {
-            [activeItemClass]: editor.isActive('heading', { level: 3 })
-          })}
-          aria-label="Heading 3"
-        >
-          <h3 className="m-0 grow text-lg font-semibold">Heading 3</h3>
-          <ShortcutKey keys={['mod', 'alt', '3']} />
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => toggleHeading(4)}
-          className={cn(DropdownMenuItemClass, {
-            [activeItemClass]: editor.isActive('heading', { level: 4 })
-          })}
-          aria-label="Heading 4"
-        >
-          <h4 className="m-0 grow text-base font-semibold">Heading 4</h4>
-          <ShortcutKey keys={['mod', 'alt', '4']} />
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => toggleHeading(5)}
-          className={cn(DropdownMenuItemClass, {
-            [activeItemClass]: editor.isActive('heading', { level: 5 })
-          })}
-          aria-label="Heading 5"
-        >
-          <h5 className="m-0 grow text-sm font-normal">Heading 5</h5>
-          <ShortcutKey keys={['mod', 'alt', '5']} />
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => toggleHeading(6)}
-          className={cn(DropdownMenuItemClass, {
-            [activeItemClass]: editor.isActive('heading', { level: 6 })
-          })}
-          aria-label="Heading 6"
-        >
-          <h6 className="m-0 grow text-sm font-normal">Heading 6</h6>
-          <ShortcutKey keys={['mod', 'alt', '6']} />
-        </DropdownMenuItem>
+      <DropdownMenuContent align="start" className="w-full" onCloseAutoFocus={event => event.preventDefault()}>
+        {TEXT_STYLES.map(renderMenuItem)}
       </DropdownMenuContent>
     </DropdownMenu>
   )
 }
+
+export default SectionOne
