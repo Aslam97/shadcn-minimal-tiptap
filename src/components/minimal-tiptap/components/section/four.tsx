@@ -22,7 +22,7 @@ const insertElements: InsertElement[] = [
     icon: <CodeIcon className="mr-2 size-4" />,
     action: editor => editor.chain().focus().toggleCodeBlock().run(),
     isActive: editor => editor.isActive('codeBlock'),
-    shortcut: ['```']
+    shortcut: ['mod', 'alt', 'C']
   },
   {
     label: 'Blockquote',
@@ -72,7 +72,7 @@ export const SectionFour = ({ editor }: { editor: Editor }) => {
                 {element.icon}
                 {element.label}
               </span>
-              {element.shortcut && <ShortcutKey keys={element.shortcut} withBg />}
+              {element.shortcut && <ShortcutKey keys={element.shortcut} />}
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>
