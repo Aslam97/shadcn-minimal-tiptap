@@ -3,41 +3,56 @@ import { cn } from '@/lib/utils'
 import { CaretDownIcon, ListBulletIcon } from '@radix-ui/react-icons'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { ToolbarButton } from './toolbar-button'
-import { activeItemClass, DropdownMenuItemClass } from '../utils'
 import { ShortcutKey } from './shortcut-key'
 
-export default function SectionThree({ editor }: { editor: Editor }) {
+interface ListItem {
+  label: string
+  isActive: (editor: Editor) => boolean
+  onClick: (editor: Editor) => void
+  shortcutKeys: string[]
+}
+
+const listItems: ListItem[] = [
+  {
+    label: 'Numbered list',
+    isActive: editor => editor.isActive('orderedList'),
+    onClick: editor => editor.chain().focus().toggleOrderedList().run(),
+    shortcutKeys: ['mod', 'shift', '7']
+  },
+  {
+    label: 'Bullet list',
+    isActive: editor => editor.isActive('bulletList'),
+    onClick: editor => editor.chain().focus().toggleBulletList().run(),
+    shortcutKeys: ['mod', 'shift', '8']
+  }
+]
+
+export const SectionThree = ({ editor }: { editor: Editor }) => {
+  const isAnyListActive = listItems.some(item => item.isActive(editor))
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <ToolbarButton
-          isActive={editor.isActive('bulletList') || editor.isActive('orderedList')}
-          tooltip="Lists"
-          aria-label="Lists"
-          className="w-12"
-        >
+        <ToolbarButton isActive={isAnyListActive} tooltip="Lists" aria-label="Lists" className="w-12">
           <ListBulletIcon className="size-5" />
           <CaretDownIcon className="size-5" />
         </ToolbarButton>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-full">
-        <DropdownMenuItem
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={cn(DropdownMenuItemClass, { [activeItemClass]: editor.isActive('orderedList') })}
-          aria-label="Numbered list"
-        >
-          <span className="grow">Numbered list</span>
-          <ShortcutKey keys={['mod', 'shift', '7']} />
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={cn(DropdownMenuItemClass, { [activeItemClass]: editor.isActive('bulletList') })}
-          aria-label="Bullet list"
-        >
-          <span className="grow">Bullet list</span>
-          <ShortcutKey keys={['mod', 'shift', '8']} />
-        </DropdownMenuItem>
+      <DropdownMenuContent align="start" className="w-full" onCloseAutoFocus={event => event.preventDefault()}>
+        {listItems.map(item => (
+          <DropdownMenuItem
+            key={item.label}
+            onClick={() => item.onClick(editor)}
+            className={cn('flex flex-row items-center justify-between gap-4', { 'bg-accent': item.isActive(editor) })}
+            aria-label={item.label}
+          >
+            <span className="grow">{item.label}</span>
+            <ShortcutKey keys={item.shortcutKeys} />
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   )
 }
+
+export default SectionThree
