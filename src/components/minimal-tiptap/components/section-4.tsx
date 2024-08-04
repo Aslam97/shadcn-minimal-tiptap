@@ -39,7 +39,7 @@ const insertElements: InsertElement[] = [
   }
 ]
 
-export default function SectionFour({ editor }: { editor: Editor }) {
+export const SectionFour = ({ editor }: { editor: Editor }) => {
   const isAnyElementActive = insertElements.some(element => element.isActive?.(editor))
 
   return (
@@ -80,3 +80,5 @@ export default function SectionFour({ editor }: { editor: Editor }) {
     </>
   )
 }
+
+export default SectionFour
