@@ -4,7 +4,6 @@ import { cn } from '@/lib/utils'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { CaretDownIcon, CodeIcon, DividerHorizontalIcon, PlusIcon, QuoteIcon } from '@radix-ui/react-icons'
 import { ToolbarButton } from './toolbar-button'
-import { activeItemClass, DropdownMenuItemClass } from '../utils'
 import { ShortcutKey } from './shortcut-key'
 import { LinkEditPopover } from './link/link-edit-popover'
 import { ImageEditDialog } from './image/image-edit-dialog'
@@ -64,8 +63,8 @@ export const SectionFour = ({ editor }: { editor: Editor }) => {
             <DropdownMenuItem
               key={element.label}
               onClick={() => element.action(editor)}
-              className={cn(DropdownMenuItemClass, {
-                [activeItemClass]: element.isActive?.(editor)
+              className={cn('flex flex-row items-center justify-between gap-4', {
+                'bg-accent': element.isActive?.(editor)
               })}
             >
               <span className="flex grow items-center">
