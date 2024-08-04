@@ -8,7 +8,7 @@ import { cn } from './lib/utils'
 
 export default function App() {
   return (
-    <main className="flex min-h-screen place-items-center justify-center bg-white p-4">
+    <main className="flex min-h-screen place-items-center justify-center p-4">
       <div className="w-full max-w-4xl">
         <div className="text-center">
           <h1 className="text-xl font-bold tracking-tight sm:text-3xl">Minimal Tiptap Editor</h1>
