@@ -6,7 +6,7 @@ interface ShortcutKeyProps extends React.HTMLAttributes<HTMLSpanElement> {
   withBg?: boolean
 }
 
-const ShortcutKey = ({ className, keys, withBg, ...props }: ShortcutKeyProps) => {
+export const ShortcutKey = ({ className, keys, withBg, ...props }: ShortcutKeyProps) => {
   return (
     <span className={cn('text-xs tracking-widest opacity-60', className)} {...props}>
       <span
@@ -22,4 +22,4 @@ const ShortcutKey = ({ className, keys, withBg, ...props }: ShortcutKeyProps) =>
 
 ShortcutKey.displayName = 'ShortcutKey'
 
-export { ShortcutKey }
+export default ShortcutKey
