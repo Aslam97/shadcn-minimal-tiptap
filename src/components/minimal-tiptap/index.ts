@@ -1,1 +1,1 @@
-export { MinimalTiptapEditor } from './components/minimal-tiptap'
+export * from './minimal-tiptap'

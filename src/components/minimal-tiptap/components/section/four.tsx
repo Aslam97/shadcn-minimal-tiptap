@@ -3,10 +3,10 @@ import type { Editor } from '@tiptap/core'
 import { cn } from '@/lib/utils'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { CaretDownIcon, CodeIcon, DividerHorizontalIcon, PlusIcon, QuoteIcon } from '@radix-ui/react-icons'
-import { ToolbarButton } from './toolbar-button'
-import { ShortcutKey } from './shortcut-key'
-import { LinkEditPopover } from './link/link-edit-popover'
-import { ImageEditDialog } from './image/image-edit-dialog'
+import { ToolbarButton } from '../toolbar-button'
+import { ShortcutKey } from '../shortcut-key'
+import { LinkEditPopover } from '../link/link-edit-popover'
+import { ImageEditDialog } from '../image/image-edit-dialog'
 
 interface InsertElement {
   label: string

@@ -2,8 +2,8 @@ import type { Editor } from '@tiptap/core'
 import { cn } from '@/lib/utils'
 import { CaretDownIcon, ListBulletIcon } from '@radix-ui/react-icons'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { ToolbarButton } from './toolbar-button'
-import { ShortcutKey } from './shortcut-key'
+import { ToolbarButton } from '../toolbar-button'
+import { ShortcutKey } from '../shortcut-key'
 
 interface ListItem {
   label: string

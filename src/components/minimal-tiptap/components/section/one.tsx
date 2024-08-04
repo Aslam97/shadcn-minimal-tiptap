@@ -3,8 +3,8 @@ import type { Level } from '@tiptap/extension-heading'
 import { cn } from '@/lib/utils'
 import { CaretDownIcon, LetterCaseCapitalizeIcon } from '@radix-ui/react-icons'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { ToolbarButton } from './toolbar-button'
-import { ShortcutKey } from './shortcut-key'
+import { ToolbarButton } from '../toolbar-button'
+import { ShortcutKey } from '../shortcut-key'
 
 interface TextStyle {
   label: string
