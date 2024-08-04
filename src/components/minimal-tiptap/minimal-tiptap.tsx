@@ -1,4 +1,5 @@
 import * as React from 'react'
+import './styles/index.css'
 import { useEditor, EditorContent } from '@tiptap/react'
 import type { Editor as TiptapEditor } from '@tiptap/core'
 import StarterKit from '@tiptap/starter-kit'
@@ -18,7 +19,8 @@ import { CodeBlockLowlight } from './extensions/code-block-lowlight'
 import { Typography } from '@tiptap/extension-typography'
 import { Placeholder } from '@tiptap/extension-placeholder'
 import { Selection } from './extensions/selection'
-import './styles/index.css'
+import { TaskList } from './extensions/task-list'
+import { TaskItem } from './extensions/task-item/task-item'
 export interface MinimalTiptapProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
   value?: string | null
   outputValue?: 'html' | 'json' | 'text'
@@ -71,6 +73,8 @@ const useMinimalTiptapEditor = (props: MinimalTiptapProps) => {
       Image,
       Selection,
       Typography,
+      TaskList,
+      TaskItem,
       HorizontalRule,
       CodeBlockLowlight,
       Placeholder.configure({
