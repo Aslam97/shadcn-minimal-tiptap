@@ -62,6 +62,7 @@ const ExampleForm = () => {
                   {...field}
                   onValueChange={field.onChange}
                   outputValue="json"
+                  placeholder="Type your description here..."
                   className={cn('w-full', {
                     'border-red-500 focus-within:border-red-500': form.formState.errors.description
                   })}

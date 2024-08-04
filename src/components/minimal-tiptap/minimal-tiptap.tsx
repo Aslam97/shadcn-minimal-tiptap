@@ -14,30 +14,71 @@ import { Link } from './extensions/link'
 import { getOutput } from './utils'
 import { Image } from './extensions/image'
 import { HorizontalRule } from './extensions/horizontal-rule'
+import { CodeBlockLowlight } from './extensions/code-block-lowlight'
+import { Typography } from '@tiptap/extension-typography'
+import { Placeholder } from '@tiptap/extension-placeholder'
+import './styles/index.css'
 
 export interface MinimalTiptapProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
   value?: string | null
   outputValue?: 'html' | 'json' | 'text'
+  placeholder?: string
   disabled?: boolean
   contentClass?: string
   onValueChange: (value: string) => void
 }
 
 const useMinimalTiptapEditor = (props: MinimalTiptapProps) => {
-  const { value, outputValue = 'html', disabled, onValueChange } = props
+  const { value, outputValue = 'html', placeholder, disabled, onValueChange } = props
 
   return useEditor({
     extensions: [
       StarterKit.configure({
-        horizontalRule: false
+        horizontalRule: false,
+        codeBlock: false,
+        paragraph: {
+          HTMLAttributes: {
+            class: 'text-node'
+          }
+        },
+        blockquote: {
+          HTMLAttributes: {
+            class: 'block-node'
+          }
+        },
+        bulletList: {
+          HTMLAttributes: {
+            class: 'list-node'
+          }
+        },
+        orderedList: {
+          HTMLAttributes: {
+            class: 'list-node'
+          }
+        },
+        code: {
+          HTMLAttributes: {
+            class: 'inline',
+            spellCheck: 'false'
+          }
+        },
+        dropcursor: {
+          width: 2,
+          class: 'ProseMirror-dropcursor border'
+        }
       }),
       Link,
       Image,
-      HorizontalRule
+      Typography,
+      HorizontalRule,
+      CodeBlockLowlight,
+      Placeholder.configure({
+        placeholder: () => placeholder || ''
+      })
     ],
     editorProps: {
       attributes: {
-        class: 'prose mx-auto focus:outline-none max-w-none prose-stone dark:prose-invert'
+        class: 'focus:outline-none'
       }
     },
     onUpdate: ({ editor }) => {
@@ -68,8 +109,8 @@ const Toolbar = ({ editor }: { editor: TiptapEditor }) => (
 )
 
 export const MinimalTiptapEditor = React.forwardRef<HTMLDivElement, MinimalTiptapProps>(
-  ({ value, outputValue, disabled, contentClass, onValueChange, className, ...props }, ref) => {
-    const editor = useMinimalTiptapEditor({ value, outputValue, disabled, onValueChange })
+  ({ value, outputValue, disabled, contentClass, onValueChange, placeholder, className, ...props }, ref) => {
+    const editor = useMinimalTiptapEditor({ value, outputValue, placeholder, disabled, onValueChange })
 
     return (
       <div
@@ -88,7 +129,7 @@ export const MinimalTiptapEditor = React.forwardRef<HTMLDivElement, MinimalTipta
           </>
         )}
         <div className="h-full grow" onClick={() => editor?.chain().focus().run()}>
-          <EditorContent editor={editor} className={cn('p-5', contentClass)} />
+          <EditorContent editor={editor} className={cn('minimal-tiptap-editor p-5', contentClass)} />
         </div>
       </div>
     )
