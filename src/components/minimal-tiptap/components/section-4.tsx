@@ -1,3 +1,4 @@
+import * as React from 'react'
 import type { Editor } from '@tiptap/core'
 import { cn } from '@/lib/utils'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
@@ -8,20 +9,48 @@ import { ShortcutKey } from './shortcut-key'
 import { LinkEditPopover } from './link/link-edit-popover'
 import { ImageEditDialog } from './image/image-edit-dialog'
 
+interface InsertElement {
+  label: string
+  icon: React.ReactNode
+  action: (editor: Editor) => void
+  isActive?: (editor: Editor) => boolean
+  shortcut?: string[]
+}
+
+const insertElements: InsertElement[] = [
+  {
+    label: 'Code block',
+    icon: <CodeIcon className="mr-2 size-4" />,
+    action: editor => editor.chain().focus().toggleCodeBlock().run(),
+    isActive: editor => editor.isActive('codeBlock'),
+    shortcut: ['```']
+  },
+  {
+    label: 'Blockquote',
+    icon: <QuoteIcon className="mr-2 size-4" />,
+    action: editor => editor.chain().focus().toggleBlockquote().run(),
+    isActive: editor => editor.isActive('blockquote'),
+    shortcut: ['>']
+  },
+  {
+    label: 'Divider',
+    icon: <DividerHorizontalIcon className="mr-2 size-4" />,
+    action: editor => editor.chain().focus().setHorizontalRule().run()
+  }
+]
+
 export default function SectionFour({ editor }: { editor: Editor }) {
+  const isAnyElementActive = insertElements.some(element => element.isActive?.(editor))
+
   return (
     <>
-      {/* LINK */}
       <LinkEditPopover editor={editor} />
-
-      {/* IMAGE */}
       <ImageEditDialog editor={editor} />
 
-      {/* INSERT ELEMENTS */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <ToolbarButton
-            isActive={editor.isActive('codeBlock') || editor.isActive('blockquote')}
+            isActive={isAnyElementActive}
             tooltip="Insert elements"
             aria-label="Insert elements"
             className="w-12"
@@ -30,37 +59,22 @@ export default function SectionFour({ editor }: { editor: Editor }) {
             <CaretDownIcon className="size-5" />
           </ToolbarButton>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" className="w-full">
-          <DropdownMenuItem
-            onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-            className={cn(DropdownMenuItemClass, {
-              [activeItemClass]: editor.isActive('codeBlock')
-            })}
-          >
-            <span className="flex grow items-center">
-              <CodeIcon className="mr-2 size-4" />
-              Code block
-            </span>
-            <ShortcutKey keys={['```']} withBg />
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => editor.chain().focus().toggleBlockquote().run()}
-            className={cn(DropdownMenuItemClass, {
-              [activeItemClass]: editor.isActive('blockquote')
-            })}
-          >
-            <span className="flex grow items-center">
-              <QuoteIcon className="mr-2 size-4" />
-              Blockquote
-            </span>
-            <ShortcutKey keys={['>']} withBg />
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => editor.chain().focus().setHorizontalRule().run()}>
-            <span className="flex grow items-center">
-              <DividerHorizontalIcon className="mr-2 size-4" />
-              Divider
-            </span>
-          </DropdownMenuItem>
+        <DropdownMenuContent align="start" className="w-full" onCloseAutoFocus={event => event.preventDefault()}>
+          {insertElements.map(element => (
+            <DropdownMenuItem
+              key={element.label}
+              onClick={() => element.action(editor)}
+              className={cn(DropdownMenuItemClass, {
+                [activeItemClass]: element.isActive?.(editor)
+              })}
+            >
+              <span className="flex grow items-center">
+                {element.icon}
+                {element.label}
+              </span>
+              {element.shortcut && <ShortcutKey keys={element.shortcut} withBg />}
+            </DropdownMenuItem>
+          ))}
         </DropdownMenuContent>
       </DropdownMenu>
     </>
