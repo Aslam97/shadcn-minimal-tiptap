@@ -1,83 +1,63 @@
-import * as React from 'react'
 import type { Editor } from '@tiptap/core'
 import { cn } from '@/lib/utils'
+import { CaretDownIcon, ListBulletIcon } from '@radix-ui/react-icons'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { CaretDownIcon, CodeIcon, DividerHorizontalIcon, PlusIcon, QuoteIcon } from '@radix-ui/react-icons'
 import { ToolbarButton } from '../toolbar-button'
 import { ShortcutKey } from '../shortcut-key'
-import { LinkEditPopover } from '../link/link-edit-popover'
-import { ImageEditDialog } from '../image/image-edit-dialog'
 
-interface InsertElement {
+interface ListItem {
   label: string
-  icon: React.ReactNode
-  action: (editor: Editor) => void
-  isActive?: (editor: Editor) => boolean
-  shortcut?: string[]
+  isActive: (editor: Editor) => boolean
+  onClick: (editor: Editor) => void
+  shortcutKeys: string[]
 }
 
-const insertElements: InsertElement[] = [
+const listItems: ListItem[] = [
   {
-    label: 'Code block',
-    icon: <CodeIcon className="mr-2 size-4" />,
-    action: editor => editor.chain().focus().toggleCodeBlock().run(),
-    isActive: editor => editor.isActive('codeBlock'),
-    shortcut: ['mod', 'alt', 'C']
+    label: 'Numbered list',
+    isActive: editor => editor.isActive('orderedList'),
+    onClick: editor => editor.chain().focus().toggleOrderedList().run(),
+    shortcutKeys: ['mod', 'shift', '7']
   },
   {
-    label: 'Blockquote',
-    icon: <QuoteIcon className="mr-2 size-4" />,
-    action: editor => editor.chain().focus().toggleBlockquote().run(),
-    isActive: editor => editor.isActive('blockquote'),
-    shortcut: ['mod', 'shift', 'B']
+    label: 'Bullet list',
+    isActive: editor => editor.isActive('bulletList'),
+    onClick: editor => editor.chain().focus().toggleBulletList().run(),
+    shortcutKeys: ['mod', 'shift', '8']
   },
   {
-    label: 'Divider',
-    icon: <DividerHorizontalIcon className="mr-2 size-4" />,
-    action: editor => editor.chain().focus().setHorizontalRule().run(),
-    shortcut: ['mod', 'alt', '-']
+    label: 'Task list',
+    isActive: editor => editor.isActive('taskList'),
+    onClick: editor => editor.chain().focus().toggleTaskList().run(),
+    shortcutKeys: ['mod', 'shift', '9']
   }
 ]
 
 export const SectionFour = ({ editor }: { editor: Editor }) => {
-  const isAnyElementActive = insertElements.some(element => element.isActive?.(editor))
+  const isAnyListActive = listItems.some(item => item.isActive(editor))
 
   return (
-    <>
-      <LinkEditPopover editor={editor} />
-      <ImageEditDialog editor={editor} />
-
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <ToolbarButton
-            isActive={isAnyElementActive}
-            tooltip="Insert elements"
-            aria-label="Insert elements"
-            className="w-12"
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <ToolbarButton isActive={isAnyListActive} tooltip="Lists" aria-label="Lists" className="w-12">
+          <ListBulletIcon className="size-5" />
+          <CaretDownIcon className="size-5" />
+        </ToolbarButton>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start" className="w-full" onCloseAutoFocus={event => event.preventDefault()}>
+        {listItems.map(item => (
+          <DropdownMenuItem
+            key={item.label}
+            onClick={() => item.onClick(editor)}
+            className={cn('flex flex-row items-center justify-between gap-4', { 'bg-accent': item.isActive(editor) })}
+            aria-label={item.label}
           >
-            <PlusIcon className="size-5" />
-            <CaretDownIcon className="size-5" />
-          </ToolbarButton>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" className="w-full" onCloseAutoFocus={event => event.preventDefault()}>
-          {insertElements.map(element => (
-            <DropdownMenuItem
-              key={element.label}
-              onClick={() => element.action(editor)}
-              className={cn('flex flex-row items-center justify-between gap-4', {
-                'bg-accent': element.isActive?.(editor)
-              })}
-            >
-              <span className="flex grow items-center">
-                {element.icon}
-                {element.label}
-              </span>
-              {element.shortcut && <ShortcutKey keys={element.shortcut} />}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </>
+            <span className="grow">{item.label}</span>
+            <ShortcutKey keys={item.shortcutKeys} />
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
 

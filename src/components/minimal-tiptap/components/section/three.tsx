@@ -1,63 +1,170 @@
+import * as React from 'react'
 import type { Editor } from '@tiptap/core'
-import { cn } from '@/lib/utils'
-import { CaretDownIcon, ListBulletIcon } from '@radix-ui/react-icons'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { CaretDownIcon, CheckIcon } from '@radix-ui/react-icons'
 import { ToolbarButton } from '../toolbar-button'
-import { ShortcutKey } from '../shortcut-key'
+import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import useTheme from '../../hooks/use-theme'
 
-interface ListItem {
+interface ColorItem {
+  cssVar: string
   label: string
-  isActive: (editor: Editor) => boolean
-  onClick: (editor: Editor) => void
-  shortcutKeys: string[]
+  darkLabel?: string
 }
 
-const listItems: ListItem[] = [
+interface ColorPalette {
+  label: string
+  colors: ColorItem[]
+  inverse: string
+}
+
+const COLORS: ColorPalette[] = [
   {
-    label: 'Numbered list',
-    isActive: editor => editor.isActive('orderedList'),
-    onClick: editor => editor.chain().focus().toggleOrderedList().run(),
-    shortcutKeys: ['mod', 'shift', '7']
+    label: 'Palette 1',
+    inverse: 'hsl(var(--background))',
+    colors: [
+      { cssVar: 'hsl(var(--foreground))', label: 'Default' },
+      { cssVar: 'var(--mt-accent-bold-blue)', label: 'Bold blue' },
+      { cssVar: 'var(--mt-accent-bold-teal)', label: 'Bold teal' },
+      { cssVar: 'var(--mt-accent-bold-green)', label: 'Bold green' },
+      { cssVar: 'var(--mt-accent-bold-orange)', label: 'Bold orange' },
+      { cssVar: 'var(--mt-accent-bold-red)', label: 'Bold red' },
+      { cssVar: 'var(--mt-accent-bold-purple)', label: 'Bold purple' }
+    ]
   },
   {
-    label: 'Bullet list',
-    isActive: editor => editor.isActive('bulletList'),
-    onClick: editor => editor.chain().focus().toggleBulletList().run(),
-    shortcutKeys: ['mod', 'shift', '8']
+    label: 'Palette 2',
+    inverse: 'hsl(var(--background))',
+    colors: [
+      { cssVar: 'var(--mt-accent-gray)', label: 'Gray' },
+      { cssVar: 'var(--mt-accent-blue)', label: 'Blue' },
+      { cssVar: 'var(--mt-accent-teal)', label: 'Teal' },
+      { cssVar: 'var(--mt-accent-green)', label: 'Green' },
+      { cssVar: 'var(--mt-accent-orange)', label: 'Orange' },
+      { cssVar: 'var(--mt-accent-red)', label: 'Red' },
+      { cssVar: 'var(--mt-accent-purple)', label: 'Purple' }
+    ]
   },
   {
-    label: 'Task list',
-    isActive: editor => editor.isActive('taskList'),
-    onClick: editor => editor.chain().focus().toggleTaskList().run(),
-    shortcutKeys: ['mod', 'shift', '9']
+    label: 'Palette 3',
+    inverse: 'hsl(var(--foreground))',
+    colors: [
+      { cssVar: 'hsl(var(--background))', label: 'White', darkLabel: 'Black' },
+      { cssVar: 'var(--mt-accent-blue-subtler)', label: 'Blue subtle' },
+      { cssVar: 'var(--mt-accent-teal-subtler)', label: 'Teal subtle' },
+      { cssVar: 'var(--mt-accent-green-subtler)', label: 'Green subtle' },
+      { cssVar: 'var(--mt-accent-yellow-subtler)', label: 'Yellow subtle' },
+      { cssVar: 'var(--mt-accent-red-subtler)', label: 'Red subtle' },
+      { cssVar: 'var(--mt-accent-purple-subtler)', label: 'Purple subtle' }
+    ]
   }
 ]
 
-export const SectionThree = ({ editor }: { editor: Editor }) => {
-  const isAnyListActive = listItems.some(item => item.isActive(editor))
+const ColorButton: React.FC<{
+  color: ColorItem
+  isSelected: boolean
+  inverse: string
+  onClick: (value: string) => void
+}> = ({ color, isSelected, inverse, onClick }) => {
+  const isDarkMode = useTheme()
+
+  const label = React.useMemo(
+    () => (isDarkMode && color.darkLabel ? color.darkLabel : color.label),
+    [isDarkMode, color]
+  )
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <ToolbarButton isActive={isAnyListActive} tooltip="Lists" aria-label="Lists" className="w-12">
-          <ListBulletIcon className="size-5" />
+    <TooltipProvider delayDuration={0}>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <ToggleGroupItem
+            className="relative size-7 rounded-md p-0"
+            value={color.cssVar}
+            aria-label={label}
+            style={{ backgroundColor: color.cssVar }}
+            onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+              e.preventDefault()
+              onClick(color.cssVar)
+            }}
+          >
+            {isSelected && <CheckIcon className="absolute inset-0 m-auto size-6" style={{ color: inverse }} />}
+          </ToggleGroupItem>
+        </TooltipTrigger>
+        <TooltipContent side="bottom">
+          <p>{label}</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  )
+}
+
+const ColorPicker: React.FC<{
+  palette: ColorPalette
+  selectedColor: string
+  inverse: string
+  onColorChange: (value: string) => void
+}> = ({ palette, selectedColor, inverse, onColorChange }) => (
+  <ToggleGroup type="single" value={selectedColor} onValueChange={onColorChange} className="gap-1.5">
+    {palette.colors.map((color, index) => (
+      <ColorButton
+        key={index}
+        inverse={inverse}
+        color={color}
+        isSelected={selectedColor === color.cssVar}
+        onClick={onColorChange}
+      />
+    ))}
+  </ToggleGroup>
+)
+
+export const SectionThree: React.FC<{ editor: Editor }> = ({ editor }) => {
+  const selectedColor = editor.getAttributes('textStyle')?.color || 'hsl(var(--foreground))'
+
+  const handleColorChange = (value: string) => {
+    editor.chain().setColor(value).run()
+  }
+
+  const colors = React.useMemo(() => COLORS, [])
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <ToolbarButton tooltip="Text color" aria-label="Text color" className="w-12">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="size-5"
+            style={{ color: selectedColor }}
+          >
+            <path d="M4 20h16" />
+            <path d="m6 16 6-12 6 12" />
+            <path d="M8 12h8" />
+          </svg>
           <CaretDownIcon className="size-5" />
         </ToolbarButton>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-full" onCloseAutoFocus={event => event.preventDefault()}>
-        {listItems.map(item => (
-          <DropdownMenuItem
-            key={item.label}
-            onClick={() => item.onClick(editor)}
-            className={cn('flex flex-row items-center justify-between gap-4', { 'bg-accent': item.isActive(editor) })}
-            aria-label={item.label}
-          >
-            <span className="grow">{item.label}</span>
-            <ShortcutKey keys={item.shortcutKeys} />
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </PopoverTrigger>
+      <PopoverContent align="start" className="w-full" onCloseAutoFocus={event => event.preventDefault()}>
+        <div className="space-y-1.5">
+          {colors.map((palette, index) => (
+            <ColorPicker
+              key={index}
+              palette={palette}
+              inverse={palette.inverse}
+              selectedColor={selectedColor}
+              onColorChange={handleColorChange}
+            />
+          ))}
+        </div>
+      </PopoverContent>
+    </Popover>
   )
 }
 

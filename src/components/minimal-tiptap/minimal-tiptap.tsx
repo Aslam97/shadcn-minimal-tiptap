@@ -9,6 +9,7 @@ import { SectionOne } from './components/section/one'
 import { SectionTwo } from './components/section/two'
 import { SectionThree } from './components/section/three'
 import { SectionFour } from './components/section/four'
+import { SectionFive } from './components/section/five'
 import { LinkBubbleMenu } from './components/bubble-menu/link-bubble-menu'
 import { ImageBubbleMenu } from './components/bubble-menu/image-bubble-menu'
 import { Link } from './extensions/link'
@@ -20,7 +21,9 @@ import { Typography } from '@tiptap/extension-typography'
 import { Placeholder } from '@tiptap/extension-placeholder'
 import { Selection } from './extensions/selection'
 import { TaskList } from './extensions/task-list'
-import { TaskItem } from './extensions/task-item/task-item'
+import { TaskItem } from './extensions/task-item'
+import { TextStyle } from '@tiptap/extension-text-style'
+import { Color } from './extensions/color'
 export interface MinimalTiptapProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
   value?: string | null
   outputValue?: 'html' | 'json' | 'text'
@@ -71,6 +74,8 @@ const useMinimalTiptapEditor = (props: MinimalTiptapProps) => {
       }),
       Link,
       Image,
+      TextStyle,
+      Color,
       Selection,
       Typography,
       TaskList,
@@ -109,6 +114,8 @@ const Toolbar = ({ editor }: { editor: TiptapEditor }) => (
       <SectionThree editor={editor} />
       <Separator orientation="vertical" className="mx-2 h-7" />
       <SectionFour editor={editor} />
+      <Separator orientation="vertical" className="mx-2 h-7" />
+      <SectionFive editor={editor} />
     </div>
   </div>
 )
