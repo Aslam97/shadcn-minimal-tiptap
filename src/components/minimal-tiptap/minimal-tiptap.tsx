@@ -24,6 +24,7 @@ import { TaskList } from './extensions/task-list'
 import { TaskItem } from './extensions/task-item'
 import { TextStyle } from '@tiptap/extension-text-style'
 import { Color } from './extensions/color'
+
 export interface MinimalTiptapProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
   value?: string | null
   outputValue?: 'html' | 'json' | 'text'
@@ -44,6 +45,11 @@ const useMinimalTiptapEditor = (props: MinimalTiptapProps) => {
         paragraph: {
           HTMLAttributes: {
             class: 'text-node'
+          }
+        },
+        heading: {
+          HTMLAttributes: {
+            class: 'heading-node'
           }
         },
         blockquote: {
