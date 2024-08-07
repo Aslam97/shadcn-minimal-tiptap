@@ -15,6 +15,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <NextThemesProvider attribute="class" defaultTheme="system" enableSystem>
       <App />
     </NextThemesProvider>
-    <App />
   </React.StrictMode>
 )
