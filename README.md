@@ -1,4 +1,4 @@
-> This readme outdated, please read the code instead. for the usage refer to the `<App />` component.
+> This readme outdated, please read the code instead. usage refer to the `<App />` component.
 
 <a href="https://shadcn-minimal-tiptap.vercel.app" target="_blank">
   <img src="https://i.imgur.com/b7DJM4K.png" alt="Minimal Tiptap Editor" />
