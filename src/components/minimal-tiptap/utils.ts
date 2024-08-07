@@ -63,7 +63,7 @@ export function getShortcutKeys(keys: string[]) {
   return keys.map(key => getShortcutKey(key)).join('')
 }
 
-export function getOutput(editor: Editor, format: MinimalTiptapProps['outputValue']) {
+export function getOutput(editor: Editor, format: MinimalTiptapProps['output']) {
   if (format === 'json') {
     return JSON.stringify(editor.getJSON())
   }
