@@ -119,9 +119,12 @@ const ColorPicker: React.FC<{
 )
 
 export const SectionThree: React.FC<{ editor: Editor }> = ({ editor }) => {
-  const selectedColor = editor.getAttributes('textStyle')?.color || 'hsl(var(--foreground))'
+  const [selectedColor, setSelectedColor] = React.useState(
+    editor.getAttributes('textStyle')?.color || 'hsl(var(--foreground))'
+  )
 
   const handleColorChange = (value: string) => {
+    setSelectedColor(value)
     editor.chain().setColor(value).run()
   }
 
