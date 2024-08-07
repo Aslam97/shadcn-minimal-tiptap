@@ -1,3 +1,5 @@
+> This readme outdated, please read the code instead. for the usage refer to the `<App />` component.
+
 <a href="https://shadcn-minimal-tiptap.vercel.app" target="_blank">
   <img src="https://i.imgur.com/b7DJM4K.png" alt="Minimal Tiptap Editor" />
 </a>
@@ -59,7 +61,3 @@ export const App = () => {
   )
 }
 ```
-
-## Advanced Template
-
-Tiptap just released a new version 2 of their documentation with a advanced template. You can check it out [here](https://tiptap.dev/docs).
