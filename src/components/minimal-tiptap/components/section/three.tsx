@@ -119,16 +119,17 @@ const ColorPicker: React.FC<{
 )
 
 export const SectionThree: React.FC<{ editor: Editor }> = ({ editor }) => {
-  const [selectedColor, setSelectedColor] = React.useState(
-    editor.getAttributes('textStyle')?.color || 'hsl(var(--foreground))'
-  )
+  const color = editor.getAttributes('textStyle')?.color || 'hsl(var(--foreground))'
+  const [selectedColor, setSelectedColor] = React.useState(color)
+
+  React.useEffect(() => {
+    setSelectedColor(color)
+  }, [color])
 
   const handleColorChange = (value: string) => {
     setSelectedColor(value)
     editor.chain().setColor(value).run()
   }
-
-  const colors = React.useMemo(() => COLORS, [])
 
   return (
     <Popover>
@@ -156,7 +157,7 @@ export const SectionThree: React.FC<{ editor: Editor }> = ({ editor }) => {
       </PopoverTrigger>
       <PopoverContent align="start" className="w-full" onCloseAutoFocus={event => event.preventDefault()}>
         <div className="space-y-1.5">
-          {colors.map((palette, index) => (
+          {COLORS.map((palette, index) => (
             <ColorPicker
               key={index}
               palette={palette}
