@@ -15,7 +15,7 @@ export default function App() {
           <div className="mt-4 flex justify-center">
             <div className="relative rounded-full px-3 py-1 text-sm leading-6 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
               <a href="https://github.com/Aslam97/shadcn-tiptap" className="font-semibold text-primary">
-                View on Github <span aria-hidden="true">→</span>
+                View on Github <span>→</span>
               </a>
             </div>
           </div>
@@ -41,7 +41,8 @@ const ExampleForm = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       description: ''
-    }
+    },
+    mode: 'all'
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -61,11 +62,20 @@ const ExampleForm = () => {
                 <MinimalTiptapEditor
                   {...field}
                   onValueChange={field.onChange}
-                  outputValue="json"
-                  placeholder="Type your description here..."
+                  throttleDelay={2000}
                   className={cn('w-full', {
-                    'border-red-500 focus-within:border-red-500': form.formState.errors.description
+                    'border-destructive focus-within:border-destructive': form.formState.errors.description
                   })}
+                  editorContentClassName="p-5"
+                  initialContent={''}
+                  output="html"
+                  placeholder="Type your description here..."
+                  autofocus={true}
+                  immediatelyRender={true}
+                  editable={true}
+                  injectCSS={true}
+                  shouldRerenderOnTransaction={false}
+                  editorClassName="focus:outline-none"
                 />
               </FormControl>
               <FormMessage />
