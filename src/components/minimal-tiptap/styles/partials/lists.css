@@ -1,5 +1,5 @@
-.minimal-tiptap-editor .ProseMirror {
-  @apply text-base;
+.minimal-tiptap-editor div.tiptap p {
+  @apply text-[var(--mt-font-size-regular)];
 }
 
 .minimal-tiptap-editor .ProseMirror ol {
@@ -47,7 +47,7 @@
 }
 
 .minimal-tiptap-editor .ProseMirror .taskItem-drag-handle {
-  @apply absolute -left-5 top-1.5 h-[18px] w-[18px] cursor-move pl-0.5 text-[var(--minimal-tiptap-secondary)] opacity-0;
+  @apply absolute -left-5 top-1.5 h-[18px] w-[18px] cursor-move pl-0.5 text-[var(--mt-secondary)] opacity-0;
 }
 
 .minimal-tiptap-editor
@@ -59,12 +59,12 @@
 }
 
 .minimal-tiptap-editor .ProseMirror .taskItem-drag-handle:hover {
-  @apply text-[var(--minimal-tiptap-drag-handle-hover)];
+  @apply text-[var(--mt-drag-handle-hover)];
 }
 
 .minimal-tiptap-editor .ProseMirror .taskItem-checkbox {
   fill-opacity: 0;
-  @apply h-3.5 w-3.5 flex-shrink-0 cursor-pointer select-none appearance-none rounded border border-solid border-[var(--minimal-tiptap-secondary)] bg-transparent bg-[1px_2px] p-0.5 align-middle transition-colors duration-75 ease-out;
+  @apply h-3.5 w-3.5 flex-shrink-0 cursor-pointer select-none appearance-none rounded border border-solid border-[var(--mt-secondary)] bg-transparent bg-[1px_2px] p-0.5 align-middle transition-colors duration-75 ease-out;
 }
 
 .minimal-tiptap-editor .ProseMirror .taskItem-checkbox:checked {

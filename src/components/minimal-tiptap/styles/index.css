@@ -4,14 +4,16 @@
 @import './partials/typography.css';
 
 :root {
-  --minimal-tiptap-code-background: rgba(8, 43, 120, 0.047);
-  --minimal-tiptap-code-color: rgb(212, 212, 212);
-  --minimal-tiptap-secondary: rgb(157, 157, 159);
-  --minimal-tiptap-pre-background: rgb(236, 236, 236);
-  --minimal-tiptap-pre-border: rgb(224, 224, 224);
-  --minimal-tiptap-pre-color: rgb(47, 47, 49);
-  --minimal-tiptap-hr: rgb(220, 220, 220);
-  --minimal-tiptap-drag-handle-hover: rgb(92, 92, 94);
+  --mt-font-size-regular: 0.9375rem;
+
+  --mt-code-background: #082b781f;
+  --mt-code-color: #d4d4d4;
+  --mt-secondary: #9d9d9f;
+  --mt-pre-background: #ececec;
+  --mt-pre-border: #e0e0e0;
+  --mt-pre-color: #2f2f31;
+  --mt-hr: #dcdcdc;
+  --mt-drag-handle-hover: #5c5c5e;
 
   --mt-accent-bold-blue: #05c;
   --mt-accent-bold-teal: #206a83;
@@ -35,26 +37,28 @@
   --mt-accent-red-subtler: #ffd5d2;
   --mt-accent-purple-subtler: #dfd8fd;
 
-  --hljs-string: rgb(170, 67, 15);
-  --hljs-title: rgb(176, 136, 54);
-  --hljs-comment: rgb(153, 153, 153);
-  --hljs-keyword: rgb(12, 94, 177);
-  --hljs-attr: rgb(58, 146, 188);
-  --hljs-literal: rgb(200, 43, 15);
-  --hljs-name: rgb(37, 151, 146);
-  --hljs-selector-tag: rgb(200, 80, 15);
-  --hljs-number: rgb(61, 160, 103);
+  --hljs-string: #aa430f;
+  --hljs-title: #b08836;
+  --hljs-comment: #999999;
+  --hljs-keyword: #0c5eb1;
+  --hljs-attr: #3a92bc;
+  --hljs-literal: #c82b0f;
+  --hljs-name: #259792;
+  --hljs-selector-tag: #c8500f;
+  --hljs-number: #3da067;
 }
 
 .dark {
-  --minimal-tiptap-code-background: rgba(255, 255, 255, 0.075);
-  --minimal-tiptap-code-color: rgb(44, 46, 51);
-  --minimal-tiptap-secondary: rgb(89, 90, 92);
-  --minimal-tiptap-pre-background: rgb(8, 8, 8);
-  --minimal-tiptap-pre-border: rgb(35, 37, 42);
-  --minimal-tiptap-pre-color: rgb(227, 228, 230);
-  --minimal-tiptap-hr: rgb(38, 40, 45);
-  --minimal-tiptap-drag-handle-hover: rgb(150, 151, 153);
+  --mt-font-size-regular: 0.9375rem;
+
+  --mt-code-background: #ffffff13;
+  --mt-code-color: #2c2e33;
+  --mt-secondary: #595a5c;
+  --mt-pre-background: #080808;
+  --mt-pre-border: #23252a;
+  --mt-pre-color: #e3e4e6;
+  --mt-hr: #26282d;
+  --mt-drag-handle-hover: #969799;
 
   --mt-accent-bold-blue: #85b8ff;
   --mt-accent-bold-teal: #9dd9ee;
@@ -78,15 +82,15 @@
   --mt-accent-red-subtler: #5d1f1a;
   --mt-accent-purple-subtler: #352c63;
 
-  --hljs-string: rgb(218, 147, 107);
-  --hljs-title: rgb(241, 213, 157);
-  --hljs-comment: rgb(170, 170, 170);
-  --hljs-keyword: rgb(102, 153, 204);
-  --hljs-attr: rgb(144, 202, 232);
-  --hljs-literal: rgb(242, 119, 122);
-  --hljs-name: rgb(95, 192, 160);
-  --hljs-selector-tag: rgb(232, 199, 133);
-  --hljs-number: rgb(182, 231, 182);
+  --hljs-string: #da936b;
+  --hljs-title: #f1d59d;
+  --hljs-comment: #aaaaaa;
+  --hljs-keyword: #6699cc;
+  --hljs-attr: #90cae8;
+  --hljs-literal: #f2777a;
+  --hljs-name: #5fc0a0;
+  --hljs-selector-tag: #e8c785;
+  --hljs-number: #b6e7b6;
 }
 
 .minimal-tiptap-editor .ProseMirror {
@@ -123,7 +127,7 @@
 }
 
 .minimal-tiptap-editor .ProseMirror p {
-  @apply break-words text-base leading-7;
+  @apply break-words;
 }
 
 .minimal-tiptap-editor .ProseMirror li .text-node:has(+ .list-node),
@@ -143,7 +147,7 @@
 }
 
 .minimal-tiptap-editor .ProseMirror hr {
-  @apply my-3 h-0.5 w-full border-none bg-[var(--minimal-tiptap-hr)];
+  @apply my-3 h-0.5 w-full border-none bg-[var(--mt-hr)];
 }
 
 .minimal-tiptap-editor .ProseMirror-focused hr.ProseMirror-selectednode {
@@ -175,8 +179,4 @@
 /* Override native selection when custom selection is present */
 .minimal-tiptap-editor .ProseMirror .selection::selection {
   background: transparent;
-}
-
-[data-theme='slash-command'] {
-  width: 1000vw;
 }
