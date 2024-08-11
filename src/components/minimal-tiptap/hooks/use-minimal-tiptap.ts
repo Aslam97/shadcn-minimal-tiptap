@@ -1,11 +1,11 @@
 import * as React from 'react'
 import { StarterKit } from '@tiptap/starter-kit'
-import { Content, useEditor, UseEditorOptions } from '@tiptap/react'
-import { Editor } from '@tiptap/core'
+import type { Content, UseEditorOptions } from '@tiptap/react'
+import { useEditor } from '@tiptap/react'
+import type { Editor } from '@tiptap/core'
 import { Typography } from '@tiptap/extension-typography'
 import { Placeholder } from '@tiptap/extension-placeholder'
 import { TextStyle } from '@tiptap/extension-text-style'
-
 import { Link, Image, HorizontalRule, CodeBlockLowlight, Selection, TaskList, TaskItem, Color } from '../extensions'
 import { cn } from '@/lib/utils'
 import { getOutput } from '../utils'
@@ -56,11 +56,12 @@ export const useMinimalTiptapEditor = ({
   onBlur,
   ...props
 }: UseMinimalTiptapEditorProps) => {
-  const [content, setContent] = React.useState<Content>(value!)
-  const throttledContent = useThrottle(content, throttleDelay)
-  const [lastThrottledContent, setLastThrottledContent] = React.useState(throttledContent)
+  const throttledSetValue = useThrottle((value: string) => onUpdate?.(value), throttleDelay)
 
-  const handleUpdate = React.useCallback((editor: Editor) => setContent(getOutput(editor, output)), [output])
+  const handleUpdate = React.useCallback(
+    (editor: Editor) => throttledSetValue(getOutput(editor, output)),
+    [output, throttledSetValue]
+  )
 
   const handleCreate = React.useCallback(
     (editor: Editor) => {
@@ -88,13 +89,6 @@ export const useMinimalTiptapEditor = ({
     onBlur: ({ editor }) => handleBlur(editor),
     ...props
   })
-
-  React.useEffect(() => {
-    if (lastThrottledContent !== throttledContent) {
-      setLastThrottledContent(throttledContent)
-      onUpdate?.(throttledContent!)
-    }
-  }, [throttledContent, lastThrottledContent, onUpdate])
 
   return editor
 }
