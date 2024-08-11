@@ -48,7 +48,8 @@ const formatActions: FormatAction[] = [
     label: 'Clear formatting',
     action: editor => editor.chain().focus().unsetAllMarks().run(),
     isActive: () => false,
-    canExecute: editor => editor.can().chain().focus().unsetAllMarks().run() && !editor.isActive('codeBlock')
+    canExecute: editor => editor.can().chain().focus().unsetAllMarks().run() && !editor.isActive('codeBlock'),
+    shortcut: ['mod', '\\']
   }
 ]
 
