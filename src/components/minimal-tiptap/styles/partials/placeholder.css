@@ -2,10 +2,6 @@
   @apply pointer-events-none float-left h-0 w-full text-[var(--mt-secondary)];
 }
 
-.minimal-tiptap-editor .ProseMirror.ProseMirror-focused > p.has-focus.is-empty::before {
-  content: 'Type / for commands...';
-}
-
 .minimal-tiptap-editor .ProseMirror > p.is-editor-empty::before {
   content: attr(data-placeholder);
   @apply pointer-events-none float-left h-0 text-[var(--mt-secondary)];
