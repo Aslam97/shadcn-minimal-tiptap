@@ -67,7 +67,6 @@ const ExampleForm = () => {
                     'border-destructive focus-within:border-destructive': form.formState.errors.description
                   })}
                   editorContentClassName="p-5"
-                  initialContent={''}
                   output="html"
                   placeholder="Type your description here..."
                   autofocus={true}

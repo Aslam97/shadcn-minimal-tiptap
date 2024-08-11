@@ -13,7 +13,6 @@ import { useThrottle } from '../hooks/use-throttle'
 
 export interface UseMinimalTiptapEditorProps extends UseEditorOptions {
   value?: Content
-  initialContent?: Content
   output?: 'html' | 'json' | 'text'
   placeholder?: string
   editorClassName?: string
@@ -49,7 +48,6 @@ const createExtensions = (placeholder: string) => [
 
 export const useMinimalTiptapEditor = ({
   value,
-  initialContent,
   output = 'html',
   placeholder = '',
   editorClassName,
@@ -97,12 +95,6 @@ export const useMinimalTiptapEditor = ({
       onUpdate?.(throttledContent!)
     }
   }, [throttledContent, lastThrottledContent, onUpdate])
-
-  React.useEffect(() => {
-    if (initialContent) {
-      setTimeout(() => editor?.commands.setContent(initialContent))
-    }
-  }, [editor, initialContent])
 
   return editor
 }
