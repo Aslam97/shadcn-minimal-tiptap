@@ -24,12 +24,6 @@ const listItems: ListItem[] = [
     isActive: editor => editor.isActive('bulletList'),
     onClick: editor => editor.chain().focus().toggleBulletList().run(),
     shortcutKeys: ['mod', 'shift', '8']
-  },
-  {
-    label: 'Task list',
-    isActive: editor => editor.isActive('taskList'),
-    onClick: editor => editor.chain().focus().toggleTaskList().run(),
-    shortcutKeys: ['mod', 'shift', '9']
   }
 ]
 

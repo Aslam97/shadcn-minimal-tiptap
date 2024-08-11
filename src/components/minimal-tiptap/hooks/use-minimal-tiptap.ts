@@ -6,7 +6,7 @@ import type { Editor } from '@tiptap/core'
 import { Typography } from '@tiptap/extension-typography'
 import { Placeholder } from '@tiptap/extension-placeholder'
 import { TextStyle } from '@tiptap/extension-text-style'
-import { Link, Image, HorizontalRule, CodeBlockLowlight, Selection, TaskList, TaskItem, Color } from '../extensions'
+import { Link, Image, HorizontalRule, CodeBlockLowlight, Selection, Color } from '../extensions'
 import { cn } from '@/lib/utils'
 import { getOutput } from '../utils'
 import { useThrottle } from '../hooks/use-throttle'
@@ -39,8 +39,6 @@ const createExtensions = (placeholder: string) => [
   Color,
   Selection,
   Typography,
-  TaskList,
-  TaskItem,
   HorizontalRule,
   CodeBlockLowlight,
   Placeholder.configure({ placeholder: () => placeholder })
