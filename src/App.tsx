@@ -71,7 +71,7 @@ const ExampleForm = () => {
                   immediatelyRender={true}
                   editable={true}
                   injectCSS={true}
-                  // shouldRerenderOnTransaction={false}
+                  shouldRerenderOnTransaction={false}
                   editorClassName="focus:outline-none"
                 />
               </FormControl>
@@ -79,7 +79,7 @@ const ExampleForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
+        <Button type="submit" size="lg" className="w-full">
           Submit
         </Button>
       </form>
