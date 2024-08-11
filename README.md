@@ -39,7 +39,7 @@ The Minimal Tiptap Editor Component accepts the following props:
 - `outputValue` is the format of the output value. It can be 'html', 'json', or 'text'. Default is 'html'.
 - `disabled` is a boolean to disable the editor.
 - `contentClass` is a string to add a class to the editor content.
-- `onValueChange` is a function that accepts a string and updates the value of the editor.
+- `onChange` is a function that accepts a string and updates the value of the editor.
 
 ## Usage
 
@@ -53,7 +53,7 @@ export const App = () => {
   return (
     <MinimalTiptapEditor
       value={value}
-      onValueChange={setValue}
+      onChange={setValue}
       outputValue="json"
       disabled={false}
       contentClass="max-w-3xl mx-auto mt-8"

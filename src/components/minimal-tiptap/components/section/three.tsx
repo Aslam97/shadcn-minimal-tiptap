@@ -5,7 +5,7 @@ import { ToolbarButton } from '../toolbar-button'
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import useTheme from '../../hooks/use-theme'
+import { useTheme } from '../../hooks/use-theme'
 
 interface ColorItem {
   cssVar: string
@@ -61,18 +61,14 @@ const COLORS: ColorPalette[] = [
   }
 ]
 
-const ColorButton: React.FC<{
+const MemoizedColorButton = React.memo<{
   color: ColorItem
   isSelected: boolean
   inverse: string
   onClick: (value: string) => void
-}> = ({ color, isSelected, inverse, onClick }) => {
+}>(({ color, isSelected, inverse, onClick }) => {
   const isDarkMode = useTheme()
-
-  const label = React.useMemo(
-    () => (isDarkMode && color.darkLabel ? color.darkLabel : color.label),
-    [isDarkMode, color]
-  )
+  const label = isDarkMode && color.darkLabel ? color.darkLabel : color.label
 
   return (
     <TooltipProvider delayDuration={0}>
@@ -97,17 +93,26 @@ const ColorButton: React.FC<{
       </Tooltip>
     </TooltipProvider>
   )
-}
+})
 
-const ColorPicker: React.FC<{
+MemoizedColorButton.displayName = 'MemoizedColorButton'
+
+const MemoizedColorPicker = React.memo<{
   palette: ColorPalette
   selectedColor: string
   inverse: string
   onColorChange: (value: string) => void
-}> = ({ palette, selectedColor, inverse, onColorChange }) => (
-  <ToggleGroup type="single" value={selectedColor} onValueChange={onColorChange} className="gap-1.5">
+}>(({ palette, selectedColor, inverse, onColorChange }) => (
+  <ToggleGroup
+    type="single"
+    value={selectedColor}
+    onValueChange={(value: string) => {
+      if (value) onColorChange(value)
+    }}
+    className="gap-1.5"
+  >
     {palette.colors.map((color, index) => (
-      <ColorButton
+      <MemoizedColorButton
         key={index}
         inverse={inverse}
         color={color}
@@ -116,20 +121,25 @@ const ColorPicker: React.FC<{
       />
     ))}
   </ToggleGroup>
-)
+))
+
+MemoizedColorPicker.displayName = 'MemoizedColorPicker'
 
 export const SectionThree: React.FC<{ editor: Editor }> = ({ editor }) => {
   const color = editor.getAttributes('textStyle')?.color || 'hsl(var(--foreground))'
   const [selectedColor, setSelectedColor] = React.useState(color)
 
+  const handleColorChange = React.useCallback(
+    (value: string) => {
+      setSelectedColor(value)
+      editor.chain().setColor(value).run()
+    },
+    [editor]
+  )
+
   React.useEffect(() => {
     setSelectedColor(color)
   }, [color])
-
-  const handleColorChange = (value: string) => {
-    setSelectedColor(value)
-    editor.chain().setColor(value).run()
-  }
 
   return (
     <Popover>
@@ -158,7 +168,7 @@ export const SectionThree: React.FC<{ editor: Editor }> = ({ editor }) => {
       <PopoverContent align="start" className="w-full" onCloseAutoFocus={event => event.preventDefault()}>
         <div className="space-y-1.5">
           {COLORS.map((palette, index) => (
-            <ColorPicker
+            <MemoizedColorPicker
               key={index}
               palette={palette}
               inverse={palette.inverse}
@@ -171,5 +181,7 @@ export const SectionThree: React.FC<{ editor: Editor }> = ({ editor }) => {
     </Popover>
   )
 }
+
+SectionThree.displayName = 'SectionThree'
 
 export default SectionThree

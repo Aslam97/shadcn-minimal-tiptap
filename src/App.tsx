@@ -41,8 +41,7 @@ const ExampleForm = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       description: ''
-    },
-    mode: 'all'
+    }
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -61,7 +60,6 @@ const ExampleForm = () => {
               <FormControl>
                 <MinimalTiptapEditor
                   {...field}
-                  onValueChange={field.onChange}
                   throttleDelay={2000}
                   className={cn('w-full', {
                     'border-destructive focus-within:border-destructive': form.formState.errors.description
@@ -73,7 +71,7 @@ const ExampleForm = () => {
                   immediatelyRender={true}
                   editable={true}
                   injectCSS={true}
-                  shouldRerenderOnTransaction={false}
+                  // shouldRerenderOnTransaction={false}
                   editorClassName="focus:outline-none"
                 />
               </FormControl>

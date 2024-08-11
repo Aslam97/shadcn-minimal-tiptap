@@ -16,7 +16,7 @@ import { useMinimalTiptapEditor, UseMinimalTiptapEditorProps } from './hooks/use
 
 export interface MinimalTiptapProps extends Omit<UseMinimalTiptapEditorProps, 'onUpdate' | 'onBlur'> {
   value?: Content
-  onValueChange?: (value: Content) => void
+  onChange?: (value: Content) => void
   className?: string
   editorContentClassName?: string
 }
@@ -38,10 +38,10 @@ const Toolbar = ({ editor }: { editor: Editor }) => (
 )
 
 export const MinimalTiptapEditor = React.forwardRef<HTMLDivElement, MinimalTiptapProps>(
-  ({ value, onValueChange, className, editorContentClassName, ...props }, ref) => {
+  ({ value, onChange, className, editorContentClassName, ...props }, ref) => {
     const editor = useMinimalTiptapEditor({
       value,
-      onUpdate: onValueChange,
+      onUpdate: onChange,
       ...props
     })
 
