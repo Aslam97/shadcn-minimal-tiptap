@@ -173,7 +173,7 @@
 .minimal-tiptap-editor .ProseMirror .selection,
 .minimal-tiptap-editor .ProseMirror *::selection,
 ::selection {
-  @apply bg-primary/40;
+  @apply bg-primary/25;
 }
 
 /* Override native selection when custom selection is present */
