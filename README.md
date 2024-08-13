@@ -6,7 +6,7 @@
 
 This is a Minimal Tiptap Editor Component built for [Shadcn](https://ui.shadcn.com). It provides a simple and clean editor for users to write and format text.
 
-> **Note:** If you are worry about future updates. You dont have to. This project will not be receiving any more updates after the last release, v1.0.1. Over the past week, the component got several updates and bug fixes as I've been using it in production. As of now, there are no remaining bugs or features to address, so I've decided to release it. If you encounter any issues or have feature requests, feel free to open an issue.
+<!-- > **Note:** If you are worry about future updates. You dont have to. This project will not be receiving any more updates after the last release, v1.0.1. Over the past week, the component got several updates and bug fixes as I've been using it in production. As of now, there are no remaining bugs or features to address, so I've decided to release it. If you encounter any issues or have feature requests, feel free to open an issue. -->
 
 ## Installation
 
@@ -72,6 +72,11 @@ export const App = () => {
   )
 }
 ```
+
+## Other Projects
+
+- [React Fancy Switch](https://github.com/Aslam97/react-fancy-switch)
+- [React Confirm Dialog](https://github.com/Aslam97/react-confirm-dialog)
 
 ## License
 
