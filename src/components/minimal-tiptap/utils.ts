@@ -47,20 +47,26 @@ export function isMacOS() {
   return isMac
 }
 
-export function getShortcutKey(key: string) {
-  if (key.toLowerCase() === 'mod') {
-    return isMacOS() ? '⌘' : 'Ctrl'
-  } else if (key.toLowerCase() === 'alt') {
-    return isMacOS() ? '⌥' : 'Alt'
-  } else if (key.toLowerCase() === 'shift') {
-    return isMacOS() ? '⇧' : 'Shift'
+interface ShortcutKeyResult {
+  symbol: string
+  readable: string
+}
+
+export function getShortcutKey(key: string): ShortcutKeyResult {
+  const lowercaseKey = key.toLowerCase()
+  if (lowercaseKey === 'mod') {
+    return isMacOS() ? { symbol: '⌘', readable: 'Command' } : { symbol: 'Ctrl', readable: 'Control' }
+  } else if (lowercaseKey === 'alt') {
+    return isMacOS() ? { symbol: '⌥', readable: 'Option' } : { symbol: 'Alt', readable: 'Alt' }
+  } else if (lowercaseKey === 'shift') {
+    return isMacOS() ? { symbol: '⇧', readable: 'Shift' } : { symbol: 'Shift', readable: 'Shift' }
   } else {
-    return key
+    return { symbol: key, readable: key }
   }
 }
 
-export function getShortcutKeys(keys: string[]) {
-  return keys.map(key => getShortcutKey(key)).join('')
+export function getShortcutKeys(keys: string[]): ShortcutKeyResult[] {
+  return keys.map(key => getShortcutKey(key))
 }
 
 export function getOutput(editor: Editor, format: MinimalTiptapProps['output']) {

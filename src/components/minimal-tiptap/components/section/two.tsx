@@ -5,6 +5,7 @@ import { DotsHorizontalIcon, FontBoldIcon, FontItalicIcon } from '@radix-ui/reac
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { ToolbarButton } from '../toolbar-button'
 import { ShortcutKey } from '../shortcut-key'
+import { getShortcutKey } from '../../utils'
 
 interface FormatAction {
   label: string
@@ -17,18 +18,20 @@ interface FormatAction {
 
 const formatActions: FormatAction[] = [
   {
-    label: 'Bold',
+    label: 'Bold ',
     icon: <FontBoldIcon className="size-5" />,
     action: editor => editor.chain().focus().toggleBold().run(),
     isActive: editor => editor.isActive('bold'),
-    canExecute: editor => editor.can().chain().focus().toggleBold().run() && !editor.isActive('codeBlock')
+    canExecute: editor => editor.can().chain().focus().toggleBold().run() && !editor.isActive('codeBlock'),
+    shortcut: ['mod', 'B']
   },
   {
     label: 'Italic',
     icon: <FontItalicIcon className="size-5" />,
     action: editor => editor.chain().focus().toggleItalic().run(),
     isActive: editor => editor.isActive('italic'),
-    canExecute: editor => editor.can().chain().focus().toggleItalic().run() && !editor.isActive('codeBlock')
+    canExecute: editor => editor.can().chain().focus().toggleItalic().run() && !editor.isActive('codeBlock'),
+    shortcut: ['mod', 'I']
   },
   {
     label: 'Strikethrough',
@@ -63,7 +66,7 @@ export const SectionTwo = ({ editor }: { editor: Editor }) => {
       onClick={() => action.action(editor)}
       disabled={!action.canExecute(editor)}
       isActive={action.isActive(editor)}
-      tooltip={action.label}
+      tooltip={`${action.label} ${action.shortcut && `${action.shortcut.map(s => getShortcutKey(s).symbol).join(' ')}`}`}
       aria-label={action.label}
     >
       {action.icon}
