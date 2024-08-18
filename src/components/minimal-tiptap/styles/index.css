@@ -143,7 +143,7 @@
 
 .minimal-tiptap-editor .ProseMirror blockquote::before,
 .minimal-tiptap-editor .ProseMirror blockquote.is-empty::before {
-  @apply absolute bottom-0 left-0 top-0 h-full w-1 rounded-sm bg-accent content-[''];
+  @apply absolute bottom-0 left-0 top-0 h-full w-1 rounded-sm bg-accent-foreground/15 content-[''];
 }
 
 .minimal-tiptap-editor .ProseMirror hr {

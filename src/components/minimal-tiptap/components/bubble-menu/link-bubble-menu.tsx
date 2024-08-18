@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import { Editor } from '@tiptap/core'
+import { Editor } from '@tiptap/react'
 import { BubbleMenu } from '@tiptap/react'
 import { LinkEditBlock } from '../link/link-edit-block'
 import { LinkPopoverBlock } from '../link/link-popover-block'

@@ -1,4 +1,4 @@
-import type { Editor } from '@tiptap/core'
+import type { Editor } from '@tiptap/react'
 import { useState } from 'react'
 import { ImageIcon } from '@radix-ui/react-icons'
 import { ToolbarButton } from '../toolbar-button'

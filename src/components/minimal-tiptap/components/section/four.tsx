@@ -1,58 +1,63 @@
-import type { Editor } from '@tiptap/core'
-import { cn } from '@/lib/utils'
+import * as React from 'react'
+import type { Editor } from '@tiptap/react'
 import { CaretDownIcon, ListBulletIcon } from '@radix-ui/react-icons'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { ToolbarButton } from '../toolbar-button'
-import { ShortcutKey } from '../shortcut-key'
+import { FormatAction } from '../../types'
+import { ToolbarSection } from '../toolbar-section'
 
-interface ListItem {
-  label: string
-  isActive: (editor: Editor) => boolean
-  onClick: (editor: Editor) => void
-  shortcutKeys: string[]
+type ListItemAction = 'orderedList' | 'bulletList'
+interface ListItem extends FormatAction {
+  value: ListItemAction
 }
 
-const listItems: ListItem[] = [
+const formatActions: ListItem[] = [
   {
+    value: 'orderedList',
     label: 'Numbered list',
+    icon: <ListBulletIcon className="size-5" />,
     isActive: editor => editor.isActive('orderedList'),
-    onClick: editor => editor.chain().focus().toggleOrderedList().run(),
-    shortcutKeys: ['mod', 'shift', '7']
+    action: editor => editor.chain().focus().toggleOrderedList().run(),
+    canExecute: editor => editor.can().chain().focus().toggleOrderedList().run(),
+    shortcuts: ['mod', 'shift', '7']
   },
   {
+    value: 'bulletList',
     label: 'Bullet list',
+    icon: <ListBulletIcon className="size-5" />,
     isActive: editor => editor.isActive('bulletList'),
-    onClick: editor => editor.chain().focus().toggleBulletList().run(),
-    shortcutKeys: ['mod', 'shift', '8']
+    action: editor => editor.chain().focus().toggleBulletList().run(),
+    canExecute: editor => editor.can().chain().focus().toggleBulletList().run(),
+    shortcuts: ['mod', 'shift', '8']
   }
 ]
 
-export const SectionFour = ({ editor }: { editor: Editor }) => {
-  const isAnyListActive = listItems.some(item => item.isActive(editor))
+interface SectionFourProps {
+  editor: Editor
+  activeActions?: ListItemAction[]
+  mainActionCount?: number
+}
 
+export const SectionFour: React.FC<SectionFourProps> = ({
+  editor,
+  activeActions = formatActions.map(action => action.value),
+  mainActionCount = 0
+}) => {
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <ToolbarButton isActive={isAnyListActive} tooltip="Lists" aria-label="Lists" className="w-12">
+    <ToolbarSection
+      editor={editor}
+      actions={formatActions}
+      activeActions={activeActions}
+      mainActionCount={mainActionCount}
+      dropdownIcon={
+        <>
           <ListBulletIcon className="size-5" />
           <CaretDownIcon className="size-5" />
-        </ToolbarButton>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-full" onCloseAutoFocus={event => event.preventDefault()}>
-        {listItems.map(item => (
-          <DropdownMenuItem
-            key={item.label}
-            onClick={() => item.onClick(editor)}
-            className={cn('flex flex-row items-center justify-between gap-4', { 'bg-accent': item.isActive(editor) })}
-            aria-label={item.label}
-          >
-            <span className="grow">{item.label}</span>
-            <ShortcutKey keys={item.shortcutKeys} />
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+        </>
+      }
+      dropdownTooltip="Lists"
+    />
   )
 }
+
+SectionFour.displayName = 'SectionFour'
 
 export default SectionFour

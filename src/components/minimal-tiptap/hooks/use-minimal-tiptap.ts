@@ -6,7 +6,16 @@ import type { Editor } from '@tiptap/core'
 import { Typography } from '@tiptap/extension-typography'
 import { Placeholder } from '@tiptap/extension-placeholder'
 import { TextStyle } from '@tiptap/extension-text-style'
-import { Link, Image, HorizontalRule, CodeBlockLowlight, Selection, Color, UnsetAllMarks } from '../extensions'
+import {
+  Link,
+  Image,
+  HorizontalRule,
+  CodeBlockLowlight,
+  Selection,
+  Color,
+  UnsetAllMarks,
+  ResetMarksOnEnter
+} from '../extensions'
 import { cn } from '@/lib/utils'
 import { getOutput } from '../utils'
 import { useThrottle } from '../hooks/use-throttle'
@@ -41,6 +50,7 @@ const createExtensions = (placeholder: string) => [
   Typography,
   UnsetAllMarks,
   HorizontalRule,
+  ResetMarksOnEnter,
   CodeBlockLowlight,
   Placeholder.configure({ placeholder: () => placeholder })
 ]
