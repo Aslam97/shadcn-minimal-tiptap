@@ -64,7 +64,7 @@ const ExampleForm = () => {
                   className={cn('w-full', {
                     'border-destructive focus-within:border-destructive': form.formState.errors.description
                   })}
-                  editorContentClassName="p-5"
+                  editorContentClassName="some-class"
                   output="html"
                   placeholder="Type your description here..."
                   autofocus={true}
@@ -72,7 +72,7 @@ const ExampleForm = () => {
                   editable={true}
                   injectCSS={true}
                   shouldRerenderOnTransaction={false}
-                  editorClassName="focus:outline-none"
+                  editorClassName="focus:outline-none p-5"
                 />
               </FormControl>
               <FormMessage />

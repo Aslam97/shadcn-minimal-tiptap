@@ -66,7 +66,7 @@ export const MinimalTiptapEditor = React.forwardRef<HTMLDivElement, MinimalTipta
         <Toolbar editor={editor} />
 
         <div className="h-full grow" onClick={handleClick}>
-          <EditorContent editor={editor} className={cn('minimal-tiptap-editor p-5', editorContentClassName)} />
+          <EditorContent editor={editor} className={cn('minimal-tiptap-editor', editorContentClassName)} />
         </div>
 
         <LinkBubbleMenu editor={editor} />
