@@ -1,4 +1,4 @@
-import type { Editor } from '@tiptap/core'
+import type { Editor } from '@tiptap/react'
 import { BubbleMenu } from '@tiptap/react'
 import { ImagePopoverBlock } from '../image/image-popover-block'
 import { ShouldShowProps } from '../../types'
