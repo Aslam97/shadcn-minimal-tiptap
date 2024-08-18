@@ -1,6 +1,5 @@
 import type { Editor } from '@tiptap/core'
 import type { MinimalTiptapProps } from './minimal-tiptap'
-import { LinkProps } from './types'
 
 let isMac: boolean | undefined
 
@@ -79,26 +78,4 @@ export function getOutput(editor: Editor, format: MinimalTiptapProps['output']) 
   }
 
   return editor.getText()
-}
-
-export function setLink(editor: Editor, { url, text, openInNewTab }: LinkProps) {
-  editor
-    .chain()
-    .extendMarkRange('link')
-    .insertContent({
-      type: 'text',
-      text: text || url,
-      marks: [
-        {
-          type: 'link',
-          attrs: {
-            href: url,
-            target: openInNewTab ? '_blank' : ''
-          }
-        }
-      ]
-    })
-    .setLink({ href: url })
-    .focus()
-    .run()
 }

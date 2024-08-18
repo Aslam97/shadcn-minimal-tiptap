@@ -1,36 +1,86 @@
-import type { Editor } from '@tiptap/core'
-import { useState } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
+import { Editor } from '@tiptap/core'
+import { BubbleMenu } from '@tiptap/react'
 import { LinkEditBlock } from '../link/link-edit-block'
 import { LinkPopoverBlock } from '../link/link-popover-block'
-import { BubbleMenu } from '@tiptap/react'
-import { LinkProps, ShouldShowProps } from '../../types'
-import { setLink } from '../../utils'
+import { ShouldShowProps } from '../../types'
 
-const LinkBubbleMenu = ({ editor }: { editor: Editor }) => {
+interface LinkBubbleMenuProps {
+  editor: Editor
+}
+
+interface LinkAttributes {
+  href: string
+  target: string
+}
+
+export const LinkBubbleMenu: React.FC<LinkBubbleMenuProps> = ({ editor }) => {
   const [showEdit, setShowEdit] = useState(false)
-  const shouldShow = ({ editor, from, to }: ShouldShowProps) => {
+  const [linkAttrs, setLinkAttrs] = useState<LinkAttributes>({ href: '', target: '' })
+  const [selectedText, setSelectedText] = useState('')
+
+  const updateLinkState = useCallback(() => {
+    const { from, to } = editor.state.selection
+    const { href, target } = editor.getAttributes('link')
+    const text = editor.state.doc.textBetween(from, to, ' ')
+
+    setLinkAttrs({ href, target })
+    setSelectedText(text)
+  }, [editor])
+
+  useEffect(() => {
+    editor.on('selectionUpdate', updateLinkState)
+
+    return () => {
+      editor.off('selectionUpdate', updateLinkState)
+    }
+  }, [editor, updateLinkState])
+
+  const shouldShow = useCallback(({ editor, from, to }: ShouldShowProps) => {
     if (from === to) {
       return false
     }
-
     const link = editor.getAttributes('link')
+    return typeof link.href === 'string' && link.href !== ''
+  }, [])
 
-    if (link.href) {
-      return true
-    }
+  const handleEdit = useCallback(() => {
+    setShowEdit(true)
+  }, [])
 
-    return false
-  }
+  const onSetLink = useCallback(
+    (url: string, text?: string, openInNewTab?: boolean) => {
+      editor
+        .chain()
+        .focus()
+        .extendMarkRange('link')
+        .insertContent({
+          type: 'text',
+          text: text || url,
+          marks: [
+            {
+              type: 'link',
+              attrs: {
+                href: url,
+                target: openInNewTab ? '_blank' : ''
+              }
+            }
+          ]
+        })
+        .setLink({ href: url, target: openInNewTab ? '_blank' : '' })
+        .run()
+      setShowEdit(false)
+      updateLinkState()
+    },
+    [editor, updateLinkState]
+  )
 
-  const unSetLink = () => {
-    editor.chain().extendMarkRange('link').unsetLink().focus().run()
+  const onUnsetLink = useCallback(() => {
+    editor.chain().focus().extendMarkRange('link').unsetLink().run()
     setShowEdit(false)
-  }
-
-  function onSetLink(props: LinkProps) {
-    setLink(editor, props)
-    setShowEdit(false)
-  }
+    updateLinkState()
+    return null
+  }, [editor, updateLinkState])
 
   return (
     <BubbleMenu
@@ -38,22 +88,20 @@ const LinkBubbleMenu = ({ editor }: { editor: Editor }) => {
       shouldShow={shouldShow}
       tippyOptions={{
         placement: 'bottom-start',
-        onHidden: () => {
-          setShowEdit(false)
-        }
+        onHidden: () => setShowEdit(false)
       }}
     >
       {showEdit ? (
         <LinkEditBlock
-          onSetLink={onSetLink}
-          editor={editor}
+          defaultUrl={linkAttrs.href}
+          defaultText={selectedText}
+          defaultIsNewTab={linkAttrs.target === '_blank'}
+          onSave={onSetLink}
           className="w-full min-w-80 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-none"
         />
       ) : (
-        <LinkPopoverBlock onClear={unSetLink} link={editor.getAttributes('link')} onEdit={() => setShowEdit(true)} />
+        <LinkPopoverBlock onClear={onUnsetLink} url={linkAttrs.href} onEdit={handleEdit} />
       )}
     </BubbleMenu>
   )
 }
-
-export { LinkBubbleMenu }

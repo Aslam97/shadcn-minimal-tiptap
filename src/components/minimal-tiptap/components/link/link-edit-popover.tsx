@@ -4,16 +4,39 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Link2Icon } from '@radix-ui/react-icons'
 import { ToolbarButton } from '../toolbar-button'
 import { LinkEditBlock } from './link-edit-block'
-import { LinkProps } from '../../types'
-import { setLink } from '../../utils'
 
 const LinkEditPopover = ({ editor }: { editor: Editor }) => {
   const [open, setOpen] = React.useState(false)
 
-  const onSetLink = (props: LinkProps) => {
-    setLink(editor, props)
-    editor.commands.enter()
-  }
+  const { from, to } = editor.state.selection
+  const text = editor.state.doc.textBetween(from, to, ' ')
+
+  const onSetLink = React.useCallback(
+    (url: string, text?: string, openInNewTab?: boolean) => {
+      editor
+        .chain()
+        .focus()
+        .extendMarkRange('link')
+        .insertContent({
+          type: 'text',
+          text: text || url,
+          marks: [
+            {
+              type: 'link',
+              attrs: {
+                href: url,
+                target: openInNewTab ? '_blank' : ''
+              }
+            }
+          ]
+        })
+        .setLink({ href: url })
+        .run()
+
+      editor.commands.enter()
+    },
+    [editor]
+  )
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -28,7 +51,7 @@ const LinkEditPopover = ({ editor }: { editor: Editor }) => {
         </ToolbarButton>
       </PopoverTrigger>
       <PopoverContent className="w-full min-w-80" align="start" side="bottom">
-        <LinkEditBlock editor={editor} close={() => setOpen(false)} onSetLink={onSetLink} />
+        <LinkEditBlock onSave={onSetLink} defaultText={text} />
       </PopoverContent>
     </Popover>
   )
