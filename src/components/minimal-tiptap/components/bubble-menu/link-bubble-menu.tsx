@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback } from 'react'
 import { Editor } from '@tiptap/core'
 import { BubbleMenu } from '@tiptap/react'
 import { LinkEditBlock } from '../link/link-edit-block'
@@ -28,21 +28,21 @@ export const LinkBubbleMenu: React.FC<LinkBubbleMenuProps> = ({ editor }) => {
     setSelectedText(text)
   }, [editor])
 
-  useEffect(() => {
-    editor.on('selectionUpdate', updateLinkState)
+  const shouldShow = useCallback(
+    ({ editor, from, to }: ShouldShowProps) => {
+      if (from === to) {
+        return false
+      }
+      const { href } = editor.getAttributes('link')
 
-    return () => {
-      editor.off('selectionUpdate', updateLinkState)
-    }
-  }, [editor, updateLinkState])
-
-  const shouldShow = useCallback(({ editor, from, to }: ShouldShowProps) => {
-    if (from === to) {
+      if (href) {
+        updateLinkState()
+        return true
+      }
       return false
-    }
-    const link = editor.getAttributes('link')
-    return typeof link.href === 'string' && link.href !== ''
-  }, [])
+    },
+    [updateLinkState]
+  )
 
   const handleEdit = useCallback(() => {
     setShowEdit(true)
@@ -79,7 +79,6 @@ export const LinkBubbleMenu: React.FC<LinkBubbleMenuProps> = ({ editor }) => {
     editor.chain().focus().extendMarkRange('link').unsetLink().run()
     setShowEdit(false)
     updateLinkState()
-    return null
   }, [editor, updateLinkState])
 
   return (
