@@ -24,4 +24,5 @@ export interface FormatAction {
   isActive: (editor: Editor) => boolean
   canExecute: (editor: Editor) => boolean
   shortcuts: string[]
+  value: string
 }

@@ -8,7 +8,7 @@ import { ShortcutKey } from '../shortcut-key'
 import React, { useCallback, useMemo } from 'react'
 import { FormatAction } from '../../types'
 
-interface TextStyle extends Omit<FormatAction, 'icon' | 'action' | 'isActive' | 'canExecute'> {
+interface TextStyle extends Omit<FormatAction, 'value' | 'icon' | 'action' | 'isActive' | 'canExecute'> {
   element: keyof JSX.IntrinsicElements
   level?: Level
   className: string

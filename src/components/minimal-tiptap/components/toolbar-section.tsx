@@ -6,16 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { ToolbarButton } from './toolbar-button'
 import { ShortcutKey } from './shortcut-key'
 import { getShortcutKey } from '../utils'
-
-export interface FormatAction {
-  label: string
-  icon?: React.ReactNode
-  action: (editor: Editor) => void
-  isActive: (editor: Editor) => boolean
-  canExecute: (editor: Editor) => boolean
-  shortcuts: string[]
-  value: string
-}
+import { FormatAction } from '../types'
 
 interface ToolbarSectionProps {
   editor: Editor
