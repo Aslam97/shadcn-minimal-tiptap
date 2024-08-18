@@ -1,110 +1,94 @@
 import * as React from 'react'
-import type { Editor } from '@tiptap/core'
-import { cn } from '@/lib/utils'
-import { DotsHorizontalIcon, FontBoldIcon, FontItalicIcon } from '@radix-ui/react-icons'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { ToolbarButton } from '../toolbar-button'
-import { ShortcutKey } from '../shortcut-key'
-import { getShortcutKey } from '../../utils'
+import type { Editor } from '@tiptap/react'
+import {
+  CodeIcon,
+  DotsHorizontalIcon,
+  FontBoldIcon,
+  FontItalicIcon,
+  StrikethroughIcon,
+  TextNoneIcon
+} from '@radix-ui/react-icons'
+import { FormatAction } from '../../types'
+import { ToolbarSection } from '../toolbar-section'
 
-interface FormatAction {
-  label: string
-  icon?: React.ReactNode
-  action: (editor: Editor) => void
-  isActive: (editor: Editor) => boolean
-  canExecute: (editor: Editor) => boolean
-  shortcut?: string[]
+type TextStyleAction = 'bold' | 'italic' | 'strikethrough' | 'code' | 'clearFormatting'
+
+interface TextStyle extends FormatAction {
+  value: TextStyleAction
 }
 
-const formatActions: FormatAction[] = [
+const formatActions: TextStyle[] = [
   {
-    label: 'Bold ',
+    value: 'bold',
+    label: 'Bold',
     icon: <FontBoldIcon className="size-5" />,
     action: editor => editor.chain().focus().toggleBold().run(),
     isActive: editor => editor.isActive('bold'),
     canExecute: editor => editor.can().chain().focus().toggleBold().run() && !editor.isActive('codeBlock'),
-    shortcut: ['mod', 'B']
+    shortcuts: ['mod', 'B']
   },
   {
+    value: 'italic',
     label: 'Italic',
     icon: <FontItalicIcon className="size-5" />,
     action: editor => editor.chain().focus().toggleItalic().run(),
     isActive: editor => editor.isActive('italic'),
     canExecute: editor => editor.can().chain().focus().toggleItalic().run() && !editor.isActive('codeBlock'),
-    shortcut: ['mod', 'I']
+    shortcuts: ['mod', 'I']
   },
   {
+    value: 'strikethrough',
     label: 'Strikethrough',
+    icon: <StrikethroughIcon className="size-5" />,
     action: editor => editor.chain().focus().toggleStrike().run(),
     isActive: editor => editor.isActive('strike'),
     canExecute: editor => editor.can().chain().focus().toggleStrike().run() && !editor.isActive('codeBlock'),
-    shortcut: ['mod', 'shift', 'S']
+    shortcuts: ['mod', 'shift', 'S']
   },
   {
+    value: 'code',
     label: 'Code',
+    icon: <CodeIcon className="size-5" />,
     action: editor => editor.chain().focus().toggleCode().run(),
     isActive: editor => editor.isActive('code'),
     canExecute: editor => editor.can().chain().focus().toggleCode().run() && !editor.isActive('codeBlock'),
-    shortcut: ['mod', 'E']
+    shortcuts: ['mod', 'E']
   },
   {
+    value: 'clearFormatting',
     label: 'Clear formatting',
+    icon: <TextNoneIcon className="size-5" />,
     action: editor => editor.chain().focus().unsetAllMarks().run(),
     isActive: () => false,
     canExecute: editor => editor.can().chain().focus().unsetAllMarks().run() && !editor.isActive('codeBlock'),
-    shortcut: ['mod', '\\']
+    shortcuts: ['mod', '\\']
   }
 ]
 
-export const SectionTwo = ({ editor }: { editor: Editor }) => {
-  const mainActions = formatActions.slice(0, 2)
-  const dropdownActions = formatActions.slice(2)
+interface SectionTwoProps {
+  editor: Editor
+  activeActions?: TextStyleAction[]
+  mainActionCount?: number
+}
 
-  const renderToolbarButton = (action: FormatAction) => (
-    <ToolbarButton
-      key={action.label}
-      onClick={() => action.action(editor)}
-      disabled={!action.canExecute(editor)}
-      isActive={action.isActive(editor)}
-      tooltip={`${action.label} ${action.shortcut && `${action.shortcut.map(s => getShortcutKey(s).symbol).join(' ')}`}`}
-      aria-label={action.label}
-    >
-      {action.icon}
-    </ToolbarButton>
-  )
-
-  const renderDropdownMenuItem = (action: FormatAction) => (
-    <DropdownMenuItem
-      key={action.label}
-      onClick={() => action.action(editor)}
-      disabled={!action.canExecute(editor)}
-      className={cn('flex flex-row items-center justify-between gap-4', { 'bg-accent': action.isActive(editor) })}
-      aria-label={action.label}
-    >
-      <span className="grow">{action.label}</span>
-      {action.shortcut && <ShortcutKey keys={action.shortcut} />}
-    </DropdownMenuItem>
-  )
-
+export const SectionTwo: React.FC<SectionTwoProps> = ({
+  editor,
+  activeActions = formatActions.map(action => action.value),
+  mainActionCount = 2
+}) => {
   return (
-    <>
-      {mainActions.map(renderToolbarButton)}
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <ToolbarButton
-            isActive={dropdownActions.some(action => action.isActive(editor))}
-            tooltip="More formatting"
-            aria-label="More formatting"
-          >
-            <DotsHorizontalIcon className="size-5" />
-          </ToolbarButton>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" className="w-full" onCloseAutoFocus={event => event.preventDefault()}>
-          {dropdownActions.map(renderDropdownMenuItem)}
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </>
+    <ToolbarSection
+      editor={editor}
+      actions={formatActions}
+      activeActions={activeActions}
+      mainActionCount={mainActionCount}
+      dropdownIcon={<DotsHorizontalIcon className="size-5" />}
+      dropdownTooltip="More formatting"
+      dropdownClassName="w-8"
+    />
   )
 }
+
+SectionTwo.displayName = 'SectionTwo'
 
 export default SectionTwo

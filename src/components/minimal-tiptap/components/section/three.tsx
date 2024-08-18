@@ -1,5 +1,5 @@
 import * as React from 'react'
-import type { Editor } from '@tiptap/core'
+import type { Editor } from '@tiptap/react'
 import { CaretDownIcon, CheckIcon } from '@radix-ui/react-icons'
 import { ToolbarButton } from '../toolbar-button'
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
