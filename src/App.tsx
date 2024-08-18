@@ -71,7 +71,6 @@ const ExampleForm = () => {
                   immediatelyRender={true}
                   editable={true}
                   injectCSS={true}
-                  shouldRerenderOnTransaction={false}
                   editorClassName="focus:outline-none p-5"
                 />
               </FormControl>
