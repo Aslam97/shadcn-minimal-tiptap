@@ -1,4 +1,4 @@
-![Minimal Tiptap Editor](https://i.postimg.cc/fbq7dbPj/Screenshot-2024-08-18-at-19-56-56.png)
+![Minimal Tiptap Editor](https://i.postimg.cc/GhfcqBpm/Screenshot-2024-08-19-at-19-43-06.png)
 
 ## Overview
 
@@ -6,14 +6,21 @@ The Minimal Tiptap Editor is a lightweight, customizable rich text editor compon
 
 ## Table of Contents
 
-1. [Installation](#installation)
-2. [Dependencies](#dependencies)
-3. [Usage](#usage)
-4. [Props](#props)
-5. [Toolbar Customization](#toolbar-customization)
-6. [Key Behaviors](#key-behaviors)
-7. [Other Projects](#other-projects)
-8. [License](#license)
+- [Overview](#overview)
+- [Table of Contents](#table-of-contents)
+- [Installation](#installation)
+- [Dependencies](#dependencies)
+- [Usage](#usage)
+- [Props](#props)
+- [Key Behaviors](#key-behaviors)
+- [Toolbar Customization](#toolbar-customization)
+    - [SectionOne](#sectionone)
+    - [SectionTwo](#sectiontwo)
+    - [SectionFour](#sectionfour)
+    - [SectionFive](#sectionfive)
+  - [General Behavior](#general-behavior)
+- [Other Projects](#other-projects)
+- [License](#license)
 
 ## Installation
 
@@ -74,6 +81,8 @@ export const App = () => {
 
 ## Props
 
+The Minimal Tiptap Editor accepts **all the tiptap editor props**. And the following additional props:
+
 | Prop                     | Type                       | Default | Description                                 |
 | ------------------------ | -------------------------- | ------- | ------------------------------------------- |
 | `value`                  | string                     | -       | Initial editor content                      |
@@ -84,32 +93,22 @@ export const App = () => {
 | `editorClassName`        | string                     | -       | CSS class for the editor instance           |
 | `throttleDelay`          | number                     | 1000    | Delay for throttling editor updates (in ms) |
 
-Plus all props from the Tiptap Editor Component.
+## Key Behaviors
+
+- When pressing `Enter` or creating a new block, it removes active formatting marks if any of these active: **bold**, **italic**, **strike**, **underline**, and **code**.
+- For performance, Tiptap offers `shouldRerenderOnTransaction` prop that can be set to `false` to prevent unnecessary re-renders. But this can cause issues with the toolbar state. To avoid this, leave the prop as `true` (default) to ensure the toolbar state is updated correctly. or if you don't care about the active state in the toolbar, you can set it to `false`.
 
 ## Toolbar Customization
 
 The Toolbar component offers extensive customization options, allowing you to control which editing options are available, their order, and how they are displayed. This customization is primarily achieved through the `activeActions` and `mainActionCount` props in various sections.
 
-### Ordering and Display of Actions
-
-- **Order of Actions**: The order of items in the `activeActions` array directly determines the order in which they appear in the toolbar.
-- **Inclusion of Actions**: Only the items specified in `activeActions` will be shown.
-- **Main Actions vs Dropdown**: The `mainActionCount` prop determines how many actions are displayed as primary buttons versus being placed in a dropdown menu.
-
-### Customizable Sections
-
-#### SectionOne: Heading Levels
+#### SectionOne
 
 ```typescript
 <SectionOne editor={editor} activeLevels={[1, 2, 3, 4, 5, 6]} />
 ```
 
-Customization Options:
-
-- `activeLevels`: Array of numbers representing heading levels to include (1-6).
-- Example: `[3, 1, 2]` shows options for H3, H1, and H2 in that order.
-
-#### SectionTwo: Text Formatting
+#### SectionTwo
 
 ```typescript
 <SectionTwo
@@ -119,32 +118,17 @@ Customization Options:
 />
 ```
 
-Customization Options:
-
-- `activeActions`: Array of text formatting options to include.
-- `mainActionCount`: Number of actions to display as primary buttons.
-
-#### SectionFour: List Formatting
+#### SectionFour
 
 ```typescript
 <SectionFour editor={editor} activeActions={['orderedList', 'bulletList']} mainActionCount={0} />
 ```
 
-Customization Options:
-
-- `activeActions`: Array of list formatting options to include.
-- `mainActionCount`: Number of actions to display as primary buttons.
-
-#### SectionFive: Block Formatting
+#### SectionFive
 
 ```typescript
 <SectionFive editor={editor} activeActions={['codeBlock', 'blockquote', 'horizontalRule']} mainActionCount={0} />
 ```
-
-Customization Options:
-
-- `activeActions`: Array of block formatting options to include.
-- `mainActionCount`: Number of actions to display as primary buttons.
 
 ### General Behavior
 
@@ -156,11 +140,6 @@ Customization Options:
   - If >= number of `activeActions`, all actions are buttons.
 
 By adjusting these props, you can create a toolbar tailored to your specific editing needs, showing only the tools you want, in the order you prefer, and with the display style that suits your interface best.
-
-## Key Behaviors
-
-- Pressing `Enter` removes active states for 'bold', 'italic', 'strike', 'underline', and 'code'.
-- Set `shouldRerenderOnTransaction` to `true` (default) to maintain active states.
 
 ## Other Projects
 
