@@ -14,10 +14,10 @@ The Minimal Tiptap Editor is a lightweight, customizable rich text editor compon
 - [Props](#props)
 - [Key Behaviors](#key-behaviors)
 - [Toolbar Customization](#toolbar-customization)
-    - [SectionOne](#sectionone)
-    - [SectionTwo](#sectiontwo)
-    - [SectionFour](#sectionfour)
-    - [SectionFive](#sectionfive)
+  - [SectionOne](#sectionone)
+  - [SectionTwo](#sectiontwo)
+  - [SectionFour](#sectionfour)
+  - [SectionFive](#sectionfive)
   - [General Behavior](#general-behavior)
 - [Other Projects](#other-projects)
 - [License](#license)
@@ -27,7 +27,7 @@ The Minimal Tiptap Editor is a lightweight, customizable rich text editor compon
 Install the required packages:
 
 ```bash
-npm install @tiptap/core @tiptap/extension-heading @tiptap/extension-horizontal-rule @tiptap/extension-image @tiptap/extension-link @tiptap/pm @tiptap/react @tiptap/starter-kit @tiptap/extension-placeholder @tiptap/extension-task-item @tiptap/extension-task-list @tiptap/extension-typography @tiptap/extension-code-block-lowlight @tiptap/extension-color @tiptap/extension-text-style lowlight
+npm install @tiptap/core @tiptap/extension-code-block-lowlight @tiptap/extension-color @tiptap/extension-heading @tiptap/extension-horizontal-rule @tiptap/extension-image @tiptap/extension-link @tiptap/extension-placeholder @tiptap/extension-text-style @tiptap/extension-typography @tiptap/pm @tiptap/react @tiptap/starter-kit
 ```
 
 ## Dependencies
