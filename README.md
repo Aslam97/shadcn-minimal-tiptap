@@ -4,25 +4,6 @@
 
 The Minimal Tiptap Editor is a lightweight, customizable rich text editor component built for [Shadcn](https://ui.shadcn.com). It provides an intuitive interface for text formatting and editing.
 
-## Table of Contents
-
-- [Overview](#overview)
-- [Table of Contents](#table-of-contents)
-- [Installation](#installation)
-- [Dependencies](#dependencies)
-- [Usage](#usage)
-- [Props](#props)
-- [Key Behaviors](#key-behaviors)
-- [Toolbar Customization](#toolbar-customization)
-  - [SectionOne](#sectionone)
-  - [SectionTwo](#sectiontwo)
-  - [SectionFour](#sectionfour)
-  - [SectionFive](#sectionfive)
-  - [General Behavior](#general-behavior)
-    - [Prevent focusing Dropdown Menu Trigger after clicking on the menu item](#prevent-focusing-dropdown-menu-trigger-after-clicking-on-the-menu-item)
-- [Other Projects](#other-projects)
-- [License](#license)
-
 ## Installation
 
 Install the required packages:
