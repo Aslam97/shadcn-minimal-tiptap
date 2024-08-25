@@ -14,7 +14,7 @@ import { LinkBubbleMenu } from './components/bubble-menu/link-bubble-menu'
 import { ImageBubbleMenu } from './components/bubble-menu/image-bubble-menu'
 import { useMinimalTiptapEditor, UseMinimalTiptapEditorProps } from './hooks/use-minimal-tiptap'
 
-export interface MinimalTiptapProps extends Omit<UseMinimalTiptapEditorProps, 'onUpdate' | 'onBlur'> {
+export interface MinimalTiptapProps extends Omit<UseMinimalTiptapEditorProps, 'onUpdate'> {
   value?: Content
   onChange?: (value: Content) => void
   className?: string
