@@ -90,7 +90,7 @@ export const ToolbarSection: React.FC<ToolbarSectionProps> = ({
               {dropdownIcon || <CaretDownIcon className="size-5" />}
             </ToolbarButton>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" className="w-full" onCloseAutoFocus={event => event.preventDefault()}>
+          <DropdownMenuContent align="start" className="w-full">
             {dropdownActions.map(renderDropdownMenuItem)}
           </DropdownMenuContent>
         </DropdownMenu>

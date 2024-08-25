@@ -165,7 +165,7 @@ export const SectionThree: React.FC<{ editor: Editor }> = ({ editor }) => {
           <CaretDownIcon className="size-5" />
         </ToolbarButton>
       </PopoverTrigger>
-      <PopoverContent align="start" className="w-full" onCloseAutoFocus={event => event.preventDefault()}>
+      <PopoverContent align="start" className="w-full">
         <div className="space-y-1.5">
           {COLORS.map((palette, index) => (
             <MemoizedColorPicker

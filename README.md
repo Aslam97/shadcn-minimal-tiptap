@@ -19,6 +19,7 @@ The Minimal Tiptap Editor is a lightweight, customizable rich text editor compon
   - [SectionFour](#sectionfour)
   - [SectionFive](#sectionfive)
   - [General Behavior](#general-behavior)
+    - [Prevent focusing Dropdown Menu Trigger after clicking on the menu item](#prevent-focusing-dropdown-menu-trigger-after-clicking-on-the-menu-item)
 - [Other Projects](#other-projects)
 - [License](#license)
 
@@ -140,6 +141,14 @@ The Toolbar component offers extensive customization options, allowing you to co
   - If >= number of `activeActions`, all actions are buttons.
 
 By adjusting these props, you can create a toolbar tailored to your specific editing needs, showing only the tools you want, in the order you prefer, and with the display style that suits your interface best.
+
+#### Prevent focusing Dropdown Menu Trigger after clicking on the menu item
+
+To prevent the Dropdown Menu Trigger from focusing after clicking on the menu item, you can add `onCloseAutoFocus` in the Dropdown Menu component.
+
+```typescript
+onCloseAutoFocus={event => event.preventDefault()}
+```
 
 ## Other Projects
 
