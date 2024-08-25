@@ -70,11 +70,11 @@ export function getShortcutKeys(keys: string[]): ShortcutKeyResult[] {
 
 export function getOutput(editor: Editor, format: MinimalTiptapProps['output']) {
   if (format === 'json') {
-    return JSON.stringify(editor.getJSON())
+    return editor.getJSON()
   }
 
   if (format === 'html') {
-    return editor.getText() ? String(editor.getHTML()) : ''
+    return editor.getText() ? editor.getHTML() : ''
   }
 
   return editor.getText()
