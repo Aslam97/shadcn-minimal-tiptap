@@ -22,8 +22,8 @@ export interface MinimalTiptapProps extends Omit<UseMinimalTiptapEditorProps, 'o
 }
 
 const Toolbar = ({ editor }: { editor: Editor }) => (
-  <div className="border-b border-border p-2">
-    <div className="flex w-full flex-wrap items-center">
+  <div className="overflow-x-auto border-b border-border p-2">
+    <div className="flex w-max items-center">
       <SectionOne editor={editor} activeLevels={[1, 2, 3, 4, 5, 6]} />
 
       <Separator orientation="vertical" className="mx-2 h-7" />
