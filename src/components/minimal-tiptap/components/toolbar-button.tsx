@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { Toggle } from '@/components/ui/toggle'
 import { cn } from '@/lib/utils'
 import type { TooltipContentProps } from '@radix-ui/react-tooltip'
@@ -23,14 +23,12 @@ export const ToolbarButton = React.forwardRef<HTMLButtonElement, ToolbarButtonPr
     }
 
     return (
-      <TooltipProvider delayDuration={0}>
-        <Tooltip>
-          <TooltipTrigger asChild>{toggleButton}</TooltipTrigger>
-          <TooltipContent {...tooltipOptions}>
-            <div className="flex flex-col items-center text-center">{tooltip}</div>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>{toggleButton}</TooltipTrigger>
+        <TooltipContent {...tooltipOptions}>
+          <div className="flex flex-col items-center text-center">{tooltip}</div>
+        </TooltipContent>
+      </Tooltip>
     )
   }
 )

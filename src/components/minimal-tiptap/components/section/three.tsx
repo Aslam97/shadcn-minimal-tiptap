@@ -4,7 +4,7 @@ import { CaretDownIcon, CheckIcon } from '@radix-ui/react-icons'
 import { ToolbarButton } from '../toolbar-button'
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { useTheme } from '../../hooks/use-theme'
 
 interface ColorItem {
@@ -71,27 +71,25 @@ const MemoizedColorButton = React.memo<{
   const label = isDarkMode && color.darkLabel ? color.darkLabel : color.label
 
   return (
-    <TooltipProvider delayDuration={0}>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <ToggleGroupItem
-            className="relative size-7 rounded-md p-0"
-            value={color.cssVar}
-            aria-label={label}
-            style={{ backgroundColor: color.cssVar }}
-            onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-              e.preventDefault()
-              onClick(color.cssVar)
-            }}
-          >
-            {isSelected && <CheckIcon className="absolute inset-0 m-auto size-6" style={{ color: inverse }} />}
-          </ToggleGroupItem>
-        </TooltipTrigger>
-        <TooltipContent side="bottom">
-          <p>{label}</p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <ToggleGroupItem
+          className="relative size-7 rounded-md p-0"
+          value={color.cssVar}
+          aria-label={label}
+          style={{ backgroundColor: color.cssVar }}
+          onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+            e.preventDefault()
+            onClick(color.cssVar)
+          }}
+        >
+          {isSelected && <CheckIcon className="absolute inset-0 m-auto size-6" style={{ color: inverse }} />}
+        </ToggleGroupItem>
+      </TooltipTrigger>
+      <TooltipContent side="bottom">
+        <p>{label}</p>
+      </TooltipContent>
+    </Tooltip>
   )
 })
 
