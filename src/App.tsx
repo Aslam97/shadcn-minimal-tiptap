@@ -11,7 +11,7 @@ import { BentoMinimalTiptap } from './components/custom/types'
 export default function App() {
   return (
     <div className="px-4 py-12 sm:py-24">
-      <main className="mx-auto w-full max-w-2xl">
+      <main className="mx-auto w-full max-w-3xl">
         <Hero />
         <div className="mt-12 flex flex-col gap-12 sm:mt-20">
           <BentoMinimalTiptap />

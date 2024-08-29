@@ -6,6 +6,7 @@ import './global.css'
 import { Analytics } from '@vercel/analytics/react'
 import { ThemeProvider as NextThemesProvider } from 'next-themes'
 import { type ThemeProviderProps } from 'next-themes/dist/types'
+import { TooltipProvider } from '@/components/ui/tooltip'
 
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   return <NextThemesProvider {...props}>{children}</NextThemesProvider>
@@ -14,7 +15,9 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <NextThemesProvider attribute="class" defaultTheme="system" enableSystem>
-      <App />
+      <TooltipProvider delayDuration={0}>
+        <App />
+      </TooltipProvider>
       <Analytics />
     </NextThemesProvider>
   </React.StrictMode>
