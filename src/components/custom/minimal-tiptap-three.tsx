@@ -27,27 +27,38 @@ export interface MinimalTiptapProps extends Omit<UseMinimalTiptapEditorProps, 'o
 const Toolbar = ({ editor }: { editor: Editor }) => (
   <div className="shrink-0 overflow-x-auto border-b border-border p-2">
     <div className="flex w-max items-center gap-px">
-      <SectionOne editor={editor} activeLevels={[1, 2, 3, 4, 5, 6]} />
+      <SectionOne editor={editor} activeLevels={[1, 2, 3]} variant="outline" />
 
       <Separator orientation="vertical" className="mx-2 h-7" />
 
       <SectionTwo
         editor={editor}
-        activeActions={['bold', 'italic', 'strikethrough', 'code', 'clearFormatting']}
+        activeActions={['italic', 'bold', 'code', 'strikethrough', 'clearFormatting']}
         mainActionCount={5}
+        variant="outline"
       />
 
       <Separator orientation="vertical" className="mx-2 h-7" />
 
-      <SectionThree editor={editor} />
+      <SectionThree editor={editor} variant="outline" />
 
       <Separator orientation="vertical" className="mx-2 h-7" />
 
-      <SectionFour editor={editor} activeActions={['orderedList', 'bulletList']} mainActionCount={2} />
+      <SectionFour
+        editor={editor}
+        activeActions={['bulletList', 'orderedList']}
+        mainActionCount={2}
+        variant="outline"
+      />
 
       <Separator orientation="vertical" className="mx-2 h-7" />
 
-      <SectionFive editor={editor} activeActions={['codeBlock', 'blockquote', 'horizontalRule']} mainActionCount={3} />
+      <SectionFive
+        editor={editor}
+        activeActions={['blockquote', 'codeBlock', 'horizontalRule']}
+        mainActionCount={3}
+        variant="outline"
+      />
     </div>
   </div>
 )
