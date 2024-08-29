@@ -12,6 +12,25 @@ Install the required packages:
 npm install @tiptap/core @tiptap/extension-code-block-lowlight @tiptap/extension-color @tiptap/extension-heading @tiptap/extension-horizontal-rule @tiptap/extension-image @tiptap/extension-link @tiptap/extension-placeholder @tiptap/extension-text-style @tiptap/extension-typography @tiptap/pm @tiptap/react @tiptap/starter-kit
 ```
 
+This component relies on a tooltip functionality. To use it properly, you need to wrap your application with a `TooltipProvider` component.
+
+Add the `TooltipProvider` to your root component (e.g., `App.tsx`, `main.tsx`, or equivalent):
+
+```tsx
+import { TooltipProvider } from '@/components/ui/tooltip'
+
+export const App = () => {
+  return (
+    <TooltipProvider>
+      {/* Your other components */}
+      <YourComponent />
+    </TooltipProvider>
+  )
+}
+```
+
+This setup ensures that all tooltip-enabled components within your application have access to the necessary context.
+
 ## Dependencies
 
 This component relies on the following Shadcn components:
