@@ -10,6 +10,8 @@ import {
 } from '@radix-ui/react-icons'
 import { FormatAction } from '../../types'
 import { ToolbarSection } from '../toolbar-section'
+import { toggleVariants } from '@/components/ui/toggle'
+import { VariantProps } from 'class-variance-authority'
 
 type TextStyleAction = 'bold' | 'italic' | 'strikethrough' | 'code' | 'clearFormatting'
 
@@ -65,7 +67,7 @@ const formatActions: TextStyle[] = [
   }
 ]
 
-interface SectionTwoProps {
+interface SectionTwoProps extends VariantProps<typeof toggleVariants> {
   editor: Editor
   activeActions?: TextStyleAction[]
   mainActionCount?: number
@@ -74,7 +76,9 @@ interface SectionTwoProps {
 export const SectionTwo: React.FC<SectionTwoProps> = ({
   editor,
   activeActions = formatActions.map(action => action.value),
-  mainActionCount = 2
+  mainActionCount = 2,
+  size,
+  variant
 }) => {
   return (
     <ToolbarSection
@@ -85,6 +89,8 @@ export const SectionTwo: React.FC<SectionTwoProps> = ({
       dropdownIcon={<DotsHorizontalIcon className="size-5" />}
       dropdownTooltip="More formatting"
       dropdownClassName="w-8"
+      size={size}
+      variant={variant}
     />
   )
 }

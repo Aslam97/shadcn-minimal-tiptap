@@ -5,6 +5,8 @@ import { LinkEditPopover } from '../link/link-edit-popover'
 import { ImageEditDialog } from '../image/image-edit-dialog'
 import { FormatAction } from '../../types'
 import { ToolbarSection } from '../toolbar-section'
+import { toggleVariants } from '@/components/ui/toggle'
+import { VariantProps } from 'class-variance-authority'
 
 type InsertElementAction = 'codeBlock' | 'blockquote' | 'horizontalRule'
 interface InsertElement extends FormatAction {
@@ -41,7 +43,7 @@ const formatActions: InsertElement[] = [
   }
 ]
 
-interface SectionFiveProps {
+interface SectionFiveProps extends VariantProps<typeof toggleVariants> {
   editor: Editor
   activeActions?: InsertElementAction[]
   mainActionCount?: number
@@ -50,12 +52,14 @@ interface SectionFiveProps {
 export const SectionFive: React.FC<SectionFiveProps> = ({
   editor,
   activeActions = formatActions.map(action => action.value),
-  mainActionCount = 0
+  mainActionCount = 0,
+  size,
+  variant
 }) => {
   return (
     <>
-      <LinkEditPopover editor={editor} />
-      <ImageEditDialog editor={editor} />
+      <LinkEditPopover editor={editor} size={size} variant={variant} />
+      <ImageEditDialog editor={editor} size={size} variant={variant} />
       <ToolbarSection
         editor={editor}
         actions={formatActions}
@@ -68,6 +72,8 @@ export const SectionFive: React.FC<SectionFiveProps> = ({
           </>
         }
         dropdownTooltip="Insert elements"
+        size={size}
+        variant={variant}
       />
     </>
   )

@@ -3,6 +3,8 @@ import type { Editor } from '@tiptap/react'
 import { CaretDownIcon, ListBulletIcon } from '@radix-ui/react-icons'
 import { FormatAction } from '../../types'
 import { ToolbarSection } from '../toolbar-section'
+import { toggleVariants } from '@/components/ui/toggle'
+import { VariantProps } from 'class-variance-authority'
 
 type ListItemAction = 'orderedList' | 'bulletList'
 interface ListItem extends FormatAction {
@@ -34,7 +36,7 @@ const formatActions: ListItem[] = [
   }
 ]
 
-interface SectionFourProps {
+interface SectionFourProps extends VariantProps<typeof toggleVariants> {
   editor: Editor
   activeActions?: ListItemAction[]
   mainActionCount?: number
@@ -43,7 +45,9 @@ interface SectionFourProps {
 export const SectionFour: React.FC<SectionFourProps> = ({
   editor,
   activeActions = formatActions.map(action => action.value),
-  mainActionCount = 0
+  mainActionCount = 0,
+  size,
+  variant
 }) => {
   return (
     <ToolbarSection
@@ -58,6 +62,8 @@ export const SectionFour: React.FC<SectionFourProps> = ({
         </>
       }
       dropdownTooltip="Lists"
+      size={size}
+      variant={variant}
     />
   )
 }

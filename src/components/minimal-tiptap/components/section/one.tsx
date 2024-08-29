@@ -7,6 +7,8 @@ import { ToolbarButton } from '../toolbar-button'
 import { ShortcutKey } from '../shortcut-key'
 import React, { useCallback, useMemo } from 'react'
 import { FormatAction } from '../../types'
+import { VariantProps } from 'class-variance-authority'
+import { toggleVariants } from '@/components/ui/toggle'
 
 interface TextStyle extends Omit<FormatAction, 'value' | 'icon' | 'action' | 'isActive' | 'canExecute'> {
   element: keyof JSX.IntrinsicElements
@@ -65,66 +67,70 @@ const formatActions: TextStyle[] = [
   }
 ]
 
-interface SectionOneProps {
+interface SectionOneProps extends VariantProps<typeof toggleVariants> {
   editor: Editor
   activeLevels?: Level[]
 }
 
-export const SectionOne: React.FC<SectionOneProps> = React.memo(({ editor, activeLevels = [1, 2, 3, 4, 5, 6] }) => {
-  const filteredActions = useMemo(
-    () => formatActions.filter(action => !action.level || activeLevels.includes(action.level)),
-    [activeLevels]
-  )
+export const SectionOne: React.FC<SectionOneProps> = React.memo(
+  ({ editor, activeLevels = [1, 2, 3, 4, 5, 6], size, variant }) => {
+    const filteredActions = useMemo(
+      () => formatActions.filter(action => !action.level || activeLevels.includes(action.level)),
+      [activeLevels]
+    )
 
-  const handleStyleChange = useCallback(
-    (level?: Level) => {
-      if (level) {
-        editor.chain().focus().toggleHeading({ level }).run()
-      } else {
-        editor.chain().focus().setParagraph().run()
-      }
-    },
-    [editor]
-  )
+    const handleStyleChange = useCallback(
+      (level?: Level) => {
+        if (level) {
+          editor.chain().focus().toggleHeading({ level }).run()
+        } else {
+          editor.chain().focus().setParagraph().run()
+        }
+      },
+      [editor]
+    )
 
-  const renderMenuItem = useCallback(
-    ({ label, element: Element, level, className, shortcuts }: TextStyle) => (
-      <DropdownMenuItem
-        key={label}
-        onClick={() => handleStyleChange(level)}
-        className={cn('flex flex-row items-center justify-between gap-4', {
-          'bg-accent': level ? editor.isActive('heading', { level }) : editor.isActive('paragraph')
-        })}
-        aria-label={label}
-      >
-        <Element className={className}>{label}</Element>
-        <ShortcutKey keys={shortcuts} />
-      </DropdownMenuItem>
-    ),
-    [editor, handleStyleChange]
-  )
-
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <ToolbarButton
-          isActive={editor.isActive('heading')}
-          tooltip="Text styles"
-          aria-label="Text styles"
-          pressed={editor.isActive('heading')}
-          className="w-12"
-          disabled={editor.isActive('codeBlock')}
+    const renderMenuItem = useCallback(
+      ({ label, element: Element, level, className, shortcuts }: TextStyle) => (
+        <DropdownMenuItem
+          key={label}
+          onClick={() => handleStyleChange(level)}
+          className={cn('flex flex-row items-center justify-between gap-4', {
+            'bg-accent': level ? editor.isActive('heading', { level }) : editor.isActive('paragraph')
+          })}
+          aria-label={label}
         >
-          <LetterCaseCapitalizeIcon className="size-5" />
-          <CaretDownIcon className="size-5" />
-        </ToolbarButton>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-full">
-        {filteredActions.map(renderMenuItem)}
-      </DropdownMenuContent>
-    </DropdownMenu>
-  )
-})
+          <Element className={className}>{label}</Element>
+          <ShortcutKey keys={shortcuts} />
+        </DropdownMenuItem>
+      ),
+      [editor, handleStyleChange]
+    )
+
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <ToolbarButton
+            isActive={editor.isActive('heading')}
+            tooltip="Text styles"
+            aria-label="Text styles"
+            pressed={editor.isActive('heading')}
+            className="w-12"
+            disabled={editor.isActive('codeBlock')}
+            size={size}
+            variant={variant}
+          >
+            <LetterCaseCapitalizeIcon className="size-5" />
+            <CaretDownIcon className="size-5" />
+          </ToolbarButton>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start" className="w-full">
+          {filteredActions.map(renderMenuItem)}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    )
+  }
+)
 
 SectionOne.displayName = 'SectionOne'
 

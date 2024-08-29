@@ -11,14 +11,26 @@ import {
   DialogTrigger
 } from '@/components/ui/dialog'
 import { ImageEditBlock } from './image-edit-block'
+import { VariantProps } from 'class-variance-authority'
+import { toggleVariants } from '@/components/ui/toggle'
 
-const ImageEditDialog = ({ editor }: { editor: Editor }) => {
+interface ImageEditDialogProps extends VariantProps<typeof toggleVariants> {
+  editor: Editor
+}
+
+const ImageEditDialog = ({ editor, size, variant }: ImageEditDialogProps) => {
   const [open, setOpen] = useState(false)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <ToolbarButton isActive={editor.isActive('image')} tooltip="Image" aria-label="Image">
+        <ToolbarButton
+          isActive={editor.isActive('image')}
+          tooltip="Image"
+          aria-label="Image"
+          size={size}
+          variant={variant}
+        >
           <ImageIcon className="size-5" />
         </ToolbarButton>
       </DialogTrigger>

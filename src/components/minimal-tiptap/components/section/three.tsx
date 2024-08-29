@@ -6,6 +6,8 @@ import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { useTheme } from '../../hooks/use-theme'
+import { toggleVariants } from '@/components/ui/toggle'
+import { VariantProps } from 'class-variance-authority'
 
 interface ColorItem {
   cssVar: string
@@ -123,7 +125,11 @@ const MemoizedColorPicker = React.memo<{
 
 MemoizedColorPicker.displayName = 'MemoizedColorPicker'
 
-export const SectionThree: React.FC<{ editor: Editor }> = ({ editor }) => {
+interface SectionThreeProps extends VariantProps<typeof toggleVariants> {
+  editor: Editor
+}
+
+export const SectionThree: React.FC<SectionThreeProps> = ({ editor, size, variant }) => {
   const color = editor.getAttributes('textStyle')?.color || 'hsl(var(--foreground))'
   const [selectedColor, setSelectedColor] = React.useState(color)
 
@@ -142,7 +148,7 @@ export const SectionThree: React.FC<{ editor: Editor }> = ({ editor }) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <ToolbarButton tooltip="Text color" aria-label="Text color" className="w-12">
+        <ToolbarButton tooltip="Text color" aria-label="Text color" className="w-12" size={size} variant={variant}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"

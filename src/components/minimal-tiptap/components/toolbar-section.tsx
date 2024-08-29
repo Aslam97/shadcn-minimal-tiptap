@@ -7,8 +7,10 @@ import { ToolbarButton } from './toolbar-button'
 import { ShortcutKey } from './shortcut-key'
 import { getShortcutKey } from '../utils'
 import { FormatAction } from '../types'
+import { VariantProps } from 'class-variance-authority'
+import { toggleVariants } from '@/components/ui/toggle'
 
-interface ToolbarSectionProps {
+interface ToolbarSectionProps extends VariantProps<typeof toggleVariants> {
   editor: Editor
   actions: FormatAction[]
   activeActions?: string[]
@@ -25,7 +27,9 @@ export const ToolbarSection: React.FC<ToolbarSectionProps> = ({
   mainActionCount = 0,
   dropdownIcon,
   dropdownTooltip = 'More options',
-  dropdownClassName = 'w-12'
+  dropdownClassName = 'w-12',
+  size,
+  variant
 }) => {
   const { mainActions, dropdownActions } = React.useMemo(() => {
     const sortedActions = actions
@@ -47,11 +51,13 @@ export const ToolbarSection: React.FC<ToolbarSectionProps> = ({
         isActive={action.isActive(editor)}
         tooltip={`${action.label} ${action.shortcuts.map(s => getShortcutKey(s).symbol).join(' ')}`}
         aria-label={action.label}
+        size={size}
+        variant={variant}
       >
         {action.icon}
       </ToolbarButton>
     ),
-    [editor]
+    [editor, size, variant]
   )
 
   const renderDropdownMenuItem = React.useCallback(
@@ -86,6 +92,8 @@ export const ToolbarSection: React.FC<ToolbarSectionProps> = ({
               tooltip={dropdownTooltip}
               aria-label={dropdownTooltip}
               className={cn(dropdownClassName)}
+              size={size}
+              variant={variant}
             >
               {dropdownIcon || <CaretDownIcon className="size-5" />}
             </ToolbarButton>
