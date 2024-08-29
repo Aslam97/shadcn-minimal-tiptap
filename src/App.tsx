@@ -5,30 +5,23 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { cn } from './lib/utils'
+import { Hero } from './components/custom/hero'
+import { BentoMinimalTiptap } from './components/custom/types'
 
 export default function App() {
   return (
-    <main className="flex min-h-screen place-items-center justify-center p-4">
-      <div className="w-full max-w-4xl">
-        <div className="text-center">
-          <h1 className="text-xl font-bold tracking-tight sm:text-3xl">Minimal Tiptap Editor</h1>
-          <div className="mt-4 flex justify-center">
-            <div className="relative rounded-full px-3 py-1 text-sm leading-6 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
-              <a href="https://github.com/Aslam97/shadcn-tiptap" className="font-semibold text-primary">
-                View on Github <span>→</span>
-              </a>
-            </div>
-          </div>
-          <div className="mt-10 flex w-full text-left">
-            <ExampleForm />
-          </div>
+    <div className="px-4 py-12 sm:py-24">
+      <main className="mx-auto w-full max-w-2xl">
+        <Hero />
+        <div className="mt-12 flex flex-col gap-12 sm:mt-20">
+          <BentoMinimalTiptap />
         </div>
-      </div>
-    </main>
+      </main>
+    </div>
   )
 }
 
-const ExampleForm = () => {
+export const ExampleForm = () => {
   const formSchema = z.object({
     description: z
       .string({

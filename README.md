@@ -1,4 +1,4 @@
-![Minimal Tiptap Editor](https://i.postimg.cc/GhfcqBpm/Screenshot-2024-08-19-at-19-43-06.png)
+![Minimal Tiptap Editor](https://i.postimg.cc/kMtKJm1M/Screenshot-2024-08-29-at-16-27-14.png)
 
 ## Overview
 

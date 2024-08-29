@@ -1,18 +1,21 @@
 import * as React from 'react'
-import './styles/index.css'
+import '@/components/minimal-tiptap/styles/index.css'
 
 import { EditorContent } from '@tiptap/react'
 import { Content, Editor } from '@tiptap/react'
 import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
-import { SectionOne } from './components/section/one'
-import { SectionTwo } from './components/section/two'
-import { SectionThree } from './components/section/three'
-import { SectionFour } from './components/section/four'
-import { SectionFive } from './components/section/five'
-import { LinkBubbleMenu } from './components/bubble-menu/link-bubble-menu'
-import { ImageBubbleMenu } from './components/bubble-menu/image-bubble-menu'
-import { useMinimalTiptapEditor, UseMinimalTiptapEditorProps } from './hooks/use-minimal-tiptap'
+import { SectionOne } from '@/components/minimal-tiptap/components/section/one'
+import { SectionTwo } from '@/components/minimal-tiptap/components/section/two'
+import { SectionThree } from '@/components/minimal-tiptap/components/section/three'
+import { SectionFour } from '@/components/minimal-tiptap/components/section/four'
+import { SectionFive } from '@/components/minimal-tiptap/components/section/five'
+import { LinkBubbleMenu } from '@/components/minimal-tiptap/components/bubble-menu/link-bubble-menu'
+import { ImageBubbleMenu } from '@/components/minimal-tiptap/components/bubble-menu/image-bubble-menu'
+import {
+  useMinimalTiptapEditor,
+  UseMinimalTiptapEditorProps
+} from '@/components/minimal-tiptap/hooks/use-minimal-tiptap'
 
 export interface MinimalTiptapProps extends Omit<UseMinimalTiptapEditorProps, 'onUpdate'> {
   value?: Content
@@ -31,7 +34,7 @@ const Toolbar = ({ editor }: { editor: Editor }) => (
       <SectionTwo
         editor={editor}
         activeActions={['bold', 'italic', 'strikethrough', 'code', 'clearFormatting']}
-        mainActionCount={2}
+        mainActionCount={5}
       />
 
       <Separator orientation="vertical" className="mx-2 h-7" />
@@ -40,16 +43,16 @@ const Toolbar = ({ editor }: { editor: Editor }) => (
 
       <Separator orientation="vertical" className="mx-2 h-7" />
 
-      <SectionFour editor={editor} activeActions={['orderedList', 'bulletList']} mainActionCount={0} />
+      <SectionFour editor={editor} activeActions={['orderedList', 'bulletList']} mainActionCount={2} />
 
       <Separator orientation="vertical" className="mx-2 h-7" />
 
-      <SectionFive editor={editor} activeActions={['codeBlock', 'blockquote', 'horizontalRule']} mainActionCount={0} />
+      <SectionFive editor={editor} activeActions={['codeBlock', 'blockquote', 'horizontalRule']} mainActionCount={3} />
     </div>
   </div>
 )
 
-export const MinimalTiptapEditor = React.forwardRef<HTMLDivElement, MinimalTiptapProps>(
+export const MinimalTiptapThree = React.forwardRef<HTMLDivElement, MinimalTiptapProps>(
   ({ value, onChange, className, editorContentClassName, ...props }, ref) => {
     const editor = useMinimalTiptapEditor({
       value,
@@ -88,6 +91,6 @@ export const MinimalTiptapEditor = React.forwardRef<HTMLDivElement, MinimalTipta
   }
 )
 
-MinimalTiptapEditor.displayName = 'MinimalTiptapEditor'
+MinimalTiptapThree.displayName = 'MinimalTiptapThree'
 
-export default MinimalTiptapEditor
+export default MinimalTiptapThree
