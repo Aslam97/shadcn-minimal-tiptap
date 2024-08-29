@@ -108,10 +108,10 @@ export const SectionOne: React.FC<SectionOneProps> = React.memo(({ editor, activ
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <ToolbarButton
-          isActive={editor.isActive('heading') || editor.isActive('paragraph')}
+          isActive={editor.isActive('heading')}
           tooltip="Text styles"
           aria-label="Text styles"
-          pressed={editor.isActive('heading') || editor.isActive('paragraph')}
+          pressed={editor.isActive('heading')}
           className="w-12"
           disabled={editor.isActive('codeBlock')}
         >
