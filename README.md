@@ -1,4 +1,4 @@
-![Minimal Tiptap Editor](https://i.postimg.cc/yxdVNsB1/Screenshot-2024-08-29-at-16-33-56.png)
+![Minimal Tiptap Editor](https://i.postimg.cc/4yntFTn8/Screenshot-2024-08-30-at-04-54-46.png)
 
 ## Overview
 
@@ -101,12 +101,12 @@ The Minimal Tiptap Editor accepts **all the tiptap editor props**. And the follo
 
 ## Toolbar Customization
 
-The Toolbar component offers extensive customization options, allowing you to control which editing options are available, their order, and how they are displayed. This customization is primarily achieved through the `activeActions` and `mainActionCount` props in various sections.
+The Toolbar component offers extensive customization options, allowing you to control which editing options are available, their order, and how they are displayed. This customization is primarily achieved through the `activeActions`, `mainActionCount`, `size` and `variant` props in various sections.
 
 #### SectionOne
 
 ```typescript
-<SectionOne editor={editor} activeLevels={[1, 2, 3, 4, 5, 6]} />
+<SectionOne editor={editor} activeLevels={[1, 2, 3, 4, 5, 6]} variant="outline" />
 ```
 
 #### SectionTwo
