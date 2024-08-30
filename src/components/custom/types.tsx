@@ -12,7 +12,7 @@ const features = [
       <MinimalTiptapOne
         throttleDelay={2000}
         className={cn('h-full min-h-0 w-full rounded-xl')}
-        editorContentClassName="some-class"
+        editorContentClassName="overflow-auto"
         output="html"
         placeholder="Comment here..."
         immediatelyRender={true}
@@ -29,7 +29,7 @@ const features = [
       <MinimalTiptapEditor
         throttleDelay={2000}
         className={cn('h-full min-h-0 w-full rounded-xl')}
-        editorContentClassName="some-class"
+        editorContentClassName="overflow-auto"
         output="html"
         placeholder="Type your description here..."
         immediatelyRender={true}
@@ -46,7 +46,7 @@ const features = [
       <MinimalTiptapThree
         throttleDelay={2000}
         className={cn('h-full min-h-0 w-full rounded-xl')}
-        editorContentClassName="some-class"
+        editorContentClassName="overflow-auto"
         output="html"
         placeholder="This is your placeholder..."
         immediatelyRender={true}

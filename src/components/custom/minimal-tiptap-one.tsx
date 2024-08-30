@@ -35,12 +35,6 @@ export const MinimalTiptapOne = React.forwardRef<HTMLDivElement, MinimalTiptapPr
       ...props
     })
 
-    const handleClick = () => {
-      if (editor && !editor?.isFocused) {
-        editor?.chain().focus().run()
-      }
-    }
-
     if (!editor) {
       return null
     }
@@ -53,12 +47,8 @@ export const MinimalTiptapOne = React.forwardRef<HTMLDivElement, MinimalTiptapPr
           className
         )}
       >
-        <div className="h-full grow" onClick={handleClick}>
-          <EditorContent editor={editor} className={cn('minimal-tiptap-editor', editorContentClassName)} />
-        </div>
-
+        <EditorContent editor={editor} className={cn('minimal-tiptap-editor', editorContentClassName)} />
         <Toolbar editor={editor} />
-
         <LinkBubbleMenu editor={editor} />
         <ImageBubbleMenu editor={editor} />
       </div>
