@@ -12,7 +12,7 @@ const features = [
       <MinimalTiptapOne
         throttleDelay={2000}
         className={cn('h-full min-h-0 w-full rounded-xl')}
-        editorContentClassName="overflow-auto"
+        editorContentClassName="overflow-auto h-full"
         output="html"
         placeholder="Comment here..."
         immediatelyRender={true}
