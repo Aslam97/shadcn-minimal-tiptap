@@ -1,10 +1,10 @@
 import * as React from 'react'
 import type { Editor } from '@tiptap/react'
 import { CaretDownIcon, ListBulletIcon } from '@radix-ui/react-icons'
-import { FormatAction } from '../../types'
+import type { FormatAction } from '../../types'
 import { ToolbarSection } from '../toolbar-section'
-import { toggleVariants } from '@/components/ui/toggle'
-import { VariantProps } from 'class-variance-authority'
+import type { toggleVariants } from '@/components/ui/toggle'
+import type { VariantProps } from 'class-variance-authority'
 
 type ListItemAction = 'orderedList' | 'bulletList'
 interface ListItem extends FormatAction {

@@ -6,8 +6,8 @@ import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { useTheme } from '../../hooks/use-theme'
-import { toggleVariants } from '@/components/ui/toggle'
-import { VariantProps } from 'class-variance-authority'
+import type { toggleVariants } from '@/components/ui/toggle'
+import type { VariantProps } from 'class-variance-authority'
 
 interface ColorItem {
   cssVar: string

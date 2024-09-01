@@ -11,8 +11,8 @@ import {
   DialogTrigger
 } from '@/components/ui/dialog'
 import { ImageEditBlock } from './image-edit-block'
-import { VariantProps } from 'class-variance-authority'
-import { toggleVariants } from '@/components/ui/toggle'
+import type { VariantProps } from 'class-variance-authority'
+import type { toggleVariants } from '@/components/ui/toggle'
 
 interface ImageEditDialogProps extends VariantProps<typeof toggleVariants> {
   editor: Editor

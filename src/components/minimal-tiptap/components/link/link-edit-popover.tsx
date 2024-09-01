@@ -4,8 +4,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Link2Icon } from '@radix-ui/react-icons'
 import { ToolbarButton } from '../toolbar-button'
 import { LinkEditBlock } from './link-edit-block'
-import { VariantProps } from 'class-variance-authority'
-import { toggleVariants } from '@/components/ui/toggle'
+import type { VariantProps } from 'class-variance-authority'
+import type { toggleVariants } from '@/components/ui/toggle'
 
 interface LinkEditPopoverProps extends VariantProps<typeof toggleVariants> {
   editor: Editor

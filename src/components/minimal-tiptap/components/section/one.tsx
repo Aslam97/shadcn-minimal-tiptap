@@ -6,9 +6,9 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { ToolbarButton } from '../toolbar-button'
 import { ShortcutKey } from '../shortcut-key'
 import React, { useCallback, useMemo } from 'react'
-import { FormatAction } from '../../types'
-import { VariantProps } from 'class-variance-authority'
-import { toggleVariants } from '@/components/ui/toggle'
+import type { FormatAction } from '../../types'
+import type { VariantProps } from 'class-variance-authority'
+import type { toggleVariants } from '@/components/ui/toggle'
 
 interface TextStyle extends Omit<FormatAction, 'value' | 'icon' | 'action' | 'isActive' | 'canExecute'> {
   element: keyof JSX.IntrinsicElements

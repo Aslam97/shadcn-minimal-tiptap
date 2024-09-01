@@ -3,10 +3,10 @@ import type { Editor } from '@tiptap/react'
 import { CaretDownIcon, CodeIcon, DividerHorizontalIcon, PlusIcon, QuoteIcon } from '@radix-ui/react-icons'
 import { LinkEditPopover } from '../link/link-edit-popover'
 import { ImageEditDialog } from '../image/image-edit-dialog'
-import { FormatAction } from '../../types'
+import type { FormatAction } from '../../types'
 import { ToolbarSection } from '../toolbar-section'
-import { toggleVariants } from '@/components/ui/toggle'
-import { VariantProps } from 'class-variance-authority'
+import type { toggleVariants } from '@/components/ui/toggle'
+import type { VariantProps } from 'class-variance-authority'
 
 type InsertElementAction = 'codeBlock' | 'blockquote' | 'horizontalRule'
 interface InsertElement extends FormatAction {

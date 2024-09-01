@@ -6,9 +6,9 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { ToolbarButton } from './toolbar-button'
 import { ShortcutKey } from './shortcut-key'
 import { getShortcutKey } from '../utils'
-import { FormatAction } from '../types'
-import { VariantProps } from 'class-variance-authority'
-import { toggleVariants } from '@/components/ui/toggle'
+import type { FormatAction } from '../types'
+import type { VariantProps } from 'class-variance-authority'
+import type { toggleVariants } from '@/components/ui/toggle'
 
 interface ToolbarSectionProps extends VariantProps<typeof toggleVariants> {
   editor: Editor
@@ -66,7 +66,9 @@ export const ToolbarSection: React.FC<ToolbarSectionProps> = ({
         key={action.label}
         onClick={() => action.action(editor)}
         disabled={!action.canExecute(editor)}
-        className={cn('flex flex-row items-center justify-between gap-4', { 'bg-accent': action.isActive(editor) })}
+        className={cn('flex flex-row items-center justify-between gap-4', {
+          'bg-accent': action.isActive(editor)
+        })}
         aria-label={action.label}
       >
         <span className="grow">{action.label}</span>

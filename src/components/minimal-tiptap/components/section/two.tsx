@@ -8,10 +8,10 @@ import {
   StrikethroughIcon,
   TextNoneIcon
 } from '@radix-ui/react-icons'
-import { FormatAction } from '../../types'
+import type { FormatAction } from '../../types'
 import { ToolbarSection } from '../toolbar-section'
-import { toggleVariants } from '@/components/ui/toggle'
-import { VariantProps } from 'class-variance-authority'
+import type { toggleVariants } from '@/components/ui/toggle'
+import type { VariantProps } from 'class-variance-authority'
 
 type TextStyleAction = 'bold' | 'italic' | 'strikethrough' | 'code' | 'clearFormatting'
 
