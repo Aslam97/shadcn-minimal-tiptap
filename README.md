@@ -56,10 +56,11 @@ Ensure these components are installed in your Shadcn project.
 
 ```tsx
 import { useState } from 'react'
+import { Content } from "@tiptap/react"
 import { MinimalTiptapEditor } from './minimal-tiptap'
 
 export const App = () => {
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState<Content>('')
 
   return (
     <MinimalTiptapEditor
