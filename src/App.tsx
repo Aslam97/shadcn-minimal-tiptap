@@ -17,7 +17,7 @@ export default function App() {
         <Hero />
         <div className="mt-12 flex flex-col gap-12 sm:mt-20">
           <BentoMinimalTiptap />
-          <ExampleForm />
+          {/* <ExampleForm /> */}
         </div>
       </main>
     </div>
