@@ -9,7 +9,7 @@ The Minimal Tiptap Editor is a lightweight, customizable rich text editor compon
 Install the required packages:
 
 ```bash
-npm install @tiptap/core @tiptap/extension-code-block-lowlight @tiptap/extension-color @tiptap/extension-heading @tiptap/extension-horizontal-rule @tiptap/extension-image @tiptap/extension-link @tiptap/extension-placeholder @tiptap/extension-text-style @tiptap/extension-typography @tiptap/pm @tiptap/react @tiptap/starter-kit
+npm install @tiptap/core @tiptap/extension-code-block-lowlight lowlight @tiptap/extension-color @tiptap/extension-heading @tiptap/extension-horizontal-rule @tiptap/extension-image @tiptap/extension-link @tiptap/extension-placeholder @tiptap/extension-text-style @tiptap/extension-typography @tiptap/pm @tiptap/react @tiptap/starter-kit
 ```
 
 This component relies on a tooltip functionality. To use it properly, you need to wrap your application with a `TooltipProvider` component.
@@ -56,7 +56,7 @@ Ensure these components are installed in your Shadcn project.
 
 ```tsx
 import { useState } from 'react'
-import { Content } from "@tiptap/react"
+import { Content } from '@tiptap/react'
 import { MinimalTiptapEditor } from './minimal-tiptap'
 
 export const App = () => {
