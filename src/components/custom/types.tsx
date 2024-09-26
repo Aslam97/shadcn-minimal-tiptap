@@ -18,7 +18,7 @@ const features = [
         immediatelyRender={true}
         editable={true}
         injectCSS={true}
-        editorClassName="focus:outline-none p-5"
+        editorClassName="focus:outline-none p-5 h-full"
       />
     )
   },
@@ -29,13 +29,13 @@ const features = [
       <MinimalTiptapEditor
         throttleDelay={2000}
         className={cn('h-full min-h-0 w-full rounded-xl')}
-        editorContentClassName="overflow-auto"
+        editorContentClassName="overflow-auto h-full"
         output="html"
         placeholder="Type your description here..."
         immediatelyRender={true}
         editable={true}
         injectCSS={true}
-        editorClassName="focus:outline-none p-5"
+        editorClassName="focus:outline-none p-5 h-full"
       />
     )
   },
@@ -46,13 +46,13 @@ const features = [
       <MinimalTiptapThree
         throttleDelay={2000}
         className={cn('h-full min-h-0 w-full rounded-xl')}
-        editorContentClassName="overflow-auto"
+        editorContentClassName="overflow-auto h-full"
         output="html"
         placeholder="This is your placeholder..."
         immediatelyRender={true}
         editable={true}
         injectCSS={true}
-        editorClassName="focus:outline-none p-5"
+        editorClassName="focus:outline-none p-5 h-full"
       />
     )
   }
