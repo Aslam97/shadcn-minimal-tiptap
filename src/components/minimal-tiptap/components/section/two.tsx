@@ -1,5 +1,8 @@
 import * as React from 'react'
 import type { Editor } from '@tiptap/react'
+import type { FormatAction } from '../../types'
+import type { toggleVariants } from '@/components/ui/toggle'
+import type { VariantProps } from 'class-variance-authority'
 import {
   CodeIcon,
   DotsHorizontalIcon,
@@ -8,10 +11,7 @@ import {
   StrikethroughIcon,
   TextNoneIcon
 } from '@radix-ui/react-icons'
-import type { FormatAction } from '../../types'
 import { ToolbarSection } from '../toolbar-section'
-import type { toggleVariants } from '@/components/ui/toggle'
-import type { VariantProps } from 'class-variance-authority'
 
 type TextStyleAction = 'bold' | 'italic' | 'strikethrough' | 'code' | 'clearFormatting'
 

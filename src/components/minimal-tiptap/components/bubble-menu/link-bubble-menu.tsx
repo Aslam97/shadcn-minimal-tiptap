@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import * as React from 'react'
 import { Editor } from '@tiptap/react'
 import { BubbleMenu } from '@tiptap/react'
 import { LinkEditBlock } from '../link/link-edit-block'
@@ -15,11 +15,11 @@ interface LinkAttributes {
 }
 
 export const LinkBubbleMenu: React.FC<LinkBubbleMenuProps> = ({ editor }) => {
-  const [showEdit, setShowEdit] = useState(false)
-  const [linkAttrs, setLinkAttrs] = useState<LinkAttributes>({ href: '', target: '' })
-  const [selectedText, setSelectedText] = useState('')
+  const [showEdit, setShowEdit] = React.useState(false)
+  const [linkAttrs, setLinkAttrs] = React.useState<LinkAttributes>({ href: '', target: '' })
+  const [selectedText, setSelectedText] = React.useState('')
 
-  const updateLinkState = useCallback(() => {
+  const updateLinkState = React.useCallback(() => {
     const { from, to } = editor.state.selection
     const { href, target } = editor.getAttributes('link')
     const text = editor.state.doc.textBetween(from, to, ' ')
@@ -28,7 +28,7 @@ export const LinkBubbleMenu: React.FC<LinkBubbleMenuProps> = ({ editor }) => {
     setSelectedText(text)
   }, [editor])
 
-  const shouldShow = useCallback(
+  const shouldShow = React.useCallback(
     ({ editor, from, to }: ShouldShowProps) => {
       if (from === to) {
         return false
@@ -44,11 +44,11 @@ export const LinkBubbleMenu: React.FC<LinkBubbleMenuProps> = ({ editor }) => {
     [updateLinkState]
   )
 
-  const handleEdit = useCallback(() => {
+  const handleEdit = React.useCallback(() => {
     setShowEdit(true)
   }, [])
 
-  const onSetLink = useCallback(
+  const onSetLink = React.useCallback(
     (url: string, text?: string, openInNewTab?: boolean) => {
       editor
         .chain()
@@ -75,7 +75,7 @@ export const LinkBubbleMenu: React.FC<LinkBubbleMenuProps> = ({ editor }) => {
     [editor, updateLinkState]
   )
 
-  const onUnsetLink = useCallback(() => {
+  const onUnsetLink = React.useCallback(() => {
     editor.chain().focus().extendMarkRange('link').unsetLink().run()
     setShowEdit(false)
     updateLinkState()

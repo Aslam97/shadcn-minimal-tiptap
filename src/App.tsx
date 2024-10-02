@@ -56,7 +56,6 @@ export const ExampleForm: React.FC = () => {
   const onSubmit = (values: FormValues) => {
     console.log(values)
     form.reset()
-    editorRef.current?.commands.clearContent()
   }
 
   return (
