@@ -70,7 +70,7 @@ export const ExampleForm: React.FC = () => {
               <FormControl>
                 <MinimalTiptapEditor
                   {...field}
-                  throttleDelay={0}
+                  throttleDelay={2000}
                   className={cn('w-full', {
                     'border-destructive focus-within:border-destructive': form.formState.errors.description
                   })}
@@ -79,7 +79,7 @@ export const ExampleForm: React.FC = () => {
                   placeholder="Type your description here..."
                   onCreate={handleCreate}
                   autofocus={true}
-                  immediatelyRender={false}
+                  immediatelyRender={true}
                   editable={true}
                   injectCSS={true}
                   editorClassName="focus:outline-none p-5"

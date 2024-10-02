@@ -27,7 +27,7 @@ const features = [
     className: 'col-span-3 lg:col-span-2',
     background: (
       <MinimalTiptapEditor
-        throttleDelay={0}
+        throttleDelay={2000}
         className={cn('h-full min-h-0 w-full rounded-xl')}
         editorContentClassName="overflow-auto h-full"
         output="html"
@@ -44,7 +44,7 @@ const features = [
     className: 'col-span-3',
     background: (
       <MinimalTiptapThree
-        throttleDelay={1000}
+        throttleDelay={2000}
         className={cn('h-full min-h-0 w-full rounded-xl')}
         editorContentClassName="overflow-auto h-full"
         output="html"
