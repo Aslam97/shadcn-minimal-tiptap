@@ -54,8 +54,33 @@ export const ExampleForm: React.FC = () => {
   )
 
   const onSubmit = (values: FormValues) => {
+    console.log('==Getting values from form==')
     console.log(values)
-    form.reset()
+    console.log('Success: Values retrieved from form')
+
+    setTimeout(() => {
+      console.log('==Clearing form==')
+      form.reset()
+      console.log('Success: Form cleared')
+    }, 1000)
+
+    setTimeout(() => {
+      console.log('==Clearing editor==')
+      editorRef.current?.commands.clearContent()
+      console.log('Success: Editor cleared')
+    }, 2000)
+
+    setTimeout(() => {
+      console.log('==Resetting editor==')
+      editorRef.current?.commands.setContent('')
+      console.log('Success: Editor reset')
+    }, 3000)
+
+    setTimeout(() => {
+      console.log('==Setting editor content==')
+      editorRef.current?.commands.setContent(values.description)
+      console.log('Success: Editor content set')
+    }, 4000)
   }
 
   return (
