@@ -56,7 +56,6 @@ export const ExampleForm: React.FC = () => {
   const onSubmit = (values: FormValues) => {
     console.log(values)
     form.reset()
-    editorRef.current?.commands.clearContent()
   }
 
   return (
@@ -71,7 +70,7 @@ export const ExampleForm: React.FC = () => {
               <FormControl>
                 <MinimalTiptapEditor
                   {...field}
-                  throttleDelay={2000}
+                  throttleDelay={0}
                   className={cn('w-full', {
                     'border-destructive focus-within:border-destructive': form.formState.errors.description
                   })}
@@ -80,7 +79,7 @@ export const ExampleForm: React.FC = () => {
                   placeholder="Type your description here..."
                   onCreate={handleCreate}
                   autofocus={true}
-                  immediatelyRender={true}
+                  immediatelyRender={false}
                   editable={true}
                   injectCSS={true}
                   editorClassName="focus:outline-none p-5"

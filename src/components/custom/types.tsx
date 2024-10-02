@@ -1,8 +1,8 @@
 import { BentoCard, BentoGrid } from '@/components/custom/bento-grid'
 import { MinimalTiptapEditor } from '../minimal-tiptap'
 import { cn } from '@/lib/utils'
-import MinimalTiptapOne from './minimal-tiptap-one'
-import MinimalTiptapThree from './minimal-tiptap-three'
+import { MinimalTiptapOne } from './minimal-tiptap-one'
+import { MinimalTiptapThree } from './minimal-tiptap-three'
 
 const features = [
   {
@@ -27,14 +27,11 @@ const features = [
     className: 'col-span-3 lg:col-span-2',
     background: (
       <MinimalTiptapEditor
-        throttleDelay={2000}
+        throttleDelay={0}
         className={cn('h-full min-h-0 w-full rounded-xl')}
         editorContentClassName="overflow-auto"
         output="html"
         placeholder="Type your description here..."
-        immediatelyRender={true}
-        editable={true}
-        injectCSS={true}
         editorClassName="focus:outline-none p-5"
       />
     )
@@ -44,7 +41,7 @@ const features = [
     className: 'col-span-3',
     background: (
       <MinimalTiptapThree
-        throttleDelay={2000}
+        throttleDelay={1000}
         className={cn('h-full min-h-0 w-full rounded-xl')}
         editorContentClassName="overflow-auto"
         output="html"

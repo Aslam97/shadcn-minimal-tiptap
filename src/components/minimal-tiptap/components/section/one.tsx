@@ -1,14 +1,14 @@
+import * as React from 'react'
 import type { Editor } from '@tiptap/react'
 import type { Level } from '@tiptap/extension-heading'
+import type { FormatAction } from '../../types'
+import type { VariantProps } from 'class-variance-authority'
+import type { toggleVariants } from '@/components/ui/toggle'
 import { cn } from '@/lib/utils'
 import { CaretDownIcon, LetterCaseCapitalizeIcon } from '@radix-ui/react-icons'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { ToolbarButton } from '../toolbar-button'
 import { ShortcutKey } from '../shortcut-key'
-import React, { useCallback, useMemo } from 'react'
-import type { FormatAction } from '../../types'
-import type { VariantProps } from 'class-variance-authority'
-import type { toggleVariants } from '@/components/ui/toggle'
 
 interface TextStyle extends Omit<FormatAction, 'value' | 'icon' | 'action' | 'isActive' | 'canExecute'> {
   element: keyof JSX.IntrinsicElements
@@ -74,12 +74,12 @@ interface SectionOneProps extends VariantProps<typeof toggleVariants> {
 
 export const SectionOne: React.FC<SectionOneProps> = React.memo(
   ({ editor, activeLevels = [1, 2, 3, 4, 5, 6], size, variant }) => {
-    const filteredActions = useMemo(
+    const filteredActions = React.useMemo(
       () => formatActions.filter(action => !action.level || activeLevels.includes(action.level)),
       [activeLevels]
     )
 
-    const handleStyleChange = useCallback(
+    const handleStyleChange = React.useCallback(
       (level?: Level) => {
         if (level) {
           editor.chain().focus().toggleHeading({ level }).run()
@@ -90,7 +90,7 @@ export const SectionOne: React.FC<SectionOneProps> = React.memo(
       [editor]
     )
 
-    const renderMenuItem = useCallback(
+    const renderMenuItem = React.useCallback(
       ({ label, element: Element, level, className, shortcuts }: TextStyle) => (
         <DropdownMenuItem
           key={label}
