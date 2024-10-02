@@ -10,14 +10,12 @@ const features = [
     className: 'col-span-3 lg:col-span-1',
     background: (
       <MinimalTiptapOne
-        throttleDelay={2000}
+        throttleDelay={1000}
         className={cn('h-full min-h-0 w-full rounded-xl')}
         editorContentClassName="overflow-auto h-full"
         output="html"
         placeholder="Comment here..."
-        immediatelyRender={true}
         editable={true}
-        injectCSS={true}
         editorClassName="focus:outline-none p-5 h-full"
       />
     )
@@ -32,9 +30,7 @@ const features = [
         editorContentClassName="overflow-auto h-full"
         output="html"
         placeholder="Type your description here..."
-        immediatelyRender={true}
         editable={true}
-        injectCSS={true}
         editorClassName="focus:outline-none p-5 h-full"
       />
     )
@@ -44,14 +40,12 @@ const features = [
     className: 'col-span-3',
     background: (
       <MinimalTiptapThree
-        throttleDelay={2000}
+        throttleDelay={3000}
         className={cn('h-full min-h-0 w-full rounded-xl')}
         editorContentClassName="overflow-auto h-full"
         output="html"
         placeholder="This is your placeholder..."
-        immediatelyRender={true}
         editable={true}
-        injectCSS={true}
         editorClassName="focus:outline-none p-5 h-full"
       />
     )

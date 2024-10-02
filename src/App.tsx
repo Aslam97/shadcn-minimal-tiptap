@@ -95,7 +95,7 @@ export const ExampleForm: React.FC = () => {
               <FormControl>
                 <MinimalTiptapEditor
                   {...field}
-                  throttleDelay={2000}
+                  throttleDelay={0}
                   className={cn('w-full', {
                     'border-destructive focus-within:border-destructive': form.formState.errors.description
                   })}
