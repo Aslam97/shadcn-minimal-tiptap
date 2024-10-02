@@ -66,15 +66,12 @@ export const App = () => {
     <MinimalTiptapEditor
       value={value}
       onChange={setValue}
-      throttleDelay={2000}
       className="w-full"
       editorContentClassName="p-5"
       output="html"
       placeholder="Type your description here..."
       autofocus={true}
-      immediatelyRender={true}
       editable={true}
-      injectCSS={true}
       editorClassName="focus:outline-none"
     />
   )
@@ -93,7 +90,7 @@ The Minimal Tiptap Editor accepts **all the tiptap editor props**. And the follo
 | `output`                 | 'html' \| 'json' \| 'text' | 'html'  | Output format of the editor content         |
 | `placeholder`            | string                     | -       | Placeholder text for the editor             |
 | `editorClassName`        | string                     | -       | CSS class for the editor instance           |
-| `throttleDelay`          | number                     | 1000    | Delay for throttling editor updates (in ms) |
+| `throttleDelay`          | number                     | 0       | Delay for throttling editor updates (in ms) |
 
 ## Key Behaviors
 

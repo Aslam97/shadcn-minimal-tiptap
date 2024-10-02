@@ -60,7 +60,7 @@ export const useMinimalTiptapEditor = ({
   output = 'html',
   placeholder = '',
   editorClassName,
-  throttleDelay = 1000,
+  throttleDelay = 0,
   onUpdate,
   onBlur,
   ...props
