@@ -1,5 +1,5 @@
+import * as React from 'react'
 import type { Editor } from '@tiptap/react'
-import React, { useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
@@ -11,8 +11,8 @@ interface ImageEditBlockProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const ImageEditBlock = ({ editor, className, close, ...props }: ImageEditBlockProps) => {
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const [link, setLink] = useState<string>('')
+  const fileInputRef = React.useRef<HTMLInputElement>(null)
+  const [link, setLink] = React.useState<string>('')
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -32,7 +32,7 @@ const ImageEditBlock = ({ editor, className, close, ...props }: ImageEditBlockPr
     const reader = new FileReader()
     reader.onload = e => {
       const src = e.target?.result as string
-      editor.chain().setImage({ src }).focus().run()
+      editor.chain().focus().setImage({ src }).run()
     }
 
     reader.readAsDataURL(files[0])
@@ -42,6 +42,7 @@ const ImageEditBlock = ({ editor, className, close, ...props }: ImageEditBlockPr
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    e.stopPropagation()
     handleLink()
   }
 
