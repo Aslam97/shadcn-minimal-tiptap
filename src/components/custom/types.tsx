@@ -16,7 +16,7 @@ const features = [
         output="html"
         placeholder="Comment here..."
         editable={true}
-        editorClassName="focus:outline-none p-5 h-full"
+        editorClassName="focus:outline-none px-5 py-4 h-full"
       />
     )
   },
@@ -31,7 +31,7 @@ const features = [
         output="html"
         placeholder="Type your description here..."
         editable={true}
-        editorClassName="focus:outline-none p-5 h-full"
+        editorClassName="focus:outline-none px-5 py-4 h-full"
       />
     )
   },
@@ -46,7 +46,7 @@ const features = [
         output="html"
         placeholder="This is your placeholder..."
         editable={true}
-        editorClassName="focus:outline-none p-5 h-full"
+        editorClassName="focus:outline-none px-5 py-4 h-full"
       />
     )
   }
