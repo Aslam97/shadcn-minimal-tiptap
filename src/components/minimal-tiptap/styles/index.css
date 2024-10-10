@@ -4,8 +4,6 @@
 @import './partials/typography.css';
 
 :root {
-  --mt-font-size-regular: 0.9375rem;
-
   --mt-code-background: #082b781f;
   --mt-code-color: #d4d4d4;
   --mt-secondary: #9d9d9f;
@@ -49,8 +47,6 @@
 }
 
 .dark {
-  --mt-font-size-regular: 0.9375rem;
-
   --mt-code-background: #ffffff13;
   --mt-code-color: #2c2e33;
   --mt-secondary: #595a5c;
@@ -94,7 +90,7 @@
 }
 
 .minimal-tiptap-editor .ProseMirror {
-  @apply flex max-w-full flex-1 cursor-text flex-col;
+  @apply flex max-w-full cursor-text flex-col;
   @apply z-0 outline-0;
 }
 
