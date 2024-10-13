@@ -14,12 +14,12 @@ import {
   Selection,
   Color,
   UnsetAllMarks,
-  ResetMarksOnEnter
+  ResetMarksOnEnter,
+  FileHandler
 } from '../extensions'
 import { cn } from '@/lib/utils'
 import { getOutput } from '../utils'
 import { useThrottle } from '../hooks/use-throttle'
-
 export interface UseMinimalTiptapEditorProps extends UseEditorOptions {
   value?: Content
   output?: 'html' | 'json' | 'text'
@@ -46,6 +46,18 @@ const createExtensions = (placeholder: string) => [
   Image,
   Color,
   TextStyle,
+  FileHandler.configure({
+    allowedMimeTypes: ['image/*'],
+    onDrop: (editor, files, pos) => {
+      console.log('==Dropping files==', { files, pos })
+      files.forEach(file =>
+        editor.commands.insertContentAt(pos, { type: 'image', attrs: { src: URL.createObjectURL(file) } })
+      )
+    },
+    onPaste: (editor, files) => {
+      files.forEach(file => editor.commands.insertContent({ type: 'image', attrs: { src: URL.createObjectURL(file) } }))
+    }
+  }),
   Selection,
   Typography,
   UnsetAllMarks,
@@ -84,7 +96,7 @@ export const useMinimalTiptapEditor = ({
   const handleBlur = React.useCallback((editor: Editor) => onBlur?.(getOutput(editor, output)), [output, onBlur])
 
   const editor = useEditor({
-    extensions: createExtensions(placeholder!),
+    extensions: createExtensions(placeholder),
     editorProps: {
       attributes: {
         autocomplete: 'off',

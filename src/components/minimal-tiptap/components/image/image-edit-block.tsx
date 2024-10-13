@@ -3,75 +3,87 @@ import type { Editor } from '@tiptap/react'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
-import { cn } from '@/lib/utils'
+import { readFileAsDataURL } from '../../utils'
 
-interface ImageEditBlockProps extends React.HTMLAttributes<HTMLDivElement> {
+interface ImageEditBlockProps {
   editor: Editor
   close: () => void
 }
 
-const ImageEditBlock = ({ editor, className, close, ...props }: ImageEditBlockProps) => {
+export const ImageEditBlock: React.FC<ImageEditBlockProps> = ({ editor, close }) => {
   const fileInputRef = React.useRef<HTMLInputElement>(null)
-  const [link, setLink] = React.useState<string>('')
+  const [link, setLink] = React.useState('')
 
-  const handleClick = (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
+  const handleClick = React.useCallback(() => {
     fileInputRef.current?.click()
-  }
+  }, [])
 
-  const handleLink = () => {
-    editor.chain().focus().setImage({ src: link }).run()
-    close()
-  }
-
-  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files
-    if (!files) return
-
-    const reader = new FileReader()
-    reader.onload = e => {
-      const src = e.target?.result as string
-      editor.chain().focus().setImage({ src }).run()
+  const handleLink = React.useCallback(() => {
+    if (link) {
+      editor.chain().focus().setImage({ src: link }).run()
+      close()
     }
+  }, [editor, link, close])
 
-    reader.readAsDataURL(files[0])
+  const handleFile = React.useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = e.target.files
+      if (!files?.length) return
 
-    close()
-  }
+      const insertImages = async () => {
+        for (const file of files) {
+          try {
+            const dataUrl = await readFileAsDataURL(file)
+            editor
+              .chain()
+              .focus()
+              .insertContent([{ type: 'image', attrs: { src: dataUrl } }, { type: 'paragraph' }])
+              .run()
+          } catch (error) {
+            console.error('Failed to read file:', error)
+          }
+        }
+      }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    handleLink()
-  }
+      await insertImages()
+      close()
+    },
+    [editor, close]
+  )
+
+  const handleSubmit = React.useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault()
+      handleLink()
+    },
+    [handleLink]
+  )
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className={cn('space-y-6', className)} {...props}>
-        <div className="space-y-1">
-          <Label>Attach an image link</Label>
-          <div className="flex">
-            <Input
-              type="url"
-              required
-              placeholder="https://example.com"
-              value={link}
-              className="grow"
-              onChange={e => setLink(e.target.value)}
-            />
-            <Button type="submit" className="ml-2 inline-block">
-              Submit
-            </Button>
-          </div>
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="space-y-1">
+        <Label htmlFor="image-link">Attach an image link</Label>
+        <div className="flex">
+          <Input
+            id="image-link"
+            type="url"
+            required
+            placeholder="https://example.com"
+            value={link}
+            className="grow"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLink(e.target.value)}
+          />
+          <Button type="submit" className="ml-2">
+            Submit
+          </Button>
         </div>
-        <Button className="w-full" onClick={handleClick}>
-          Upload from your computer
-        </Button>
-        <input type="file" accept="image/*" ref={fileInputRef} multiple className="hidden" onChange={handleFile} />
       </div>
+      <Button type="button" className="w-full" onClick={handleClick}>
+        Upload from your computer
+      </Button>
+      <input type="file" accept="image/*" ref={fileInputRef} multiple className="hidden" onChange={handleFile} />
     </form>
   )
 }
 
-export { ImageEditBlock }
+export default ImageEditBlock
