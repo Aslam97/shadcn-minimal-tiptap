@@ -1,4 +1,5 @@
-import { isNumber, NodeViewProps, NodeViewWrapper } from '@tiptap/react'
+import type { NodeViewProps } from '@tiptap/react'
+import { isNumber, NodeViewWrapper } from '@tiptap/react'
 import { useMemo } from 'react'
 import { useImageLoad } from '../../../hooks/use-image-load'
 import { cn } from '@/lib/utils'

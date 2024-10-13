@@ -79,3 +79,11 @@ export function getOutput(editor: Editor, format: MinimalTiptapProps['output']) 
 
   return editor.getText()
 }
+
+export const readFileAsDataURL = (file: File): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = e => resolve(e.target?.result as string)
+    reader.onerror = reject
+    reader.readAsDataURL(file)
+  })
