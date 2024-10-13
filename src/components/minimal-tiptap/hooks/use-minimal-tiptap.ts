@@ -49,7 +49,6 @@ const createExtensions = (placeholder: string) => [
   FileHandler.configure({
     allowedMimeTypes: ['image/*'],
     onDrop: (editor, files, pos) => {
-      console.log('==Dropping files==', { files, pos })
       files.forEach(file =>
         editor.commands.insertContentAt(pos, { type: 'image', attrs: { src: URL.createObjectURL(file) } })
       )
