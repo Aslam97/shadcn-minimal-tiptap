@@ -13,7 +13,7 @@ import { useCallback, useRef } from 'react'
 export default function App() {
   return (
     <div className="px-4 py-12 sm:py-24">
-      <main className="mx-auto w-full max-w-3xl">
+      <main className="mx-auto w-full max-w-4xl">
         <Hero />
         <div className="mt-12 flex flex-col gap-12 sm:mt-20">
           <BentoMinimalTiptap />
