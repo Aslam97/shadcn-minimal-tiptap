@@ -20,6 +20,7 @@ import {
 import { cn } from '@/lib/utils'
 import { getOutput } from '../utils'
 import { useThrottle } from '../hooks/use-throttle'
+
 export interface UseMinimalTiptapEditorProps extends UseEditorOptions {
   value?: Content
   output?: 'html' | 'json' | 'text'
