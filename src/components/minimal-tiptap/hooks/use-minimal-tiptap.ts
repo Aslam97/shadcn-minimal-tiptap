@@ -44,11 +44,29 @@ const createExtensions = (placeholder: string) => [
     dropcursor: { width: 2, class: 'ProseMirror-dropcursor border' }
   }),
   Link,
-  Image,
-  Color,
-  TextStyle,
-  FileHandler.configure({
+  Image.configure({
     allowedMimeTypes: ['image/*'],
+    maxFileSize: 5 * 1024 * 1024,
+    allowBase64: true,
+    customCopyLink(props, options) {
+      console.log('customCopyLink', props, options)
+    },
+    onValidationError(errors) {
+      errors.forEach(error => {
+        console.log('Image validation error', error)
+      })
+    },
+    onActionSuccess({ action, src, alt }) {
+      alert(`Image action: ${action} ${src} ${alt}`)
+    },
+    onActionError(error, { action, src, alt }) {
+      alert(`Image action failed: ${error.message} (${action} ${src} ${alt})`)
+    }
+  }),
+  FileHandler.configure({
+    allowBase64: true,
+    allowedMimeTypes: ['image/*'],
+    maxFileSize: 5 * 1024 * 1024,
     onDrop: (editor, files, pos) => {
       files.forEach(file =>
         editor.commands.insertContentAt(pos, { type: 'image', attrs: { src: URL.createObjectURL(file) } })
@@ -56,8 +74,15 @@ const createExtensions = (placeholder: string) => [
     },
     onPaste: (editor, files) => {
       files.forEach(file => editor.commands.insertContent({ type: 'image', attrs: { src: URL.createObjectURL(file) } }))
+    },
+    onValidationError: errors => {
+      errors.forEach(error => {
+        console.log('File validation error', error)
+      })
     }
   }),
+  Color,
+  TextStyle,
   Selection,
   Typography,
   UnsetAllMarks,

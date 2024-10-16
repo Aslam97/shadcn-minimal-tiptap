@@ -5,15 +5,15 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
-    'plugin:import/typescript' // Add this line
+    'plugin:import/typescript',
+    'plugin:tailwindcss/recommended'
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh', 'import'], // Add 'import' here
+  plugins: ['react-refresh', 'import'],
   rules: {
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     '@typescript-eslint/no-explicit-any': 'off',
-    // Add these new rules
     '@typescript-eslint/consistent-type-imports': [
       'error',
       {

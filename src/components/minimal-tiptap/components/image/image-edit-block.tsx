@@ -3,7 +3,6 @@ import type { Editor } from '@tiptap/react'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
-import { readFileAsDataURL } from '../../utils'
 
 interface ImageEditBlockProps {
   editor: Editor
@@ -18,31 +17,19 @@ export const ImageEditBlock: React.FC<ImageEditBlockProps> = ({ editor, close })
     fileInputRef.current?.click()
   }, [])
 
-  const handleLink = React.useCallback(() => {
-    if (link) {
-      editor.chain().focus().setImage({ src: link }).run()
-      close()
-    }
-  }, [editor, link, close])
-
   const handleFile = React.useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
       const files = e.target.files
       if (!files?.length) return
 
       const insertImages = async () => {
+        const contentBucket = []
+
         for (const file of files) {
-          try {
-            const dataUrl = await readFileAsDataURL(file)
-            editor
-              .chain()
-              .focus()
-              .insertContent([{ type: 'image', attrs: { src: dataUrl } }, { type: 'paragraph' }])
-              .run()
-          } catch (error) {
-            console.error('Failed to read file:', error)
-          }
+          contentBucket.push({ src: file })
         }
+
+        editor.commands.setImages(contentBucket)
       }
 
       await insertImages()
@@ -54,9 +41,14 @@ export const ImageEditBlock: React.FC<ImageEditBlockProps> = ({ editor, close })
   const handleSubmit = React.useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
-      handleLink()
+      e.stopPropagation()
+
+      if (link) {
+        editor.commands.setImages([{ src: link }])
+        close()
+      }
     },
-    [handleLink]
+    [editor, link, close]
   )
 
   return (
