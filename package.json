@@ -48,7 +48,6 @@
     "react-helmet-async": "^2.0.5",
     "react-hook-form": "^7.53.0",
     "react-medium-image-zoom": "^5.2.10",
-    "react-resizable": "^3.0.5",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.23.8"
