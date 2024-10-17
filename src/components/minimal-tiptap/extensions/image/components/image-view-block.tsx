@@ -1,17 +1,17 @@
 import * as React from 'react'
 import { NodeViewWrapper, type NodeViewProps } from '@tiptap/react'
-import type { ElementDimensions } from '@/components/minimal-tiptap/hooks/use-drag-resize'
-import { useDragResize } from '@/components/minimal-tiptap/hooks/use-drag-resize'
+import type { ElementDimensions } from '../hooks/use-drag-resize'
+import { useDragResize } from '../hooks/use-drag-resize'
 import { ResizeHandle } from './resize-handle'
 import { cn } from '@/lib/utils'
-import { Loader2, AlertCircle } from 'lucide-react'
 import { NodeSelection } from '@tiptap/pm/state'
 import { Controlled as ControlledZoom } from 'react-medium-image-zoom'
 import { ActionButton, ActionWrapper, ImageActions } from './image-actions'
 import { useImageActions } from '../hooks/use-image-actions'
-import { blobUrlToBase64 } from '@/components/minimal-tiptap/utils'
-import { Cross2Icon, TrashIcon } from '@radix-ui/react-icons'
+import { blobUrlToBase64 } from '../../../utils'
+import { Cross2Icon, InfoCircledIcon, TrashIcon } from '@radix-ui/react-icons'
 import { ImageOverlay } from './image-overlay'
+import { Spinner } from '../../../components/spinner'
 
 const MAX_HEIGHT = 600
 const MIN_HEIGHT = 120
@@ -168,13 +168,13 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, getPos, 
             <div className="relative h-full">
               {!imageState.imageLoaded && !imageState.error && (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <Loader2 className="size-8 animate-spin" />
+                  <Spinner className="size-7" />
                 </div>
               )}
 
               {imageState.error && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <AlertCircle className="size-8 text-destructive" />
+                  <InfoCircledIcon className="size-8 text-destructive" />
                   <p className="mt-2 text-sm text-muted-foreground">Failed to load image</p>
                 </div>
               )}

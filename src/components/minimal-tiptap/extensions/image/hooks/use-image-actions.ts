@@ -1,7 +1,7 @@
 import * as React from 'react'
 import type { Editor } from '@tiptap/core'
 import type { Node } from '@tiptap/pm/model'
-import { isUrl } from '@/components/minimal-tiptap/utils'
+import { isUrl } from '../../../utils'
 
 interface UseImageActionsProps {
   editor: Editor

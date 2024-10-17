@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
-import { ClipboardCopy, DownloadIcon, Link, Maximize2, MoreHorizontal } from 'lucide-react'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { ClipboardCopyIcon, DotsHorizontalIcon, DownloadIcon, Link2Icon, SizeIcon } from '@radix-ui/react-icons'
 
 interface ImageActionsProps {
   shouldMerge?: boolean
@@ -69,10 +69,10 @@ const ActionItems: Array<{
   tooltip: string
   isLink?: boolean
 }> = [
-  { key: 'onView', icon: <Maximize2 className="size-4" />, tooltip: 'View image' },
+  { key: 'onView', icon: <SizeIcon className="size-4" />, tooltip: 'View image' },
   { key: 'onDownload', icon: <DownloadIcon className="size-4" />, tooltip: 'Download image' },
-  { key: 'onCopy', icon: <ClipboardCopy className="size-4" />, tooltip: 'Copy image to clipboard' },
-  { key: 'onCopyLink', icon: <Link className="size-4" />, tooltip: 'Copy image link', isLink: true }
+  { key: 'onCopy', icon: <ClipboardCopyIcon className="size-4" />, tooltip: 'Copy image to clipboard' },
+  { key: 'onCopyLink', icon: <Link2Icon className="size-4" />, tooltip: 'Copy image link', isLink: true }
 ]
 
 export const ImageActions: React.FC<ImageActionsProps> = React.memo(
@@ -93,7 +93,7 @@ export const ImageActions: React.FC<ImageActionsProps> = React.memo(
           <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
             <DropdownMenuTrigger asChild>
               <ActionButton
-                icon={<MoreHorizontal className="size-4" />}
+                icon={<DotsHorizontalIcon className="size-4" />}
                 tooltip="Open menu"
                 onClick={e => e.preventDefault()}
               />
