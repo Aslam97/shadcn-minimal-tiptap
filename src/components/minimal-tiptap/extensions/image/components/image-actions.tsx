@@ -19,7 +19,25 @@ interface ActionButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement
   tooltip: string
 }
 
-const ActionButton = React.memo(
+export const ActionWrapper = React.memo(
+  React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ children, className, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={cn(
+        'absolute right-3 top-3 flex flex-row rounded px-0.5 opacity-0 group-hover/node-image:opacity-100',
+        'border-[0.5px] bg-[var(--mt-bg-secondary)] [backdrop-filter:saturate(1.8)_blur(20px)]',
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  ))
+)
+
+ActionWrapper.displayName = 'ActionWrapper'
+
+export const ActionButton = React.memo(
   React.forwardRef<HTMLButtonElement, ActionButtonProps>(({ icon, tooltip, className, ...props }, ref) => (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -70,13 +88,7 @@ export const ImageActions: React.FC<ImageActionsProps> = React.memo(
     const filteredActions = React.useMemo(() => ActionItems.filter(item => isLink || !item.isLink), [isLink])
 
     return (
-      <div
-        className={cn(
-          'absolute right-3 top-3 flex flex-row rounded px-0.5 opacity-0 group-hover/node-image:opacity-100',
-          'border-[0.5px] bg-[var(--mt-bg-secondary)] [backdrop-filter:saturate(1.8)_blur(20px)]',
-          { 'opacity-100': isOpen }
-        )}
-      >
+      <ActionWrapper className={cn({ 'opacity-100': isOpen })}>
         {shouldMerge ? (
           <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
             <DropdownMenuTrigger asChild>
@@ -98,13 +110,11 @@ export const ImageActions: React.FC<ImageActionsProps> = React.memo(
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
-          <>
-            {filteredActions.map(({ key, icon, tooltip }) => (
-              <ActionButton key={key} icon={icon} tooltip={tooltip} onClick={e => handleAction(e, actions[key])} />
-            ))}
-          </>
+          filteredActions.map(({ key, icon, tooltip }) => (
+            <ActionButton key={key} icon={icon} tooltip={tooltip} onClick={e => handleAction(e, actions[key])} />
+          ))
         )}
-      </div>
+      </ActionWrapper>
     )
   }
 )

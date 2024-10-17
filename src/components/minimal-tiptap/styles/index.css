@@ -5,6 +5,7 @@
 @import './partials/zoom.css';
 
 :root {
+  --mt-overlay: rgba(251, 251, 251, 0.75);
   --mt-transparent-foreground: rgba(0, 0, 0, 0.4);
   --mt-bg-secondary: rgba(251, 251, 251, 0.8);
   --mt-code-background: #082b781f;
@@ -50,6 +51,7 @@
 }
 
 .dark {
+  --mt-overlay: rgba(31, 32, 35, 0.75);
   --mt-transparent-foreground: rgba(255, 255, 255, 0.4);
   --mt-bg-secondary: rgba(31, 32, 35, 0.8);
   --mt-code-background: #ffffff13;

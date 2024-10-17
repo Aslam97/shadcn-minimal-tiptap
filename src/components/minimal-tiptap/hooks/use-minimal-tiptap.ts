@@ -18,7 +18,7 @@ import {
   FileHandler
 } from '../extensions'
 import { cn } from '@/lib/utils'
-import { getOutput } from '../utils'
+import { blobUrlToBase64, getOutput } from '../utils'
 import { useThrottle } from '../hooks/use-throttle'
 
 export interface UseMinimalTiptapEditorProps extends UseEditorOptions {
@@ -48,6 +48,10 @@ const createExtensions = (placeholder: string) => [
     allowedMimeTypes: ['image/*'],
     maxFileSize: 5 * 1024 * 1024,
     allowBase64: true,
+    uploadFn: async file => {
+      const url = await blobUrlToBase64(file)
+      return url
+    },
     customCopyLink(props, options) {
       console.log('customCopyLink', props, options)
     },
@@ -56,11 +60,11 @@ const createExtensions = (placeholder: string) => [
         console.log('Image validation error', error)
       })
     },
-    onActionSuccess({ action, src, alt }) {
-      alert(`Image action: ${action} ${src} ${alt}`)
+    onActionSuccess(props) {
+      console.log('Image action success', props)
     },
-    onActionError(error, { action, src, alt }) {
-      alert(`Image action failed: ${error.message} (${action} ${src} ${alt})`)
+    onActionError(error, props) {
+      console.error('Image action error', error, props)
     }
   }),
   FileHandler.configure({

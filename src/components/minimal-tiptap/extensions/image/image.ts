@@ -1,105 +1,48 @@
 import type { ImageOptions } from '@tiptap/extension-image'
 import { Image as TiptapImage } from '@tiptap/extension-image'
+import type { Editor } from '@tiptap/react'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import { ImageViewBlock } from './components/image-view-block'
 import { filterFiles, sanitizeUrl, type FileError, type FileValidationOptions } from '../../utils'
 
-/**
- * Props for the downloadImage command
- */
 interface DownloadImageCommandProps {
   src: string
   alt?: string
 }
 
-/**
- * Props for image-related actions
- */
 interface ImageActionProps {
   src: string
   alt?: string
   action: 'download' | 'copyImage' | 'copyLink'
 }
 
-/**
- * Extended options for the custom image extension
- */
 interface CustomImageOptions extends ImageOptions, Omit<FileValidationOptions, 'allowBase64'> {
-  /**
-   * Callback function called when an image action is successful
-   * @param props - The props related to the action
-   */
+  uploadFn?: (file: string, editor: Editor) => Promise<string>
   onActionSuccess?: (props: ImageActionProps) => void
-
-  /**
-   * Callback function called when an image action fails
-   * @param error - The error that occurred
-   * @param props - The props related to the action
-   */
   onActionError?: (error: Error, props: ImageActionProps) => void
-
-  /**
-   * Custom function to handle image download
-   * @param props - The props passed to the downloadImage command
-   */
   customDownloadImage?: (props: ImageActionProps, options: CustomImageOptions) => void
-
-  /**
-   * Custom function to handle image copying
-   * @param props - The props passed to the copyImage command
-   */
   customCopyImage?: (props: ImageActionProps, options: CustomImageOptions) => void
-
-  /**
-   * Custom function to handle link copying
-   * @param props - The props passed to the copyLink command
-   */
   customCopyLink?: (props: ImageActionProps, options: CustomImageOptions) => void
-
-  /**
-   * Callback function called when file validation fails
-   * @param errors - The errors that occurred
-   */
   onValidationError?: (errors: FileError[]) => void
 }
 
-/**
- * Extend the Tiptap commands interface with custom image commands
- */
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     setImages: {
-      /**
-       * Set multiple images at once
-       * @param images - The images to set
-       */
       setImages: (attrs: { src: string | File; alt?: string; title?: string }[]) => ReturnType
     }
-
     downloadImage: {
-      /**
-       * Download an image
-       */
       downloadImage: (attrs: DownloadImageCommandProps) => ReturnType
     }
     copyImage: {
-      /**
-       * Copy an image
-       */
       copyImage: (attrs: DownloadImageCommandProps) => ReturnType
     }
     copyLink: {
-      /**
-       * Copy an image link
-       */
       copyLink: (attrs: DownloadImageCommandProps) => ReturnType
     }
   }
 }
 
-/**
- * Handle errors for image operations
- */
 const handleError = (
   error: unknown,
   props: ImageActionProps,
@@ -109,9 +52,6 @@ const handleError = (
   errorHandler?.(typedError, props)
 }
 
-/**
- * Handle data URL for image operations
- */
 const handleDataUrl = (src: string): { blob: Blob; extension: string } => {
   const [header, base64Data] = src.split(',')
   const mimeType = header.split(':')[1].split(';')[0]
@@ -125,9 +65,6 @@ const handleDataUrl = (src: string): { blob: Blob; extension: string } => {
   return { blob, extension }
 }
 
-/**
- * Handle image URL for image operations
- */
 const handleImageUrl = async (src: string): Promise<{ blob: Blob; extension: string }> => {
   const response = await fetch(src)
   if (!response.ok) throw new Error('Failed to fetch image')
@@ -136,9 +73,6 @@ const handleImageUrl = async (src: string): Promise<{ blob: Blob; extension: str
   return { blob, extension }
 }
 
-/**
- * Fetch image blob from either data URL or image URL
- */
 const fetchImageBlob = async (src: string): Promise<{ blob: Blob; extension: string }> => {
   if (src.startsWith('data:')) {
     return handleDataUrl(src)
@@ -147,9 +81,6 @@ const fetchImageBlob = async (src: string): Promise<{ blob: Blob; extension: str
   }
 }
 
-/**
- * Save image to user's device
- */
 const saveImage = async (blob: Blob, name: string, extension: string): Promise<void> => {
   const imageURL = URL.createObjectURL(blob)
   const link = document.createElement('a')
@@ -161,9 +92,6 @@ const saveImage = async (blob: Blob, name: string, extension: string): Promise<v
   URL.revokeObjectURL(imageURL)
 }
 
-/**
- * Default implementation for downloading an image
- */
 const defaultDownloadImage = async (props: ImageActionProps, options: CustomImageOptions): Promise<void> => {
   const { src, alt } = props
   const potentialName = alt || 'image'
@@ -177,9 +105,6 @@ const defaultDownloadImage = async (props: ImageActionProps, options: CustomImag
   }
 }
 
-/**
- * Default implementation for copying an image
- */
 const defaultCopyImage = async (props: ImageActionProps, options: CustomImageOptions) => {
   const { src } = props
   try {
@@ -192,9 +117,6 @@ const defaultCopyImage = async (props: ImageActionProps, options: CustomImageOpt
   }
 }
 
-/**
- * Default implementation for copying an image link
- */
 const defaultCopyLink = async (props: ImageActionProps, options: CustomImageOptions) => {
   const { src } = props
   try {
@@ -205,9 +127,6 @@ const defaultCopyLink = async (props: ImageActionProps, options: CustomImageOpti
   }
 }
 
-/**
- * Custom Image extension that extends Tiptap's Image extension
- */
 export const Image = TiptapImage.extend<CustomImageOptions>({
   atom: true,
 
@@ -215,7 +134,8 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
     return {
       ...this.parent?.(),
       allowedMimeTypes: [],
-      maxFileSize: 0
+      maxFileSize: 0,
+      uploadFn: undefined
     }
   },
 
@@ -250,7 +170,7 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
             return commands.insertContent(
               validImages.map(image => {
                 return {
-                  type: 'image',
+                  type: this.type.name,
                   attrs: {
                     src:
                       image.src instanceof File

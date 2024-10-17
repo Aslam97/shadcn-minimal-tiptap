@@ -4,27 +4,32 @@ type ResizeDirection = 'left' | 'right'
 export type ElementDimensions = { width: number; height: number }
 
 type HookParams = {
-  onDimensionsChange?: (dimensions: ElementDimensions) => void
-  initialWidth: number
-  initialHeight: number
-  contentWidth: number
-  contentHeight: number
+  initialWidth?: number
+  initialHeight?: number
+  contentWidth?: number
+  contentHeight?: number
   gridInterval: number
   minWidth: number
+  minHeight: number
   maxWidth: number
+  onDimensionsChange?: (dimensions: ElementDimensions) => void
 }
 
 export function useDragResize({
-  onDimensionsChange,
   initialWidth,
   initialHeight,
   contentWidth,
   contentHeight,
   gridInterval,
   minWidth,
-  maxWidth
+  minHeight,
+  maxWidth,
+  onDimensionsChange
 }: HookParams) {
-  const [dimensions, updateDimensions] = useState<ElementDimensions>({ width: initialWidth, height: initialHeight })
+  const [dimensions, updateDimensions] = useState<ElementDimensions>({
+    width: Math.max(initialWidth ?? minWidth, minWidth),
+    height: Math.max(initialHeight ?? minHeight, minHeight)
+  })
   const [boundaryWidth, setBoundaryWidth] = useState(Infinity)
   const [resizeOrigin, setResizeOrigin] = useState(0)
   const [initialDimensions, setInitialDimensions] = useState(dimensions)
@@ -32,7 +37,10 @@ export function useDragResize({
 
   const widthConstraint = useCallback(
     (proposedWidth: number, maxAllowedWidth: number) => {
-      const effectiveMinWidth = Math.max(minWidth, Math.min(contentWidth, (gridInterval / 100) * maxAllowedWidth))
+      const effectiveMinWidth = Math.max(
+        minWidth,
+        Math.min(contentWidth ?? minWidth, (gridInterval / 100) * maxAllowedWidth)
+      )
       return Math.min(maxAllowedWidth, Math.max(proposedWidth, effectiveMinWidth))
     },
     [gridInterval, contentWidth, minWidth]
@@ -46,11 +54,11 @@ export function useDragResize({
       const proposedWidth = initialDimensions.width + movementDelta
       const alignedWidth = Math.round(proposedWidth / gridUnitWidth) * gridUnitWidth
       const finalWidth = widthConstraint(alignedWidth, boundaryWidth)
-      const aspectRatio = contentHeight / contentWidth
+      const aspectRatio = contentHeight && contentWidth ? contentHeight / contentWidth : 1
 
       updateDimensions({
-        width: finalWidth,
-        height: contentWidth ? finalWidth * aspectRatio : contentHeight
+        width: Math.max(finalWidth, minWidth),
+        height: Math.max(contentWidth ? finalWidth * aspectRatio : (contentHeight ?? minHeight), minHeight)
       })
     },
     [
@@ -61,7 +69,9 @@ export function useDragResize({
       gridInterval,
       contentHeight,
       contentWidth,
-      initialDimensions.width
+      initialDimensions.width,
+      minWidth,
+      minHeight
     ]
   )
 
@@ -82,11 +92,14 @@ export function useDragResize({
       if (event.key === 'Escape') {
         event.preventDefault()
         event.stopPropagation()
-        updateDimensions(initialDimensions)
+        updateDimensions({
+          width: Math.max(initialDimensions.width, minWidth),
+          height: Math.max(initialDimensions.height, minHeight)
+        })
         setResizeDirection(undefined)
       }
     },
-    [initialDimensions]
+    [initialDimensions, minWidth, minHeight]
   )
 
   const initiateResize = useCallback(
@@ -96,13 +109,13 @@ export function useDragResize({
 
       setBoundaryWidth(maxWidth)
       setInitialDimensions({
-        width: widthConstraint(dimensions.width, maxWidth),
-        height: dimensions.height
+        width: Math.max(widthConstraint(dimensions.width, maxWidth), minWidth),
+        height: Math.max(dimensions.height, minHeight)
       })
       setResizeOrigin(event.pageX)
       setResizeDirection(direction)
     },
-    [maxWidth, widthConstraint, dimensions.width, dimensions.height]
+    [maxWidth, widthConstraint, dimensions.width, dimensions.height, minWidth, minHeight]
   )
 
   useEffect(() => {
@@ -123,7 +136,7 @@ export function useDragResize({
     initiateResize,
     isResizing: !!resizeDirection,
     updateDimensions,
-    currentWidth: dimensions.width,
-    currentHeight: dimensions.height
+    currentWidth: Math.max(dimensions.width, minWidth),
+    currentHeight: Math.max(dimensions.height, minHeight)
   }
 }
