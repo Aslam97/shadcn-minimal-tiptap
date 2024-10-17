@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 
 const BentoGrid = ({ children, className }: { children: ReactNode; className?: string }) => {
-  return <div className={cn('grid w-full auto-rows-[14rem] grid-cols-3 gap-4', className)}>{children}</div>
+  return <div className={cn('grid w-full auto-rows-auto grid-cols-3 gap-4', className)}>{children}</div>
 }
 
 const BentoCard = ({ name, className, background }: { name: string; className: string; background: ReactNode }) => (

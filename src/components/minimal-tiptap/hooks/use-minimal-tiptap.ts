@@ -18,7 +18,7 @@ import {
   FileHandler
 } from '../extensions'
 import { cn } from '@/lib/utils'
-import { getOutput } from '../utils'
+import { blobUrlToBase64, getOutput } from '../utils'
 import { useThrottle } from '../hooks/use-throttle'
 
 export interface UseMinimalTiptapEditorProps extends UseEditorOptions {
@@ -44,11 +44,36 @@ const createExtensions = (placeholder: string) => [
     dropcursor: { width: 2, class: 'ProseMirror-dropcursor border' }
   }),
   Link,
-  Image,
-  Color,
-  TextStyle,
-  FileHandler.configure({
+  Image.configure({
     allowedMimeTypes: ['image/*'],
+    maxFileSize: 5 * 1024 * 1024,
+    allowBase64: true,
+    uploadFn: async file => {
+      // wait 5s to simulate a slow upload
+      await new Promise(resolve => setTimeout(resolve, 5000))
+
+      const url = await blobUrlToBase64(file)
+      return url
+    },
+    customCopyLink(props, options) {
+      console.log('customCopyLink', props, options)
+    },
+    onValidationError(errors) {
+      errors.forEach(error => {
+        console.log('Image validation error', error)
+      })
+    },
+    onActionSuccess(props) {
+      console.log('Image action success', props)
+    },
+    onActionError(error, props) {
+      console.error('Image action error', error, props)
+    }
+  }),
+  FileHandler.configure({
+    allowBase64: true,
+    allowedMimeTypes: ['image/*'],
+    maxFileSize: 5 * 1024 * 1024,
     onDrop: (editor, files, pos) => {
       files.forEach(file =>
         editor.commands.insertContentAt(pos, { type: 'image', attrs: { src: URL.createObjectURL(file) } })
@@ -56,8 +81,15 @@ const createExtensions = (placeholder: string) => [
     },
     onPaste: (editor, files) => {
       files.forEach(file => editor.commands.insertContent({ type: 'image', attrs: { src: URL.createObjectURL(file) } }))
+    },
+    onValidationError: errors => {
+      errors.forEach(error => {
+        console.log('File validation error', error)
+      })
     }
   }),
+  Color,
+  TextStyle,
   Selection,
   Typography,
   UnsetAllMarks,

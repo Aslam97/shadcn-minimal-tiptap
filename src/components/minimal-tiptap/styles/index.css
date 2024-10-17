@@ -2,8 +2,12 @@
 @import './partials/placeholder.css';
 @import './partials/lists.css';
 @import './partials/typography.css';
+@import './partials/zoom.css';
 
 :root {
+  --mt-overlay: rgba(251, 251, 251, 0.75);
+  --mt-transparent-foreground: rgba(0, 0, 0, 0.4);
+  --mt-bg-secondary: rgba(251, 251, 251, 0.8);
   --mt-code-background: #082b781f;
   --mt-code-color: #d4d4d4;
   --mt-secondary: #9d9d9f;
@@ -47,6 +51,9 @@
 }
 
 .dark {
+  --mt-overlay: rgba(31, 32, 35, 0.75);
+  --mt-transparent-foreground: rgba(255, 255, 255, 0.4);
+  --mt-bg-secondary: rgba(31, 32, 35, 0.8);
   --mt-code-background: #ffffff13;
   --mt-code-color: #2c2e33;
   --mt-secondary: #595a5c;
