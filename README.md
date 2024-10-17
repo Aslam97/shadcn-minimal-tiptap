@@ -4,15 +4,40 @@
 
 The Minimal Tiptap Editor is a lightweight, customizable rich text editor component built for [Shadcn](https://ui.shadcn.com). It provides an intuitive interface for text formatting and editing.
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Table of Contents](#table-of-contents)
+- [Overview](#overview-1)
+- [Installation](#installation)
+- [Dependencies](#dependencies)
+- [Usage](#usage)
+- [Props](#props)
+- [Image Extension](#image-extension)
+  - [Customization](#customization)
+  - [Image Commands](#image-commands)
+  - [Handling Image Uploads](#handling-image-uploads)
+  - [Image Actions UI](#image-actions-ui)
+  - [Resizing Images](#resizing-images)
+  - [Error Handling](#error-handling)
+- [Toolbar Customization](#toolbar-customization)
+- [Key Behaviors](#key-behaviors)
+- [Other Projects](#other-projects)
+- [License](#license)
+
+## Overview
+
+The Minimal Tiptap Editor is a lightweight, customizable rich text editor component built for [Shadcn](https://ui.shadcn.com). It provides an intuitive interface for text formatting and editing, with features like image handling, toolbar customization, and various text styling options.
+
 ## Installation
 
-Install the required packages:
+1. Install the required packages:
 
 ```bash
-npm install @tiptap/core @tiptap/extension-code-block-lowlight lowlight @tiptap/extension-color @tiptap/extension-heading @tiptap/extension-horizontal-rule @tiptap/extension-image @tiptap/extension-link @tiptap/extension-placeholder @tiptap/extension-text-style @tiptap/extension-typography @tiptap/pm @tiptap/react @tiptap/starter-kit
+npm install @tiptap/core @tiptap/extension-code-block-lowlight lowlight react-medium-image-zoom @tiptap/extension-color @tiptap/extension-heading @tiptap/extension-horizontal-rule @tiptap/extension-image @tiptap/extension-link @tiptap/extension-placeholder @tiptap/extension-text-style @tiptap/extension-typography @tiptap/pm @tiptap/react @tiptap/starter-kit
 ```
 
-This component relies on a tooltip functionality. To use it properly, you need to wrap your application with a `TooltipProvider` component.
+2. Set up the `TooltipProvider`:
 
 Add the `TooltipProvider` to your root component (e.g., `App.tsx`, `main.tsx`, or equivalent):
 
@@ -29,11 +54,9 @@ export const App = () => {
 }
 ```
 
-This setup ensures that all tooltip-enabled components within your application have access to the necessary context.
-
 ## Dependencies
 
-This component relies on the following Shadcn components:
+Ensure you have the following Shadcn components installed in your project:
 
 - [Button](https://ui.shadcn.com/docs/components/button)
 - [Dropdown Menu](https://ui.shadcn.com/docs/components/dropdown-menu)
@@ -46,8 +69,6 @@ This component relies on the following Shadcn components:
 - [Tooltip](https://ui.shadcn.com/docs/components/tooltip)
 - [Dialog](https://ui.shadcn.com/docs/components/dialog)
 - [Toggle Group](https://ui.shadcn.com/docs/components/toggle-group)
-
-Ensure these components are installed in your Shadcn project.
 
 ## Usage
 
@@ -80,7 +101,7 @@ export const App = () => {
 
 ## Props
 
-The Minimal Tiptap Editor accepts **all the tiptap editor props**. And the following additional props:
+The Minimal Tiptap Editor accepts all standard Tiptap editor props, plus these additional props:
 
 | Prop                     | Type                       | Default | Description                                 |
 | ------------------------ | -------------------------- | ------- | ------------------------------------------- |
@@ -92,61 +113,118 @@ The Minimal Tiptap Editor accepts **all the tiptap editor props**. And the follo
 | `editorClassName`        | string                     | -       | CSS class for the editor instance           |
 | `throttleDelay`          | number                     | 0       | Delay for throttling editor updates (in ms) |
 
-## Key Behaviors
+## Image Extension
 
-- When pressing `Enter` or creating a new block, it removes active formatting marks if any of these active: **bold**, **italic**, **strike**, **underline**, and **code**.
-- For performance, Tiptap offers `shouldRerenderOnTransaction` prop that can be set to `false` to prevent unnecessary re-renders. But this can cause issues with the toolbar state. To avoid this, leave the prop as `true` (default) to ensure the toolbar state is updated correctly. or if you don't care about the active state in the toolbar, you can set it to `false`.
+### Customization
+
+Customize the Image extension by passing options:
+
+```typescript
+Image.configure({
+  allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif'],
+  maxFileSize: 5 * 1024 * 1024, // 5MB
+  uploadFn: myCustomUploadFunction,
+  onActionSuccess: handleActionSuccess,
+  onActionError: handleActionError,
+  onValidationError: handleValidationError
+})
+```
+
+### Image Commands
+
+Use these commands to interact with images:
+
+```typescript
+// Insert Images
+editor.commands.setImages([
+  { src: 'path/to/image.jpg', alt: 'Alt text' },
+  { src: imageFile, alt: 'Alt text' } // File object
+])
+
+// Download Image
+editor.commands.downloadImage({ src: 'path/to/image.jpg', alt: 'Alt text' })
+
+// Copy Image
+editor.commands.copyImage({ src: 'path/to/image.jpg' })
+
+// Copy Image Link
+editor.commands.copyLink({ src: 'path/to/image.jpg' })
+```
+
+### Handling Image Uploads
+
+Provide a custom `uploadFn` to handle image uploads:
+
+```typescript
+const myCustomUploadFunction = async (file: File, editor: Editor) => {
+  // Implement your upload logic here
+  // Return the URL of the uploaded image
+  return 'https://example.com/uploaded-image.jpg'
+}
+
+Image.configure({
+  uploadFn: myCustomUploadFunction
+})
+```
+
+### Image Actions UI
+
+The extension provides a built-in UI for image actions, including:
+
+- Full-size view
+- Download
+- Copy to clipboard
+- Copy image link (for images with URLs)
+
+### Resizing Images
+
+Users can resize images by dragging handles on the sides, respecting the original aspect ratio.
+
+### Error Handling
+
+Implement error handling callbacks for a better user experience:
+
+```typescript
+Image.configure({
+  onActionError: (error, props) => {
+    console.error('Image action failed:', error, props)
+    // Show user-friendly error message
+  },
+  onValidationError: errors => {
+    console.error('Image validation failed:', errors)
+    // Show validation error to the user
+  }
+})
+```
 
 ## Toolbar Customization
 
-The Toolbar component offers extensive customization options, allowing you to control which editing options are available, their order, and how they are displayed. This customization is primarily achieved through the `activeActions`, `mainActionCount`, `size` and `variant` props in various sections.
-
-#### SectionOne
+Customize the toolbar using the `activeActions`, `mainActionCount`, `size`, and `variant` props in various sections:
 
 ```typescript
 <SectionOne editor={editor} activeLevels={[1, 2, 3, 4, 5, 6]} variant="outline" />
-```
 
-#### SectionTwo
-
-```typescript
 <SectionTwo
   editor={editor}
   activeActions={['bold', 'italic', 'strikethrough', 'code', 'clearFormatting']}
   mainActionCount={2}
 />
-```
 
-#### SectionFour
-
-```typescript
 <SectionFour editor={editor} activeActions={['orderedList', 'bulletList']} mainActionCount={0} />
-```
 
-#### SectionFive
-
-```typescript
 <SectionFive editor={editor} activeActions={['codeBlock', 'blockquote', 'horizontalRule']} mainActionCount={0} />
 ```
 
-### General Behavior
-
-- The order in `activeActions` determines the display order in the toolbar.
-- Only items in `activeActions` are shown, allowing for both inclusion/exclusion and ordering.
-- `mainActionCount` determines button vs dropdown display:
-  - If 0, all actions are in the dropdown.
-  - If 1, the first action is a button, the rest are in the dropdown.
-  - If >= number of `activeActions`, all actions are buttons.
-
-By adjusting these props, you can create a toolbar tailored to your specific editing needs, showing only the tools you want, in the order you prefer, and with the display style that suits your interface best.
-
-#### Prevent focusing Dropdown Menu Trigger after clicking on the menu item
-
-To prevent the Dropdown Menu Trigger from focusing after clicking on the menu item, you can add `onCloseAutoFocus` in the Dropdown Menu component.
+To prevent focusing the Dropdown Menu Trigger after clicking a menu item, add:
 
 ```typescript
 onCloseAutoFocus={event => event.preventDefault()}
 ```
+
+## Key Behaviors
+
+- Pressing `Enter` or creating a new block removes active formatting marks (bold, italic, strike, underline, code).
+- Set `shouldRerenderOnTransaction` to `false` for performance, but this may affect toolbar state updates.
 
 ## Other Projects
 
