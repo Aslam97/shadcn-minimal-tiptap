@@ -9,7 +9,11 @@ import { Controlled as ControlledZoom } from 'react-medium-image-zoom'
 import { ActionButton, ActionWrapper, ImageActions } from './image-actions'
 import { useImageActions } from '../hooks/use-image-actions'
 import { blobUrlToBase64 } from '../../../utils'
-import { Cross2Icon, InfoCircledIcon, TrashIcon } from '@radix-ui/react-icons'
+import {
+  // Cross2Icon,
+  InfoCircledIcon,
+  TrashIcon
+} from '@radix-ui/react-icons'
 import { ImageOverlay } from './image-overlay'
 import { Spinner } from '../../../components/spinner'
 
@@ -137,8 +141,8 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, getPos, 
       if (uploadFn && initialSrc.startsWith('blob:')) {
         try {
           setImageState(prev => ({ ...prev, isServerUploading: true }))
-          const response = await uploadFn(initialSrc, editor)
-          setImageState(prev => ({ ...prev, src: response.url, isServerUploading: false }))
+          const url = await uploadFn(initialSrc, editor)
+          setImageState(prev => ({ ...prev, src: url, isServerUploading: false }))
         } catch {
           setImageState(prev => ({ ...prev, error: true, isServerUploading: false }))
         }
@@ -203,7 +207,7 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, getPos, 
 
             {imageState.isServerUploading && <ImageOverlay />}
 
-            {editor.isEditable && imageState.imageLoaded && !imageState.error && (
+            {editor.isEditable && imageState.imageLoaded && !imageState.error && !imageState.isServerUploading && (
               <>
                 <ResizeHandle
                   onPointerDown={handleResizeStart('left')}
@@ -219,11 +223,12 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, getPos, 
             )}
           </div>
 
-          {imageState.isServerUploading && (
+          {/* this will be implemented sooooooonnnnnnnn */}
+          {/* {imageState.isServerUploading && (
             <ActionWrapper>
               <ActionButton icon={<Cross2Icon className="size-4" />} tooltip="Cancel upload" />
             </ActionWrapper>
-          )}
+          )} */}
 
           {imageState.error && (
             <ActionWrapper>

@@ -49,6 +49,9 @@ const createExtensions = (placeholder: string) => [
     maxFileSize: 5 * 1024 * 1024,
     allowBase64: true,
     uploadFn: async file => {
+      // wait 10s to simulate a slow upload
+      await new Promise(resolve => setTimeout(resolve, 10000))
+
       const url = await blobUrlToBase64(file)
       return url
     },
