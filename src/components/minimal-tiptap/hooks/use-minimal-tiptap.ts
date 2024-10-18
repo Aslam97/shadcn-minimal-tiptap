@@ -55,9 +55,6 @@ const createExtensions = (placeholder: string) => [
       const url = await blobUrlToBase64(file)
       return url
     },
-    customCopyLink(props, options) {
-      console.log('customCopyLink', props, options)
-    },
     onValidationError(errors) {
       errors.forEach(error => {
         console.log('Image validation error', error)
