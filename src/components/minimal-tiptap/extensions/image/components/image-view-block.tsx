@@ -8,9 +8,9 @@ import { NodeSelection } from '@tiptap/pm/state'
 import { Controlled as ControlledZoom } from 'react-medium-image-zoom'
 import { ActionButton, ActionWrapper, ImageActions } from './image-actions'
 import { useImageActions } from '../hooks/use-image-actions'
+import { blobUrlToBase64 } from '../../../utils'
 import { InfoCircledIcon, TrashIcon } from '@radix-ui/react-icons'
 import { ImageOverlay } from './image-overlay'
-import { blobUrlToBase64 } from '../../../utils'
 import { Spinner } from '../../../components/spinner'
 
 const MAX_HEIGHT = 600
@@ -91,8 +91,8 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, getPos, 
         imageLoaded: true
       }))
       updateAttributes({
-        width: newNaturalSize.width,
-        height: newNaturalSize.height,
+        width: img.width || newNaturalSize.width,
+        height: img.height || newNaturalSize.height,
         alt: img.alt,
         title: img.title
       })
