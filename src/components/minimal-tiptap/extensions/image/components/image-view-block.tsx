@@ -8,13 +8,9 @@ import { NodeSelection } from '@tiptap/pm/state'
 import { Controlled as ControlledZoom } from 'react-medium-image-zoom'
 import { ActionButton, ActionWrapper, ImageActions } from './image-actions'
 import { useImageActions } from '../hooks/use-image-actions'
-import { blobUrlToBase64 } from '../../../utils'
-import {
-  // Cross2Icon,
-  InfoCircledIcon,
-  TrashIcon
-} from '@radix-ui/react-icons'
+import { InfoCircledIcon, TrashIcon } from '@radix-ui/react-icons'
 import { ImageOverlay } from './image-overlay'
+import { blobUrlToBase64 } from '../../../utils'
 import { Spinner } from '../../../components/spinner'
 
 const MAX_HEIGHT = 600
@@ -94,12 +90,18 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, getPos, 
         naturalSize: newNaturalSize,
         imageLoaded: true
       }))
+      updateAttributes({
+        width: newNaturalSize.width,
+        height: newNaturalSize.height,
+        alt: img.alt,
+        title: img.title
+      })
 
       if (!initialWidth) {
         updateDimensions(state => ({ ...state, width: newNaturalSize.width }))
       }
     },
-    [initialWidth, updateDimensions]
+    [initialWidth, updateAttributes, updateDimensions]
   )
 
   const handleImageError = React.useCallback(() => {
@@ -129,22 +131,32 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, getPos, 
       const imageExtension = editor.options.extensions.find(ext => ext.name === 'image')
       const { uploadFn } = imageExtension?.options ?? {}
 
-      if (initialSrc.startsWith('blob:') && !uploadFn) {
-        try {
-          const base64 = await blobUrlToBase64(initialSrc)
-          setImageState(prev => ({ ...prev, src: base64 }))
-        } catch {
-          setImageState(prev => ({ ...prev, error: true }))
-        }
-      }
-
-      if (uploadFn && initialSrc.startsWith('blob:')) {
-        try {
-          setImageState(prev => ({ ...prev, isServerUploading: true }))
-          const url = await uploadFn(initialSrc, editor)
-          setImageState(prev => ({ ...prev, src: url, isServerUploading: false }))
-        } catch {
-          setImageState(prev => ({ ...prev, error: true, isServerUploading: false }))
+      if (initialSrc.startsWith('blob:')) {
+        if (!uploadFn) {
+          try {
+            const base64 = await blobUrlToBase64(initialSrc)
+            setImageState(prev => ({ ...prev, src: base64 }))
+            updateAttributes({ src: base64 })
+          } catch {
+            setImageState(prev => ({ ...prev, error: true }))
+          }
+        } else {
+          try {
+            setImageState(prev => ({ ...prev, isServerUploading: true }))
+            const url = await uploadFn(initialSrc, editor)
+            setImageState(prev => ({
+              ...prev,
+              src: url,
+              isServerUploading: false
+            }))
+            updateAttributes({ src: url })
+          } catch {
+            setImageState(prev => ({
+              ...prev,
+              error: true,
+              isServerUploading: false
+            }))
+          }
         }
       }
     }
@@ -201,6 +213,7 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, getPos, 
                   src={imageState.src}
                   onError={handleImageError}
                   onLoad={handleImageLoad}
+                  alt={node.attrs.alt || ''}
                 />
               </ControlledZoom>
             </div>
@@ -211,24 +224,21 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, getPos, 
               <>
                 <ResizeHandle
                   onPointerDown={handleResizeStart('left')}
-                  className={cn('left-1', { hidden: isResizing && activeResizeHandle === 'right' })}
+                  className={cn('left-1', {
+                    hidden: isResizing && activeResizeHandle === 'right'
+                  })}
                   isResizing={isResizing && activeResizeHandle === 'left'}
                 />
                 <ResizeHandle
                   onPointerDown={handleResizeStart('right')}
-                  className={cn('right-1', { hidden: isResizing && activeResizeHandle === 'left' })}
+                  className={cn('right-1', {
+                    hidden: isResizing && activeResizeHandle === 'left'
+                  })}
                   isResizing={isResizing && activeResizeHandle === 'right'}
                 />
               </>
             )}
           </div>
-
-          {/* this will be implemented sooooooonnnnnnnn */}
-          {/* {imageState.isServerUploading && (
-            <ActionWrapper>
-              <ActionButton icon={<Cross2Icon className="size-4" />} tooltip="Cancel upload" />
-            </ActionWrapper>
-          )} */}
 
           {imageState.error && (
             <ActionWrapper>
