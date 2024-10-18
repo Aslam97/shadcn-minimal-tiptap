@@ -14,10 +14,7 @@ The Minimal Tiptap Editor is a lightweight, customizable rich text editor compon
 - [Props](#props)
 - [Image Extension](#image-extension)
   - [Customization](#customization)
-  - [Image Commands](#image-commands)
   - [Handling Image Uploads](#handling-image-uploads)
-  - [Image Actions UI](#image-actions-ui)
-  - [Resizing Images](#resizing-images)
   - [Error Handling](#error-handling)
 - [Toolbar Customization](#toolbar-customization)
 - [Key Behaviors](#key-behaviors)
@@ -114,6 +111,9 @@ The Minimal Tiptap Editor accepts all standard Tiptap editor props, plus these a
 
 Customize the Image extension by passing options:
 
+> Note: The `uploadFn` must return the URL of the uploaded image.
+> Note: If you dont specify `uploadFn`, please enable the `allowBase64` option, because all the images converted to blob url.
+
 ```typescript
 Image.configure({
   allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif'],
@@ -123,27 +123,6 @@ Image.configure({
   onActionError: handleActionError,
   onValidationError: handleValidationError
 })
-```
-
-### Image Commands
-
-Use these commands to interact with images:
-
-```typescript
-// Insert Images
-editor.commands.setImages([
-  { src: 'path/to/image.jpg', alt: 'Alt text' },
-  { src: imageFile, alt: 'Alt text' } // File object
-])
-
-// Download Image
-editor.commands.downloadImage({ src: 'path/to/image.jpg', alt: 'Alt text' })
-
-// Copy Image
-editor.commands.copyImage({ src: 'path/to/image.jpg' })
-
-// Copy Image Link
-editor.commands.copyLink({ src: 'path/to/image.jpg' })
 ```
 
 ### Handling Image Uploads
@@ -161,19 +140,6 @@ Image.configure({
   uploadFn: myCustomUploadFunction
 })
 ```
-
-### Image Actions UI
-
-The extension provides a built-in UI for image actions, including:
-
-- Full-size view
-- Download
-- Copy to clipboard
-- Copy image link (for images with URLs)
-
-### Resizing Images
-
-Users can resize images by dragging handles on the sides, respecting the original aspect ratio.
 
 ### Error Handling
 
