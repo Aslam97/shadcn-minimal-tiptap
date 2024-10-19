@@ -46,7 +46,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-helmet-async": "^2.0.5",
-    "react-hook-form": "^7.53.0",
+    "react-hook-form": "^7.53.1",
     "react-medium-image-zoom": "^5.2.10",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.15",
-    "@types/node": "^20.16.12",
+    "@types/node": "^20.16.13",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.1",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
