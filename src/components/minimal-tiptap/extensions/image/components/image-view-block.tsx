@@ -56,6 +56,9 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, getPos, 
 
   const aspectRatio = imageState.naturalSize.width / imageState.naturalSize.height
   const maxWidth = MAX_HEIGHT * aspectRatio
+  const containerMaxWidth = containerRef.current
+    ? parseFloat(getComputedStyle(containerRef.current).getPropertyValue('--editor-width'))
+    : Infinity
 
   const { isLink, onView, onDownload, onCopy, onCopyLink, onRemoveImg } = useImageActions({
     editor,
@@ -73,7 +76,7 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, getPos, 
     onDimensionsChange,
     minWidth: MIN_WIDTH,
     minHeight: MIN_HEIGHT,
-    maxWidth
+    maxWidth: containerMaxWidth
   })
 
   const shouldMerge = React.useMemo(() => currentWidth <= 180, [currentWidth])
@@ -158,6 +161,8 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, getPos, 
             }))
           }
         }
+
+        URL.revokeObjectURL(initialSrc)
       }
     }
 

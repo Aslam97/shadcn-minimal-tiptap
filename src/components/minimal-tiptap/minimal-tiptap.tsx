@@ -13,6 +13,7 @@ import { SectionFour } from './components/section/four'
 import { SectionFive } from './components/section/five'
 import { LinkBubbleMenu } from './components/bubble-menu/link-bubble-menu'
 import { useMinimalTiptapEditor } from './hooks/use-minimal-tiptap'
+import { MeasuredContainer } from './components/measured-container'
 
 export interface MinimalTiptapProps extends Omit<UseMinimalTiptapEditorProps, 'onUpdate'> {
   value?: Content
@@ -70,7 +71,9 @@ export const MinimalTiptapEditor = React.forwardRef<HTMLDivElement, MinimalTipta
         )}
       >
         <Toolbar editor={editor} />
-        <EditorContent editor={editor} className={cn('minimal-tiptap-editor', editorContentClassName)} />
+        <MeasuredContainer as="span" name="editor">
+          <EditorContent editor={editor} className={cn('minimal-tiptap-editor', editorContentClassName)} />
+        </MeasuredContainer>
         <LinkBubbleMenu editor={editor} />
       </div>
     )

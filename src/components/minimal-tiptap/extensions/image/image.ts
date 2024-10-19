@@ -5,24 +5,24 @@ import { ReactNodeViewRenderer } from '@tiptap/react'
 import { ImageViewBlock } from './components/image-view-block'
 import { filterFiles, sanitizeUrl, type FileError, type FileValidationOptions } from '../../utils'
 
+type ImageAction = 'download' | 'copyImage' | 'copyLink'
+
 interface DownloadImageCommandProps {
   src: string
   alt?: string
 }
 
-interface ImageActionProps {
-  src: string
-  alt?: string
-  action: 'download' | 'copyImage' | 'copyLink'
+interface ImageActionProps extends DownloadImageCommandProps {
+  action: ImageAction
 }
 
 interface CustomImageOptions extends ImageOptions, Omit<FileValidationOptions, 'allowBase64'> {
   uploadFn?: (file: string, editor: Editor) => Promise<string>
   onActionSuccess?: (props: ImageActionProps) => void
   onActionError?: (error: Error, props: ImageActionProps) => void
-  customDownloadImage?: (props: ImageActionProps, options: CustomImageOptions) => void
-  customCopyImage?: (props: ImageActionProps, options: CustomImageOptions) => void
-  customCopyLink?: (props: ImageActionProps, options: CustomImageOptions) => void
+  customDownloadImage?: (props: ImageActionProps, options: CustomImageOptions) => Promise<void>
+  customCopyImage?: (props: ImageActionProps, options: CustomImageOptions) => Promise<void>
+  customCopyLink?: (props: ImageActionProps, options: CustomImageOptions) => Promise<void>
   onValidationError?: (errors: FileError[]) => void
 }
 
@@ -47,7 +47,7 @@ const handleError = (
   error: unknown,
   props: ImageActionProps,
   errorHandler?: (error: Error, props: ImageActionProps) => void
-) => {
+): void => {
   const typedError = error instanceof Error ? error : new Error('Unknown error')
   errorHandler?.(typedError, props)
 }
@@ -74,11 +74,7 @@ const handleImageUrl = async (src: string): Promise<{ blob: Blob; extension: str
 }
 
 const fetchImageBlob = async (src: string): Promise<{ blob: Blob; extension: string }> => {
-  if (src.startsWith('data:')) {
-    return handleDataUrl(src)
-  } else {
-    return handleImageUrl(src)
-  }
+  return src.startsWith('data:') ? handleDataUrl(src) : handleImageUrl(src)
 }
 
 const saveImage = async (blob: Blob, name: string, extension: string): Promise<void> => {
@@ -105,7 +101,7 @@ const defaultDownloadImage = async (props: ImageActionProps, options: CustomImag
   }
 }
 
-const defaultCopyImage = async (props: ImageActionProps, options: CustomImageOptions) => {
+const defaultCopyImage = async (props: ImageActionProps, options: CustomImageOptions): Promise<void> => {
   const { src } = props
   try {
     const res = await fetch(src)
@@ -117,7 +113,7 @@ const defaultCopyImage = async (props: ImageActionProps, options: CustomImageOpt
   }
 }
 
-const defaultCopyLink = async (props: ImageActionProps, options: CustomImageOptions) => {
+const defaultCopyLink = async (props: ImageActionProps, options: CustomImageOptions): Promise<void> => {
   const { src } = props
   try {
     await navigator.clipboard.writeText(src)
@@ -168,21 +164,19 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
 
           if (validImages.length > 0) {
             return commands.insertContent(
-              validImages.map(image => {
-                return {
-                  type: this.type.name,
-                  attrs: {
-                    src:
-                      image.src instanceof File
-                        ? sanitizeUrl(URL.createObjectURL(image.src), {
-                            allowBase64: this.options.allowBase64
-                          })
-                        : image.src,
-                    alt: image.alt,
-                    title: image.title
-                  }
+              validImages.map(image => ({
+                type: this.type.name,
+                attrs: {
+                  src:
+                    image.src instanceof File
+                      ? sanitizeUrl(URL.createObjectURL(image.src), {
+                          allowBase64: this.options.allowBase64
+                        })
+                      : image.src,
+                  alt: image.alt,
+                  title: image.title
                 }
-              })
+              }))
             )
           }
 
