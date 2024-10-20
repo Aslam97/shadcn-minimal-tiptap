@@ -3,6 +3,7 @@ import { MinimalTiptapEditor } from '../minimal-tiptap'
 import { cn } from '@/lib/utils'
 import { MinimalTiptapOne } from './minimal-tiptap-one'
 import { MinimalTiptapThree } from './minimal-tiptap-three'
+import Content from '../../data/content.json'
 
 const features = [
   {
@@ -40,10 +41,14 @@ const features = [
     className: 'col-span-3',
     background: (
       <MinimalTiptapThree
+        value={Content}
         throttleDelay={3000}
         className={cn('h-full min-h-56 w-full rounded-xl')}
         editorContentClassName="overflow-auto h-full"
-        output="html"
+        output="json"
+        onChange={value => {
+          console.log(value)
+        }}
         placeholder="This is your placeholder..."
         editable={true}
         editorClassName="focus:outline-none px-5 py-4 h-full"
