@@ -4,7 +4,6 @@ import type { ElementDimensions } from '../hooks/use-drag-resize'
 import { useDragResize } from '../hooks/use-drag-resize'
 import { ResizeHandle } from './resize-handle'
 import { cn } from '@/lib/utils'
-import { NodeSelection } from '@tiptap/pm/state'
 import { Controlled as ControlledZoom } from 'react-medium-image-zoom'
 import { ActionButton, ActionWrapper, ImageActions } from './image-actions'
 import { useImageActions } from '../hooks/use-image-actions'
@@ -26,7 +25,7 @@ interface ImageState {
   naturalSize: ElementDimensions
 }
 
-export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, getPos, selected, updateAttributes }) => {
+export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, selected, updateAttributes }) => {
   const { src: initialSrc, width: initialWidth, height: initialHeight } = node.attrs
   const [imageState, setImageState] = React.useState<ImageState>({
     src: initialSrc,
@@ -40,18 +39,11 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, getPos, 
   const containerRef = React.useRef<HTMLDivElement>(null)
   const [activeResizeHandle, setActiveResizeHandle] = React.useState<'left' | 'right' | null>(null)
 
-  const focus = React.useCallback(() => {
-    const { view } = editor
-    const $pos = view.state.doc.resolve(getPos())
-    view.dispatch(view.state.tr.setSelection(new NodeSelection($pos)))
-  }, [editor, getPos])
-
   const onDimensionsChange = React.useCallback(
     ({ width, height }: ElementDimensions) => {
-      focus()
       updateAttributes({ width, height })
     },
-    [focus, updateAttributes]
+    [updateAttributes]
   )
 
   const aspectRatio = imageState.naturalSize.width / imageState.naturalSize.height
@@ -76,7 +68,7 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, getPos, 
     onDimensionsChange,
     minWidth: MIN_WIDTH,
     minHeight: MIN_HEIGHT,
-    maxWidth: containerMaxWidth
+    maxWidth: containerMaxWidth > 0 ? containerMaxWidth : maxWidth
   })
 
   const shouldMerge = React.useMemo(() => currentWidth <= 180, [currentWidth])
