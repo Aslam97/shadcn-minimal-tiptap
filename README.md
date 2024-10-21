@@ -61,6 +61,7 @@ Ensure you have the following Shadcn components installed in your project:
 - [Tooltip](https://ui.shadcn.com/docs/components/tooltip)
 - [Dialog](https://ui.shadcn.com/docs/components/dialog)
 - [Toggle Group](https://ui.shadcn.com/docs/components/toggle-group)
+- [Sonner](https://ui.shadcn.com/docs/components/sonner)
 
 ## Usage
 
@@ -111,8 +112,7 @@ The Minimal Tiptap Editor accepts all standard Tiptap editor props, plus these a
 
 Customize the Image extension by passing options:
 
-> Note: The `uploadFn` must return the URL of the uploaded image.
-> Note: If you dont specify `uploadFn`, please enable the `allowBase64` option, because all the images converted to blob url.
+> Note: The `uploadFn` must return the URL of the uploaded image. If you dont specify `uploadFn`, please enable the `allowBase64` option.
 
 ```typescript
 Image.configure({
