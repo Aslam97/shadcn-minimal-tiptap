@@ -18,7 +18,7 @@ import {
   FileHandler
 } from '../extensions'
 import { cn } from '@/lib/utils'
-import { blobUrlToBase64, getOutput } from '../utils'
+import { fileToBase64, getOutput } from '../utils'
 import { useThrottle } from '../hooks/use-throttle'
 
 export interface UseMinimalTiptapEditorProps extends UseEditorOptions {
@@ -49,10 +49,11 @@ const createExtensions = (placeholder: string) => [
     maxFileSize: 5 * 1024 * 1024,
     allowBase64: true,
     uploadFn: async file => {
+      console.log('Uploading image', file)
       // wait 5s to simulate a slow upload
-      await new Promise(resolve => setTimeout(resolve, 5000))
+      await new Promise(resolve => setTimeout(resolve, 3000))
 
-      const url = await blobUrlToBase64(file)
+      const url = await fileToBase64(file)
       return url
     },
     onValidationError(errors) {

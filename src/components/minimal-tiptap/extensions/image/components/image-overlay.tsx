@@ -14,3 +14,5 @@ export const ImageOverlay = React.memo(() => {
     </div>
   )
 })
+
+ImageOverlay.displayName = 'ImageOverlay'

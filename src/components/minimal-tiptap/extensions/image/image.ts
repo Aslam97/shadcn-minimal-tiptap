@@ -3,7 +3,7 @@ import { Image as TiptapImage } from '@tiptap/extension-image'
 import type { Editor } from '@tiptap/react'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import { ImageViewBlock } from './components/image-view-block'
-import { filterFiles, sanitizeUrl, type FileError, type FileValidationOptions } from '../../utils'
+import { filterFiles, type FileError, type FileValidationOptions } from '../../utils'
 
 type ImageAction = 'download' | 'copyImage' | 'copyLink'
 
@@ -17,7 +17,7 @@ interface ImageActionProps extends DownloadImageCommandProps {
 }
 
 interface CustomImageOptions extends ImageOptions, Omit<FileValidationOptions, 'allowBase64'> {
-  uploadFn?: (file: string, editor: Editor) => Promise<string>
+  uploadFn?: (file: File, editor: Editor) => Promise<string>
   onActionSuccess?: (props: ImageActionProps) => void
   onActionError?: (error: Error, props: ImageActionProps) => void
   customDownloadImage?: (props: ImageActionProps, options: CustomImageOptions) => Promise<void>
@@ -143,6 +143,12 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
       },
       height: {
         default: undefined
+      },
+      fileName: {
+        default: undefined
+      },
+      fileType: {
+        default: undefined
       }
     }
   },
@@ -164,19 +170,32 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
 
           if (validImages.length > 0) {
             return commands.insertContent(
-              validImages.map(image => ({
-                type: this.type.name,
-                attrs: {
-                  src:
-                    image.src instanceof File
-                      ? sanitizeUrl(URL.createObjectURL(image.src), {
-                          allowBase64: this.options.allowBase64
-                        })
-                      : image.src,
-                  alt: image.alt,
-                  title: image.title
+              validImages.map(image => {
+                if (image.src instanceof File) {
+                  const blobUrl = URL.createObjectURL(image.src)
+                  return {
+                    type: this.type.name,
+                    attrs: {
+                      src: blobUrl,
+                      alt: image.alt,
+                      title: image.title,
+                      fileName: image.src.name,
+                      fileType: image.src.type
+                    }
+                  }
+                } else {
+                  return {
+                    type: this.type.name,
+                    attrs: {
+                      src: image.src,
+                      alt: image.alt,
+                      title: image.title,
+                      fileName: null,
+                      fileType: null
+                    }
+                  }
                 }
-              }))
+              })
             )
           }
 
