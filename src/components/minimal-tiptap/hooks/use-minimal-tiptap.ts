@@ -20,6 +20,7 @@ import {
 import { cn } from '@/lib/utils'
 import { fileToBase64, getOutput } from '../utils'
 import { useThrottle } from '../hooks/use-throttle'
+import { toast } from 'sonner'
 
 export interface UseMinimalTiptapEditorProps extends UseEditorOptions {
   value?: Content
@@ -49,23 +50,44 @@ const createExtensions = (placeholder: string) => [
     maxFileSize: 5 * 1024 * 1024,
     allowBase64: true,
     uploadFn: async file => {
-      console.log('Uploading image', file)
-      // wait 5s to simulate a slow upload
+      // NOTE: This is a fake upload function. Replace this with your own upload logic.
+      // This function should return the uploaded image URL.
+
+      // wait 3s to simulate upload
       await new Promise(resolve => setTimeout(resolve, 3000))
 
-      const url = await fileToBase64(file)
-      return url
+      const src = await fileToBase64(file)
+      return src
     },
     onValidationError(errors) {
       errors.forEach(error => {
-        console.log('Image validation error', error)
+        toast.error('Image validation error', {
+          position: 'bottom-right',
+          description: error.reason
+        })
       })
     },
-    onActionSuccess(props) {
-      console.log('Image action success', props)
+    onActionSuccess({ action }) {
+      const mapping = {
+        copyImage: 'Copy Image',
+        copyLink: 'Copy Link',
+        download: 'Download'
+      }
+      toast.success(mapping[action], {
+        position: 'bottom-right',
+        description: 'Image action success'
+      })
     },
-    onActionError(error, props) {
-      console.error('Image action error', error, props)
+    onActionError(error, { action }) {
+      const mapping = {
+        copyImage: 'Copy Image',
+        copyLink: 'Copy Link',
+        download: 'Download'
+      }
+      toast.error(`Failed to ${mapping[action]}`, {
+        position: 'bottom-right',
+        description: error.message
+      })
     }
   }),
   FileHandler.configure({
@@ -73,16 +95,29 @@ const createExtensions = (placeholder: string) => [
     allowedMimeTypes: ['image/*'],
     maxFileSize: 5 * 1024 * 1024,
     onDrop: (editor, files, pos) => {
-      files.forEach(file =>
-        editor.commands.insertContentAt(pos, { type: 'image', attrs: { src: URL.createObjectURL(file) } })
-      )
+      files.forEach(async file => {
+        const src = await fileToBase64(file)
+        editor.commands.insertContentAt(pos, {
+          type: 'image',
+          attrs: { src }
+        })
+      })
     },
     onPaste: (editor, files) => {
-      files.forEach(file => editor.commands.insertContent({ type: 'image', attrs: { src: URL.createObjectURL(file) } }))
+      files.forEach(async file => {
+        const src = await fileToBase64(file)
+        editor.commands.insertContent({
+          type: 'image',
+          attrs: { src }
+        })
+      })
     },
     onValidationError: errors => {
       errors.forEach(error => {
-        console.log('File validation error', error)
+        toast.error('Image validation error', {
+          position: 'bottom-right',
+          description: error.reason
+        })
       })
     }
   }),

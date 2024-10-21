@@ -8,6 +8,7 @@ import { ThemeProvider } from 'next-themes'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { HelmetProvider } from 'react-helmet-async'
 import { SEO } from './components/custom/seo.tsx'
+import { Toaster } from './components/ui/sonner.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -16,6 +17,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <HelmetProvider>
           <App />
           <SEO />
+          <Toaster />
         </HelmetProvider>
       </TooltipProvider>
       <Analytics />
