@@ -26,7 +26,7 @@ interface ImageState {
 }
 
 export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, selected, updateAttributes }) => {
-  const { src: initialSrc, width: initialWidth, height: initialHeight } = node.attrs
+  const { src: initialSrc, width: initialWidth, height: initialHeight, fileName, fileType } = node.attrs
   const [imageState, setImageState] = React.useState<ImageState>({
     src: initialSrc,
     isServerUploading: false,
@@ -138,7 +138,15 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, selected
         } else {
           try {
             setImageState(prev => ({ ...prev, isServerUploading: true }))
-            const url = await uploadFn(initialSrc, editor)
+
+            const response = await fetch(initialSrc)
+            const blob = await response.blob()
+
+            const file = new File([blob], fileName || 'image', {
+              type: fileType || blob.type
+            })
+
+            const url = await uploadFn(file, editor)
             setImageState(prev => ({
               ...prev,
               src: url,
@@ -159,7 +167,7 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, selected
     }
 
     handleImage()
-  }, [editor, initialSrc, updateAttributes])
+  }, [editor, fileName, fileType, initialSrc, updateAttributes])
 
   return (
     <NodeViewWrapper ref={containerRef} data-drag-handle className="relative text-center leading-none">

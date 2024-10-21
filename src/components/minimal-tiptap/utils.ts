@@ -1,20 +1,6 @@
 import type { Editor } from '@tiptap/core'
 import type { MinimalTiptapProps } from './minimal-tiptap'
 
-type Navigator = {
-  userAgentData?: {
-    brands: { brand: string; version: string }[]
-    mobile: boolean
-    platform: string
-    getHighEntropyValues: (hints: string[]) => Promise<{
-      platform: string
-      platformVersion: string
-      uaFullVersion: string
-    }>
-  }
-  platform?: string
-}
-
 type ShortcutKeyResult = {
   symbol: string
   readable: string
@@ -33,39 +19,14 @@ export type FileValidationOptions = {
 
 type FileInput = File | { src: string | File; alt?: string; title?: string }
 
-// Platform detection
-let isMac: boolean | undefined
+export const isClient = (): boolean => typeof window !== 'undefined'
+export const isServer = (): boolean => !isClient()
+export const isMacOS = (): boolean => isClient() && window.navigator.platform === 'MacIntel'
 
-const getPlatform = (): string => {
-  const nav = navigator as Navigator
-
-  if (nav.userAgentData?.platform) {
-    return nav.userAgentData.platform
-  }
-
-  if (nav.userAgentData) {
-    nav.userAgentData.getHighEntropyValues(['platform']).then(highEntropyValues => {
-      if (highEntropyValues.platform) {
-        return highEntropyValues.platform
-      }
-    })
-  }
-
-  return nav.platform || ''
-}
-
-export const isMacOS = (): boolean => {
-  if (isMac === undefined) {
-    isMac = getPlatform().toLowerCase().includes('mac')
-  }
-  return isMac
-}
-
-// Shortcut key helpers
 const shortcutKeyMap: Record<string, ShortcutKeyResult> = {
   mod: isMacOS() ? { symbol: '⌘', readable: 'Command' } : { symbol: 'Ctrl', readable: 'Control' },
   alt: isMacOS() ? { symbol: '⌥', readable: 'Option' } : { symbol: 'Alt', readable: 'Alt' },
-  shift: isMacOS() ? { symbol: '⇧', readable: 'Shift' } : { symbol: 'Shift', readable: 'Shift' }
+  shift: { symbol: '⇧', readable: 'Shift' }
 }
 
 export const getShortcutKey = (key: string): ShortcutKeyResult =>
@@ -73,29 +34,35 @@ export const getShortcutKey = (key: string): ShortcutKeyResult =>
 
 export const getShortcutKeys = (keys: string[]): ShortcutKeyResult[] => keys.map(getShortcutKey)
 
-// Editor output
-export const getOutput = (editor: Editor, format: MinimalTiptapProps['output']) => {
-  if (format === 'json') return editor.getJSON()
-  if (format === 'html') return editor.getText() ? editor.getHTML() : ''
-  return editor.getText()
+export const getOutput = (editor: Editor, format: MinimalTiptapProps['output']): object | string => {
+  switch (format) {
+    case 'json':
+      return editor.getJSON()
+    case 'html':
+      return editor.getText() ? editor.getHTML() : ''
+    default:
+      return editor.getText()
+  }
 }
 
-// URL validation and sanitization
-export const isUrl = (text: string, options?: { requireHostname: boolean; allowBase64?: boolean }): boolean => {
-  if (text.match(/\n/)) return false
+export const isUrl = (
+  text: string,
+  options: { requireHostname: boolean; allowBase64?: boolean } = { requireHostname: false }
+): boolean => {
+  if (text.includes('\n')) return false
 
   try {
     const url = new URL(text)
-    const blockedProtocols = ['javascript:', 'file:', 'vbscript:', ...(options?.allowBase64 ? [] : ['data:'])]
+    const blockedProtocols = ['javascript:', 'file:', 'vbscript:', ...(options.allowBase64 ? [] : ['data:'])]
 
     if (blockedProtocols.includes(url.protocol)) return false
-    if (options?.allowBase64 && url.protocol === 'data:') return /^data:image\/[a-z]+;base64,/.test(text)
+    if (options.allowBase64 && url.protocol === 'data:') return /^data:image\/[a-z]+;base64,/.test(text)
     if (url.hostname) return true
 
     return (
       url.protocol !== '' &&
       (url.pathname.startsWith('//') || url.pathname.startsWith('http')) &&
-      !options?.requireHostname
+      !options.requireHostname
     )
   } catch {
     return false
@@ -104,22 +71,21 @@ export const isUrl = (text: string, options?: { requireHostname: boolean; allowB
 
 export const sanitizeUrl = (
   url: string | null | undefined,
-  options?: { allowBase64?: boolean }
+  options: { allowBase64?: boolean } = {}
 ): string | undefined => {
   if (!url) return undefined
 
-  if (options?.allowBase64 && url.startsWith('data:image')) {
+  if (options.allowBase64 && url.startsWith('data:image')) {
     return isUrl(url, { requireHostname: false, allowBase64: true }) ? url : undefined
   }
 
-  const isValidUrl = isUrl(url, { requireHostname: false, allowBase64: options?.allowBase64 })
-  const isSpecialProtocol = /^(\/|#|mailto:|sms:|fax:|tel:)/.test(url)
-
-  return isValidUrl || isSpecialProtocol ? url : `https://${url}`
+  return isUrl(url, { requireHostname: false, allowBase64: options.allowBase64 }) ||
+    /^(\/|#|mailto:|sms:|fax:|tel:)/.test(url)
+    ? url
+    : `https://${url}`
 }
 
-// File handling
-export async function blobUrlToBase64(blobUrl: string): Promise<string> {
+export const blobUrlToBase64 = async (blobUrl: string): Promise<string> => {
   const response = await fetch(blobUrl)
   const blob = await response.blob()
 
@@ -137,13 +103,28 @@ export async function blobUrlToBase64(blobUrl: string): Promise<string> {
   })
 }
 
+export const fileToBase64 = (file: File | Blob): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      if (typeof reader.result === 'string') {
+        resolve(reader.result)
+      } else {
+        reject(new Error('Failed to convert File to base64'))
+      }
+    }
+    reader.onerror = reject
+    reader.readAsDataURL(file)
+  })
+}
+
 const validateFileOrBase64 = <T extends FileInput>(
   input: File | string,
   options: FileValidationOptions,
   originalFile: T,
   validFiles: T[],
   errors: FileError[]
-) => {
+): void => {
   const { isValidType, isValidSize } = checkTypeAndSize(input, options)
 
   if (isValidType && isValidSize) {
@@ -154,7 +135,10 @@ const validateFileOrBase64 = <T extends FileInput>(
   }
 }
 
-const checkTypeAndSize = (input: File | string, { allowedMimeTypes, maxFileSize }: FileValidationOptions) => {
+const checkTypeAndSize = (
+  input: File | string,
+  { allowedMimeTypes, maxFileSize }: FileValidationOptions
+): { isValidType: boolean; isValidSize: boolean } => {
   const mimeType = input instanceof File ? input.type : base64MimeType(input)
   const size = input instanceof File ? input.size : atob(input.split(',')[1]).length
 
@@ -170,7 +154,7 @@ const checkTypeAndSize = (input: File | string, { allowedMimeTypes, maxFileSize 
 
 const base64MimeType = (encoded: string): string => {
   const result = encoded.match(/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).*,.*/)
-  return result && result.length ? result[1] : 'unknown'
+  return result && result.length > 1 ? result[1] : 'unknown'
 }
 
 const isBase64 = (str: string): boolean => {
@@ -184,8 +168,7 @@ const isBase64 = (str: string): boolean => {
   }
 
   try {
-    atob(str)
-    return true
+    return btoa(atob(str)) === str
   } catch {
     return false
   }
@@ -208,7 +191,11 @@ export const filterFiles = <T extends FileInput>(files: T[], options: FileValida
           errors.push({ file: actualFile, reason: 'base64NotAllowed' })
         }
       } else {
-        validFiles.push(file)
+        if (!sanitizeUrl(actualFile, { allowBase64: options.allowBase64 })) {
+          errors.push({ file: actualFile, reason: 'invalidBase64' })
+        } else {
+          validFiles.push(file)
+        }
       }
     }
   })
