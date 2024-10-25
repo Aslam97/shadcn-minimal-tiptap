@@ -266,10 +266,12 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
           URL.revokeObjectURL(imageInfo.src)
         }
 
-        this.options.onImageRemoved?.({
-          id: imageInfo.id,
-          src: imageInfo.src
-        })
+        if (!imageInfo.src.startsWith('blob:') && !imageInfo.src.startsWith('data:')) {
+          this.options.onImageRemoved?.({
+            id: imageInfo.id,
+            src: imageInfo.src
+          })
+        }
       }
     })
   },
