@@ -103,6 +103,8 @@ export const blobUrlToBase64 = async (blobUrl: string): Promise<string> => {
   })
 }
 
+export const randomId = (): string => Math.random().toString(36).slice(2, 11)
+
 export const fileToBase64 = (file: File | Blob): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()

@@ -7,10 +7,11 @@ import { cn } from '@/lib/utils'
 import { Controlled as ControlledZoom } from 'react-medium-image-zoom'
 import { ActionButton, ActionWrapper, ImageActions } from './image-actions'
 import { useImageActions } from '../hooks/use-image-actions'
-import { blobUrlToBase64 } from '../../../utils'
+import { blobUrlToBase64, randomId } from '../../../utils'
 import { InfoCircledIcon, TrashIcon } from '@radix-ui/react-icons'
 import { ImageOverlay } from './image-overlay'
 import { Spinner } from '../../../components/spinner'
+import type { UploadReturnType } from '../image'
 
 const MAX_HEIGHT = 600
 const MIN_HEIGHT = 120
@@ -25,10 +26,24 @@ interface ImageState {
   naturalSize: ElementDimensions
 }
 
+const normalizeUploadResponse = (res: UploadReturnType) => ({
+  src: typeof res === 'string' ? res : res.src,
+  id: typeof res === 'string' ? randomId() : res.id
+})
+
 export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, selected, updateAttributes }) => {
   const { src: initialSrc, width: initialWidth, height: initialHeight, fileName, fileType } = node.attrs
+
+  const initSrc = React.useMemo(() => {
+    if (typeof initialSrc === 'string') {
+      return initialSrc
+    }
+
+    return initialSrc.src
+  }, [initialSrc])
+
   const [imageState, setImageState] = React.useState<ImageState>({
-    src: initialSrc,
+    src: initSrc,
     isServerUploading: false,
     imageLoaded: false,
     isZoomed: false,
@@ -126,10 +141,10 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, selected
       const imageExtension = editor.options.extensions.find(ext => ext.name === 'image')
       const { uploadFn } = imageExtension?.options ?? {}
 
-      if (initialSrc.startsWith('blob:')) {
+      if (initSrc.startsWith('blob:')) {
         if (!uploadFn) {
           try {
-            const base64 = await blobUrlToBase64(initialSrc)
+            const base64 = await blobUrlToBase64(initSrc)
             setImageState(prev => ({ ...prev, src: base64 }))
             updateAttributes({ src: base64 })
           } catch {
@@ -139,20 +154,23 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, selected
           try {
             setImageState(prev => ({ ...prev, isServerUploading: true }))
 
-            const response = await fetch(initialSrc)
+            const response = await fetch(initSrc)
             const blob = await response.blob()
 
             const file = new File([blob], fileName || 'image', {
               type: fileType || blob.type
             })
 
-            const url = await uploadFn(file, editor)
+            const url: UploadReturnType = await uploadFn(file, editor)
+            const normalizedData = normalizeUploadResponse(url)
+
             setImageState(prev => ({
               ...prev,
-              src: url,
+              ...normalizedData,
               isServerUploading: false
             }))
-            updateAttributes({ src: url })
+
+            updateAttributes(normalizedData)
           } catch {
             setImageState(prev => ({
               ...prev,
@@ -161,13 +179,11 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, selected
             }))
           }
         }
-
-        URL.revokeObjectURL(initialSrc)
       }
     }
 
     handleImage()
-  }, [editor, fileName, fileType, initialSrc, updateAttributes])
+  }, [editor, fileName, fileType, initSrc, updateAttributes])
 
   return (
     <NodeViewWrapper ref={containerRef} data-drag-handle className="relative text-center leading-none">

@@ -18,7 +18,7 @@ import {
   FileHandler
 } from '../extensions'
 import { cn } from '@/lib/utils'
-import { fileToBase64, getOutput } from '../utils'
+import { fileToBase64, getOutput, randomId } from '../utils'
 import { useThrottle } from '../hooks/use-throttle'
 import { toast } from 'sonner'
 
@@ -57,7 +57,13 @@ const createExtensions = (placeholder: string) => [
       await new Promise(resolve => setTimeout(resolve, 3000))
 
       const src = await fileToBase64(file)
-      return src
+
+      // either return { id: string | number, src: string } or just src
+      // return src;
+      return { id: randomId(), src }
+    },
+    onImageRemoved({ id, src }) {
+      console.log('Image removed', { id, src })
     },
     onValidationError(errors) {
       errors.forEach(error => {

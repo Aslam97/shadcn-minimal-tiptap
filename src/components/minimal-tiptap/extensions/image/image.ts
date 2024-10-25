@@ -1,9 +1,10 @@
 import type { ImageOptions } from '@tiptap/extension-image'
 import { Image as TiptapImage } from '@tiptap/extension-image'
 import type { Editor } from '@tiptap/react'
+import type { Node } from '@tiptap/pm/model'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import { ImageViewBlock } from './components/image-view-block'
-import { filterFiles, type FileError, type FileValidationOptions } from '../../utils'
+import { filterFiles, randomId, type FileError, type FileValidationOptions } from '../../utils'
 
 type ImageAction = 'download' | 'copyImage' | 'copyLink'
 
@@ -16,8 +17,21 @@ interface ImageActionProps extends DownloadImageCommandProps {
   action: ImageAction
 }
 
+type ImageInfo = {
+  id?: string | number
+  src: string
+}
+
+export type UploadReturnType =
+  | string
+  | {
+      id: string | number
+      src: string
+    }
+
 interface CustomImageOptions extends ImageOptions, Omit<FileValidationOptions, 'allowBase64'> {
-  uploadFn?: (file: File, editor: Editor) => Promise<string>
+  uploadFn?: (file: File, editor: Editor) => Promise<UploadReturnType>
+  onImageRemoved?: (props: ImageInfo) => void
   onActionSuccess?: (props: ImageActionProps) => void
   onActionError?: (error: Error, props: ImageActionProps) => void
   customDownloadImage?: (props: ImageActionProps, options: CustomImageOptions) => Promise<void>
@@ -138,6 +152,9 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
   addAttributes() {
     return {
       ...this.parent?.(),
+      id: {
+        default: undefined
+      },
       width: {
         default: undefined
       },
@@ -176,6 +193,7 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
                   return {
                     type: this.type.name,
                     attrs: {
+                      id: randomId(),
                       src: blobUrl,
                       alt: image.alt,
                       title: image.title,
@@ -187,6 +205,7 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
                   return {
                     type: this.type.name,
                     attrs: {
+                      id: randomId(),
                       src: image.src,
                       alt: image.alt,
                       title: image.title,
@@ -217,6 +236,42 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
         return true
       }
     }
+  },
+
+  onTransaction({ transaction }) {
+    if (!transaction.docChanged) return
+
+    const oldDoc = transaction.before
+    const newDoc = transaction.doc
+
+    const oldImages = new Map<string, ImageInfo>()
+    const newImages = new Map<string, ImageInfo>()
+
+    const addToMap = (node: Node, map: Map<string, ImageInfo>) => {
+      if (node.type.name === 'image') {
+        const attrs = node.attrs
+        if (attrs.src) {
+          const key = attrs.id || attrs.src
+          map.set(key, { id: attrs.id, src: attrs.src })
+        }
+      }
+    }
+
+    oldDoc.descendants(node => addToMap(node, oldImages))
+    newDoc.descendants(node => addToMap(node, newImages))
+
+    oldImages.forEach((imageInfo, key) => {
+      if (!newImages.has(key)) {
+        if (imageInfo.src.startsWith('blob:')) {
+          URL.revokeObjectURL(imageInfo.src)
+        }
+
+        this.options.onImageRemoved?.({
+          id: imageInfo.id,
+          src: imageInfo.src
+        })
+      }
+    })
   },
 
   addNodeView() {
