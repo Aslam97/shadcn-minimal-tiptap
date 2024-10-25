@@ -117,6 +117,7 @@ Customize the Image extension by passing options:
 ```typescript
 Image.configure({
   allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif'],
+  onImageRemove: handleImageRemove,
   maxFileSize: 5 * 1024 * 1024, // 5MB
   uploadFn: myCustomUploadFunction,
   onActionSuccess: handleActionSuccess,
