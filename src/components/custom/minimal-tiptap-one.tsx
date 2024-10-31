@@ -20,7 +20,11 @@ export interface MinimalTiptapProps extends Omit<UseMinimalTiptapEditorProps, 'o
 const Toolbar = ({ editor }: { editor: Editor }) => (
   <div className="shrink-0 overflow-x-auto border-t border-border p-2">
     <div className="flex w-max items-center gap-px">
-      <SectionTwo editor={editor} activeActions={['bold', 'italic', 'strikethrough', 'code']} mainActionCount={5} />
+      <SectionTwo
+        editor={editor}
+        activeActions={['bold', 'italic', 'underline', 'strikethrough', 'code']}
+        mainActionCount={5}
+      />
     </div>
   </div>
 )

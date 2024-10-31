@@ -31,7 +31,7 @@ const Toolbar = ({ editor }: { editor: Editor }) => (
 
       <SectionTwo
         editor={editor}
-        activeActions={['italic', 'bold', 'code', 'strikethrough', 'clearFormatting']}
+        activeActions={['italic', 'bold', 'underline', 'code', 'strikethrough', 'clearFormatting']}
         mainActionCount={5}
         variant="outline"
       />

@@ -31,8 +31,8 @@ const Toolbar = ({ editor }: { editor: Editor }) => (
 
       <SectionTwo
         editor={editor}
-        activeActions={['bold', 'italic', 'strikethrough', 'code', 'clearFormatting']}
-        mainActionCount={2}
+        activeActions={['bold', 'italic', 'underline', 'strikethrough', 'code', 'clearFormatting']}
+        mainActionCount={3}
       />
 
       <Separator orientation="vertical" className="mx-2 h-7" />

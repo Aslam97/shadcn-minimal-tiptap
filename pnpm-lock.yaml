@@ -77,6 +77,9 @@ importers:
       '@tiptap/extension-typography':
         specifier: ^2.9.1
         version: 2.9.1(@tiptap/core@2.9.1(@tiptap/pm@2.9.1))
+      '@tiptap/extension-underline':
+        specifier: ^2.9.1
+        version: 2.9.1(@tiptap/core@2.9.1(@tiptap/pm@2.9.1))
       '@tiptap/pm':
         specifier: ^2.9.1
         version: 2.9.1
@@ -1153,6 +1156,11 @@ packages:
 
   '@tiptap/extension-typography@2.9.1':
     resolution: {integrity: sha512-HX0kghh+Gmlp5FsVVGmQNRxxA+aErLBgmKVspycJ3UHzAkyzsdx4qM19KCZ3pMOI+kxcXF9cMh3QxJYJ+OQ7wg==}
+    peerDependencies:
+      '@tiptap/core': ^2.7.0
+
+  '@tiptap/extension-underline@2.9.1':
+    resolution: {integrity: sha512-IrUsIqKPgD7GcAjr4D+RC0WvLHUDBTMkD8uPNEoeD1uH9t9zFyDfMRPnx/z3/6Gf6fTh3HzLcHGibiW2HiMi2A==}
     peerDependencies:
       '@tiptap/core': ^2.7.0
 
@@ -3539,6 +3547,10 @@ snapshots:
       '@tiptap/core': 2.9.1(@tiptap/pm@2.9.1)
 
   '@tiptap/extension-typography@2.9.1(@tiptap/core@2.9.1(@tiptap/pm@2.9.1))':
+    dependencies:
+      '@tiptap/core': 2.9.1(@tiptap/pm@2.9.1)
+
+  '@tiptap/extension-underline@2.9.1(@tiptap/core@2.9.1(@tiptap/pm@2.9.1))':
     dependencies:
       '@tiptap/core': 2.9.1(@tiptap/pm@2.9.1)
 
