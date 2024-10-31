@@ -9,11 +9,12 @@ import {
   FontBoldIcon,
   FontItalicIcon,
   StrikethroughIcon,
-  TextNoneIcon
+  TextNoneIcon,
+  UnderlineIcon
 } from '@radix-ui/react-icons'
 import { ToolbarSection } from '../toolbar-section'
 
-type TextStyleAction = 'bold' | 'italic' | 'strikethrough' | 'code' | 'clearFormatting'
+type TextStyleAction = 'bold' | 'italic' | 'underline' | 'strikethrough' | 'code' | 'clearFormatting'
 
 interface TextStyle extends FormatAction {
   value: TextStyleAction
@@ -37,6 +38,15 @@ const formatActions: TextStyle[] = [
     isActive: editor => editor.isActive('italic'),
     canExecute: editor => editor.can().chain().focus().toggleItalic().run() && !editor.isActive('codeBlock'),
     shortcuts: ['mod', 'I']
+  },
+  {
+    value: 'underline',
+    label: 'Underline',
+    icon: <UnderlineIcon className="size-5" />,
+    action: editor => editor.chain().focus().toggleUnderline().run(),
+    isActive: editor => editor.isActive('underline'),
+    canExecute: editor => editor.can().chain().focus().toggleUnderline().run() && !editor.isActive('codeBlock'),
+    shortcuts: ['mod', 'U']
   },
   {
     value: 'strikethrough',

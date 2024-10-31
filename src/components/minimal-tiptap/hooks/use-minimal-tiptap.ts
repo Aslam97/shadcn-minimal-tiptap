@@ -5,6 +5,7 @@ import { StarterKit } from '@tiptap/starter-kit'
 import { useEditor } from '@tiptap/react'
 import { Typography } from '@tiptap/extension-typography'
 import { Placeholder } from '@tiptap/extension-placeholder'
+import { Underline } from '@tiptap/extension-underline'
 import { TextStyle } from '@tiptap/extension-text-style'
 import {
   Link,
@@ -45,6 +46,7 @@ const createExtensions = (placeholder: string) => [
     dropcursor: { width: 2, class: 'ProseMirror-dropcursor border' }
   }),
   Link,
+  Underline,
   Image.configure({
     allowedMimeTypes: ['image/*'],
     maxFileSize: 5 * 1024 * 1024,
