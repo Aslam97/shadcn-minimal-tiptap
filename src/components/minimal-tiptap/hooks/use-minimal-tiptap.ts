@@ -1,5 +1,5 @@
 import * as React from 'react'
-import type { Editor } from '@tiptap/core'
+import type { Editor } from '@tiptap/react'
 import type { Content, UseEditorOptions } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
 import { useEditor } from '@tiptap/react'

@@ -40,7 +40,7 @@ interface CustomImageOptions extends ImageOptions, Omit<FileValidationOptions, '
   onValidationError?: (errors: FileError[]) => void
 }
 
-declare module '@tiptap/core' {
+declare module '@tiptap/react' {
   interface Commands<ReturnType> {
     setImages: {
       setImages: (attrs: { src: string | File; alt?: string; title?: string }[]) => ReturnType
