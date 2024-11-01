@@ -7,7 +7,7 @@ import { z } from 'zod'
 import { cn } from './lib/utils'
 import { Hero } from './components/custom/hero'
 import { BentoMinimalTiptap } from './components/custom/types'
-import type { Editor } from '@tiptap/core'
+import type { Editor } from '@tiptap/react'
 import { useCallback, useRef } from 'react'
 
 export default function App() {
