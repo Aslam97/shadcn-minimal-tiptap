@@ -163,9 +163,6 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
       },
       fileName: {
         default: undefined
-      },
-      fileType: {
-        default: undefined
       }
     }
   },
@@ -197,8 +194,7 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
                       src: blobUrl,
                       alt: image.alt,
                       title: image.title,
-                      fileName: image.src.name,
-                      fileType: image.src.type
+                      fileName: image.src.name
                     }
                   }
                 } else {
@@ -209,8 +205,7 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
                       src: image.src,
                       alt: image.alt,
                       title: image.title,
-                      fileName: null,
-                      fileType: null
+                      fileName: null
                     }
                   }
                 }

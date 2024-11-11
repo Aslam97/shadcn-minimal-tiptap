@@ -18,6 +18,18 @@
   @apply mb-3 mt-6 text-[1.0625rem] leading-6 tracking-[0.00625rem];
 }
 
+.minimal-tiptap-editor .ProseMirror h4 {
+  @apply mb-2 mt-4 text-[0.9375rem] leading-6;
+}
+
+.minimal-tiptap-editor .ProseMirror h5 {
+  @apply mb-2 mt-4 text-sm;
+}
+
+.minimal-tiptap-editor .ProseMirror h5 {
+  @apply mb-2 mt-4 text-sm;
+}
+
 .minimal-tiptap-editor .ProseMirror a.link {
   @apply cursor-pointer text-primary;
 }
