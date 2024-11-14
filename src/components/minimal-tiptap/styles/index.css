@@ -173,6 +173,10 @@
   @apply inline-block;
 }
 
+.minimal-tiptap-editor .ProseMirror s span {
+  @apply line-through;
+}
+
 .minimal-tiptap-editor .ProseMirror .selection,
 .minimal-tiptap-editor .ProseMirror *::selection,
 ::selection {
