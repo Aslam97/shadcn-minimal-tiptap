@@ -151,6 +151,10 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, selected
           const base64 = await blobUrlToBase64(initSrc)
           setImageState(prev => ({ ...prev, src: base64 }))
           updateAttributes({ src: base64 })
+
+          if (node.attrs.id) {
+            imageExtension?.storage.uploadingImages.delete(node.attrs.id)
+          }
         } catch {
           setImageState(prev => ({ ...prev, error: true }))
         }
@@ -173,18 +177,25 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, selected
         }))
 
         updateAttributes(normalizedData)
+
+        if (node.attrs.id) {
+          imageExtension?.storage.uploadingImages.delete(node.attrs.id)
+        }
       } catch (error) {
-        console.error('Image upload failed:', error)
         setImageState(prev => ({
           ...prev,
           error: true,
           isServerUploading: false
         }))
+
+        if (node.attrs.id) {
+          imageExtension?.storage.uploadingImages.delete(node.attrs.id)
+        }
       }
     }
 
     handleImage()
-  }, [editor, fileName, initSrc, updateAttributes])
+  }, [editor, fileName, initSrc, node.attrs.id, updateAttributes])
 
   return (
     <NodeViewWrapper ref={containerRef} data-drag-handle className="relative text-center leading-none">
@@ -204,7 +215,7 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, selected
         >
           <div className="h-full contain-paint">
             <div className="relative h-full">
-              {!imageState.imageLoaded && !imageState.error && (
+              {imageState.isServerUploading && !imageState.error && (
                 <div className="absolute inset-0 flex items-center justify-center">
                   <Spinner className="size-7" />
                 </div>
@@ -236,6 +247,8 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, selected
                   onError={handleImageError}
                   onLoad={handleImageLoad}
                   alt={node.attrs.alt || ''}
+                  title={node.attrs.title || ''}
+                  id={node.attrs.id}
                 />
               </ControlledZoom>
             </div>

@@ -151,18 +151,26 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
 
   addAttributes() {
     return {
-      ...this.parent?.(),
+      src: {
+        default: null
+      },
+      alt: {
+        default: null
+      },
+      title: {
+        default: null
+      },
       id: {
-        default: undefined
+        default: null
       },
       width: {
-        default: undefined
+        default: null
       },
       height: {
-        default: undefined
+        default: null
       },
       fileName: {
-        default: undefined
+        default: null
       }
     }
   },
@@ -185,12 +193,17 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
           if (validImages.length > 0) {
             return commands.insertContent(
               validImages.map(image => {
+                console.log('Image', image)
                 if (image.src instanceof File) {
                   const blobUrl = URL.createObjectURL(image.src)
+                  const id = randomId()
+
+                  this.storage.uploadingImages.add(id)
+
                   return {
                     type: this.type.name,
                     attrs: {
-                      id: randomId(),
+                      id,
                       src: blobUrl,
                       alt: image.alt,
                       title: image.title,
@@ -233,6 +246,12 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
     }
   },
 
+  addStorage() {
+    return {
+      uploadingImages: new Set<string>()
+    }
+  },
+
   onTransaction({ transaction }) {
     if (!transaction.docChanged) return
 
@@ -245,9 +264,9 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
     const addToMap = (node: Node, map: Map<string, ImageInfo>) => {
       if (node.type.name === 'image') {
         const attrs = node.attrs
+        const id = attrs.id || attrs.src
         if (attrs.src) {
-          const key = attrs.id || attrs.src
-          map.set(key, { id: attrs.id, src: attrs.src })
+          map.set(id, { id: attrs.id, src: attrs.src })
         }
       }
     }
@@ -257,11 +276,14 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
 
     oldImages.forEach((imageInfo, key) => {
       if (!newImages.has(key)) {
-        if (imageInfo.src.startsWith('blob:')) {
-          URL.revokeObjectURL(imageInfo.src)
-        }
+        const isUploading = imageInfo.id && this.storage.uploadingImages.has(imageInfo.id)
+        const srcStillExists = Array.from(newImages.values()).some(newImage => newImage.src === imageInfo.src)
 
-        if (!imageInfo.src.startsWith('blob:') && !imageInfo.src.startsWith('data:')) {
+        if (!isUploading && !srcStillExists) {
+          if (imageInfo.src.startsWith('blob:')) {
+            URL.revokeObjectURL(imageInfo.src)
+          }
+
           this.options.onImageRemoved?.({
             id: imageInfo.id,
             src: imageInfo.src
