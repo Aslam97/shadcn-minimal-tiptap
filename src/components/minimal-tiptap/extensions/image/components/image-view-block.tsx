@@ -151,10 +151,6 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, selected
           const base64 = await blobUrlToBase64(initSrc)
           setImageState(prev => ({ ...prev, src: base64 }))
           updateAttributes({ src: base64 })
-
-          if (node.attrs.id) {
-            imageExtension?.storage.uploadingImages.delete(node.attrs.id)
-          }
         } catch {
           setImageState(prev => ({ ...prev, error: true }))
         }
@@ -177,25 +173,17 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, selected
         }))
 
         updateAttributes(normalizedData)
-
-        if (node.attrs.id) {
-          imageExtension?.storage.uploadingImages.delete(node.attrs.id)
-        }
       } catch (error) {
         setImageState(prev => ({
           ...prev,
           error: true,
           isServerUploading: false
         }))
-
-        if (node.attrs.id) {
-          imageExtension?.storage.uploadingImages.delete(node.attrs.id)
-        }
       }
     }
 
     handleImage()
-  }, [editor, fileName, initSrc, node.attrs.id, updateAttributes])
+  }, [editor, fileName, initSrc, updateAttributes])
 
   return (
     <NodeViewWrapper ref={containerRef} data-drag-handle className="relative text-center leading-none">

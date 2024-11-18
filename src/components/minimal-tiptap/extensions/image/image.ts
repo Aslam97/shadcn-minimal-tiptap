@@ -1,10 +1,11 @@
 import type { ImageOptions } from '@tiptap/extension-image'
 import { Image as TiptapImage } from '@tiptap/extension-image'
 import type { Editor } from '@tiptap/react'
-import type { Node } from '@tiptap/pm/model'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import { ImageViewBlock } from './components/image-view-block'
 import { filterFiles, randomId, type FileError, type FileValidationOptions } from '../../utils'
+import { ReplaceStep } from '@tiptap/pm/transform'
+import type { Attrs } from '@tiptap/pm/model'
 
 type ImageAction = 'download' | 'copyImage' | 'copyLink'
 
@@ -17,11 +18,6 @@ interface ImageActionProps extends DownloadImageCommandProps {
   action: ImageAction
 }
 
-type ImageInfo = {
-  id?: string | number
-  src: string
-}
-
 export type UploadReturnType =
   | string
   | {
@@ -31,13 +27,14 @@ export type UploadReturnType =
 
 interface CustomImageOptions extends ImageOptions, Omit<FileValidationOptions, 'allowBase64'> {
   uploadFn?: (file: File, editor: Editor) => Promise<UploadReturnType>
-  onImageRemoved?: (props: ImageInfo) => void
+  onImageRemoved?: (props: Attrs) => void
   onActionSuccess?: (props: ImageActionProps) => void
   onActionError?: (error: Error, props: ImageActionProps) => void
   downloadImage?: (props: ImageActionProps, options: CustomImageOptions) => Promise<void>
   copyImage?: (props: ImageActionProps, options: CustomImageOptions) => Promise<void>
   copyLink?: (props: ImageActionProps, options: CustomImageOptions) => Promise<void>
   onValidationError?: (errors: FileError[]) => void
+  onToggle?: (editor: Editor, files: File[], pos: number) => void
 }
 
 declare module '@tiptap/react' {
@@ -149,6 +146,7 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
       allowedMimeTypes: [],
       maxFileSize: 0,
       uploadFn: undefined,
+      onToggle: undefined,
       downloadImage: undefined,
       copyImage: undefined,
       copyLink: undefined
@@ -203,8 +201,6 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
                   const blobUrl = URL.createObjectURL(image.src)
                   const id = randomId()
 
-                  this.storage.uploadingImages.add(id)
-
                   return {
                     type: this.type.name,
                     attrs: {
@@ -254,7 +250,7 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
 
       toggleImage:
         () =>
-        ({ commands }) => {
+        ({ editor }) => {
           const input = document.createElement('input')
           input.type = 'file'
           input.accept = this.options.allowedMimeTypes.join(',')
@@ -273,26 +269,10 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
               return false
             }
 
-            if (validImages.length > 0) {
-              return commands.insertContent(
-                validImages.map(image => {
-                  const blobUrl = URL.createObjectURL(image)
-                  const id = randomId()
+            if (validImages.length === 0) return false
 
-                  this.storage.uploadingImages.add(id)
-
-                  return {
-                    type: this.type.name,
-                    attrs: {
-                      id,
-                      src: blobUrl,
-                      alt: image.name,
-                      title: image.name,
-                      fileName: image.name
-                    }
-                  }
-                })
-              )
+            if (this.options.onToggle) {
+              this.options.onToggle(editor, validImages, editor.state.selection.from)
             }
 
             return false
@@ -304,49 +284,22 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
     }
   },
 
-  addStorage() {
-    return {
-      uploadingImages: new Set<string>()
-    }
-  },
-
   onTransaction({ transaction }) {
-    if (!transaction.docChanged) return
+    transaction.steps.forEach(step => {
+      if (step instanceof ReplaceStep && step.slice.size === 0) {
+        const deletedPages = transaction.before.content.cut(step.from, step.to)
 
-    const oldDoc = transaction.before
-    const newDoc = transaction.doc
+        deletedPages.forEach(node => {
+          if (node.type.name === 'image') {
+            const attrs = node.attrs
 
-    const oldImages = new Map<string, ImageInfo>()
-    const newImages = new Map<string, ImageInfo>()
+            if (attrs.src.startsWith('blob:')) {
+              URL.revokeObjectURL(attrs.src)
+            }
 
-    const addToMap = (node: Node, map: Map<string, ImageInfo>) => {
-      if (node.type.name === 'image') {
-        const attrs = node.attrs
-        const id = attrs.id || attrs.src
-        if (attrs.src) {
-          map.set(id, { id: attrs.id, src: attrs.src })
-        }
-      }
-    }
-
-    oldDoc.descendants(node => addToMap(node, oldImages))
-    newDoc.descendants(node => addToMap(node, newImages))
-
-    oldImages.forEach((imageInfo, key) => {
-      if (!newImages.has(key)) {
-        const isUploading = imageInfo.id && this.storage.uploadingImages.has(imageInfo.id)
-        const srcStillExists = Array.from(newImages.values()).some(newImage => newImage.src === imageInfo.src)
-
-        if (!isUploading && !srcStillExists) {
-          if (imageInfo.src.startsWith('blob:')) {
-            URL.revokeObjectURL(imageInfo.src)
+            this.options.onImageRemoved?.(attrs)
           }
-
-          this.options.onImageRemoved?.({
-            id: imageInfo.id,
-            src: imageInfo.src
-          })
-        }
+        })
       }
     })
   },

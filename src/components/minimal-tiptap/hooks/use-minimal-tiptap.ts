@@ -64,6 +64,26 @@ const createExtensions = (placeholder: string) => [
       // return src;
       return { id: randomId(), src }
     },
+    onToggle(editor, files, pos) {
+      editor.commands.insertContentAt(
+        pos,
+        files.map(image => {
+          const blobUrl = URL.createObjectURL(image)
+          const id = randomId()
+
+          return {
+            type: 'image',
+            attrs: {
+              id,
+              src: blobUrl,
+              alt: image.name,
+              title: image.name,
+              fileName: image.name
+            }
+          }
+        })
+      )
+    },
     onImageRemoved({ id, src }) {
       console.log('Image removed', { id, src })
     },
