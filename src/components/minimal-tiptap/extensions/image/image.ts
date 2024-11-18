@@ -193,7 +193,6 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
           if (validImages.length > 0) {
             return commands.insertContent(
               validImages.map(image => {
-                console.log('Image', image)
                 if (image.src instanceof File) {
                   const blobUrl = URL.createObjectURL(image.src)
                   const id = randomId()
