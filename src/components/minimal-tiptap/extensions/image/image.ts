@@ -34,9 +34,9 @@ interface CustomImageOptions extends ImageOptions, Omit<FileValidationOptions, '
   onImageRemoved?: (props: ImageInfo) => void
   onActionSuccess?: (props: ImageActionProps) => void
   onActionError?: (error: Error, props: ImageActionProps) => void
-  customDownloadImage?: (props: ImageActionProps, options: CustomImageOptions) => Promise<void>
-  customCopyImage?: (props: ImageActionProps, options: CustomImageOptions) => Promise<void>
-  customCopyLink?: (props: ImageActionProps, options: CustomImageOptions) => Promise<void>
+  downloadImage?: (props: ImageActionProps, options: CustomImageOptions) => Promise<void>
+  copyImage?: (props: ImageActionProps, options: CustomImageOptions) => Promise<void>
+  copyLink?: (props: ImageActionProps, options: CustomImageOptions) => Promise<void>
   onValidationError?: (errors: FileError[]) => void
 }
 
@@ -53,6 +53,9 @@ declare module '@tiptap/react' {
     }
     copyLink: {
       copyLink: (attrs: DownloadImageCommandProps) => ReturnType
+    }
+    toggleImage: {
+      toggleImage: () => ReturnType
     }
   }
 }
@@ -102,7 +105,7 @@ const saveImage = async (blob: Blob, name: string, extension: string): Promise<v
   URL.revokeObjectURL(imageURL)
 }
 
-const defaultDownloadImage = async (props: ImageActionProps, options: CustomImageOptions): Promise<void> => {
+const downloadImage = async (props: ImageActionProps, options: CustomImageOptions): Promise<void> => {
   const { src, alt } = props
   const potentialName = alt || 'image'
 
@@ -115,7 +118,7 @@ const defaultDownloadImage = async (props: ImageActionProps, options: CustomImag
   }
 }
 
-const defaultCopyImage = async (props: ImageActionProps, options: CustomImageOptions): Promise<void> => {
+const copyImage = async (props: ImageActionProps, options: CustomImageOptions): Promise<void> => {
   const { src } = props
   try {
     const res = await fetch(src)
@@ -127,7 +130,7 @@ const defaultCopyImage = async (props: ImageActionProps, options: CustomImageOpt
   }
 }
 
-const defaultCopyLink = async (props: ImageActionProps, options: CustomImageOptions): Promise<void> => {
+const copyLink = async (props: ImageActionProps, options: CustomImageOptions): Promise<void> => {
   const { src } = props
   try {
     await navigator.clipboard.writeText(src)
@@ -145,7 +148,10 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
       ...this.parent?.(),
       allowedMimeTypes: [],
       maxFileSize: 0,
-      uploadFn: undefined
+      uploadFn: undefined,
+      downloadImage: undefined,
+      copyImage: undefined,
+      copyLink: undefined
     }
   },
 
@@ -227,21 +233,74 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
 
           return false
         },
+
       downloadImage: attrs => () => {
-        const downloadFunc = this.options.customDownloadImage || defaultDownloadImage
+        const downloadFunc = this.options.downloadImage || downloadImage
         void downloadFunc({ ...attrs, action: 'download' }, this.options)
         return true
       },
+
       copyImage: attrs => () => {
-        const copyImageFunc = this.options.customCopyImage || defaultCopyImage
+        const copyImageFunc = this.options.copyImage || copyImage
         void copyImageFunc({ ...attrs, action: 'copyImage' }, this.options)
         return true
       },
+
       copyLink: attrs => () => {
-        const copyLinkFunc = this.options.customCopyLink || defaultCopyLink
+        const copyLinkFunc = this.options.copyLink || copyLink
         void copyLinkFunc({ ...attrs, action: 'copyLink' }, this.options)
         return true
-      }
+      },
+
+      toggleImage:
+        () =>
+        ({ commands }) => {
+          const input = document.createElement('input')
+          input.type = 'file'
+          input.accept = this.options.allowedMimeTypes.join(',')
+          input.onchange = () => {
+            const files = input.files
+            if (!files) return
+
+            const [validImages, errors] = filterFiles(Array.from(files), {
+              allowedMimeTypes: this.options.allowedMimeTypes,
+              maxFileSize: this.options.maxFileSize,
+              allowBase64: this.options.allowBase64
+            })
+
+            if (errors.length > 0 && this.options.onValidationError) {
+              this.options.onValidationError(errors)
+              return false
+            }
+
+            if (validImages.length > 0) {
+              return commands.insertContent(
+                validImages.map(image => {
+                  const blobUrl = URL.createObjectURL(image)
+                  const id = randomId()
+
+                  this.storage.uploadingImages.add(id)
+
+                  return {
+                    type: this.type.name,
+                    attrs: {
+                      id,
+                      src: blobUrl,
+                      alt: image.name,
+                      title: image.name,
+                      fileName: image.name
+                    }
+                  }
+                })
+              )
+            }
+
+            return false
+          }
+
+          input.click()
+          return true
+        }
     }
   },
 
