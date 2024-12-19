@@ -39,7 +39,7 @@ export const getOutput = (editor: Editor, format: MinimalTiptapProps['output']):
     case 'json':
       return editor.getJSON()
     case 'html':
-      return editor.getText() ? editor.getHTML() : ''
+      return editor.isEmpty ? '' : editor.getHTML()
     default:
       return editor.getText()
   }
