@@ -45,7 +45,6 @@
     "next-themes": "^0.3.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-helmet-async": "^2.0.5",
     "react-hook-form": "^7.54.2",
     "react-medium-image-zoom": "^5.2.12",
     "sonner": "^1.7.1",
