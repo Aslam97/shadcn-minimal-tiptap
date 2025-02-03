@@ -1,37 +1,40 @@
+# Minimal Tiptap Editor
+
 ![Minimal Tiptap Editor](https://i.postimg.cc/4yntFTn8/Screenshot-2024-08-30-at-04-54-46.png)
 
 ## Overview
 
-The Minimal Tiptap Editor is a lightweight, customizable rich text editor component built for [Shadcn](https://ui.shadcn.com). It provides an intuitive interface for text formatting and editing.
+The Minimal Tiptap Editor is a lightweight, customizable rich text editor component designed for integration with [Shadcn UI](https://ui.shadcn.com). It provides an intuitive interface for text formatting and editing while maintaining excellent performance.
 
 ## Table of Contents
 
-- [Overview](#overview)
-- [Table of Contents](#table-of-contents)
-- [Installation](#installation)
-- [Dependencies](#dependencies)
-- [Usage](#usage)
-- [Props](#props)
-- [Image Extension](#image-extension)
-  - [Customization](#customization)
-  - [Handling Image Uploads](#handling-image-uploads)
-  - [Error Handling](#error-handling)
-- [Toolbar Customization](#toolbar-customization)
-- [Key Behaviors](#key-behaviors)
-- [Other Projects](#other-projects)
-- [License](#license)
+- [Minimal Tiptap Editor](#minimal-tiptap-editor)
+  - [Overview](#overview)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Dependencies](#dependencies)
+  - [Usage](#usage)
+  - [Props](#props)
+  - [Image Support](#image-support)
+    - [Configuration](#configuration)
+    - [Upload Management](#upload-management)
+    - [Error Management](#error-management)
+  - [Toolbar Configuration](#toolbar-configuration)
+  - [Key Features](#key-features)
+  - [Related Projects](#related-projects)
+  - [License](#license)
 
 ## Installation
 
-1. Install the required packages:
+1. Install the required dependencies:
 
 ```bash
 npm install @tiptap/extension-code-block-lowlight lowlight react-medium-image-zoom @tiptap/extension-color @tiptap/extension-heading @tiptap/extension-horizontal-rule @tiptap/extension-image @tiptap/extension-link @tiptap/extension-placeholder @tiptap/extension-text-style @tiptap/extension-typography @tiptap/pm @tiptap/react @tiptap/starter-kit @tiptap/extension-underline
 ```
 
-2. Set up the `TooltipProvider`:
+2. Configure the `TooltipProvider`:
 
-Add the `TooltipProvider` to your root component (e.g., `App.tsx`, `main.tsx`, or equivalent):
+Add the `TooltipProvider` to your application's root component (e.g., `App.tsx` or `main.tsx`):
 
 ```tsx
 import { TooltipProvider } from '@/components/ui/tooltip'
@@ -39,7 +42,7 @@ import { TooltipProvider } from '@/components/ui/tooltip'
 export const App = () => {
   return (
     <TooltipProvider>
-      {/* Your other components */}
+      {/* Application components */}
       <YourComponent />
     </TooltipProvider>
   )
@@ -48,7 +51,7 @@ export const App = () => {
 
 ## Dependencies
 
-Ensure you have the following Shadcn components installed in your project:
+The following Shadcn UI components are required:
 
 - [Button](https://ui.shadcn.com/docs/components/button)
 - [Dropdown Menu](https://ui.shadcn.com/docs/components/dropdown-menu)
@@ -65,8 +68,8 @@ Ensure you have the following Shadcn components installed in your project:
 
 ## Usage
 
-1. Copy the `minimal-tiptap` directory into your project.
-2. Import and use the component in your React application:
+1. Copy the `minimal-tiptap` directory into your project
+2. Implement the component in your React application:
 
 ```tsx
 import { useState } from 'react'
@@ -83,7 +86,7 @@ export const App = () => {
       className="w-full"
       editorContentClassName="p-5"
       output="html"
-      placeholder="Type your description here..."
+      placeholder="Enter your description..."
       autofocus={true}
       editable={true}
       editorClassName="focus:outline-none"
@@ -94,74 +97,74 @@ export const App = () => {
 
 ## Props
 
-The Minimal Tiptap Editor accepts all standard Tiptap editor props, plus these additional props:
+The editor accepts all standard Tiptap editor props, plus these additional configuration options:
 
-| Prop                     | Type                       | Default | Description                                 |
-| ------------------------ | -------------------------- | ------- | ------------------------------------------- |
-| `value`                  | string                     | -       | Initial editor content                      |
-| `onChange`               | function                   | -       | Callback function for content changes       |
-| `editorContentClassName` | string                     | -       | CSS class for the EditorContent component   |
-| `output`                 | 'html' \| 'json' \| 'text' | 'html'  | Output format of the editor content         |
-| `placeholder`            | string                     | -       | Placeholder text for the editor             |
-| `editorClassName`        | string                     | -       | CSS class for the editor instance           |
-| `throttleDelay`          | number                     | 0       | Delay for throttling editor updates (in ms) |
+| Prop                     | Type                       | Default | Description                                |
+| ------------------------ | -------------------------- | ------- | ------------------------------------------ |
+| `value`                  | string                     | -       | Initial editor content                     |
+| `onChange`               | function                   | -       | Content change event handler               |
+| `editorContentClassName` | string                     | -       | CSS class for the editor content container |
+| `output`                 | 'html' \| 'json' \| 'text' | 'html'  | Desired output format                      |
+| `placeholder`            | string                     | -       | Editor placeholder text                    |
+| `editorClassName`        | string                     | -       | CSS class for the editor container         |
+| `throttleDelay`          | number                     | 0       | Update throttling delay in milliseconds    |
 
-## Image Extension
+## Image Support
 
-### Customization
+### Configuration
 
-Customize the Image extension by passing options:
+Configure the Image extension with custom options:
 
-> Note: The `uploadFn` must return the URL of the uploaded image. If you dont specify `uploadFn`, please enable the `allowBase64` option.
+> Note: The `uploadFn` must return the uploaded image URL. If no `uploadFn` is specified, enable the `allowBase64` option.
 
 ```typescript
 Image.configure({
   allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif'],
   onImageRemove: handleImageRemove,
   maxFileSize: 5 * 1024 * 1024, // 5MB
-  uploadFn: myCustomUploadFunction,
+  uploadFn: customImageUploader,
   onActionSuccess: handleActionSuccess,
   onActionError: handleActionError,
   onValidationError: handleValidationError
 })
 ```
 
-### Handling Image Uploads
+### Upload Management
 
-Provide a custom `uploadFn` to handle image uploads:
+Implement a custom upload handler:
 
 ```typescript
-const myCustomUploadFunction = async (file: File, editor: Editor) => {
-  // Implement your upload logic here
-  // Return the URL of the uploaded image
+const customImageUploader = async (file: File, editor: Editor) => {
+  // Implement upload logic
+  // Return the uploaded image URL
   return 'https://example.com/uploaded-image.jpg'
 }
 
 Image.configure({
-  uploadFn: myCustomUploadFunction
+  uploadFn: customImageUploader
 })
 ```
 
-### Error Handling
+### Error Management
 
-Implement error handling callbacks for a better user experience:
+Implement comprehensive error handling:
 
 ```typescript
 Image.configure({
   onActionError: (error, props) => {
-    console.error('Image action failed:', error, props)
-    // Show user-friendly error message
+    console.error('Image upload failed:', error, props)
+    // Implement user notification
   },
   onValidationError: errors => {
     console.error('Image validation failed:', errors)
-    // Show validation error to the user
+    // Display validation feedback
   }
 })
 ```
 
-## Toolbar Customization
+## Toolbar Configuration
 
-Customize the toolbar using the `activeActions`, `mainActionCount`, `size`, and `variant` props in various sections:
+Customize toolbar sections using various configuration options:
 
 ```typescript
 <SectionOne editor={editor} activeLevels={[1, 2, 3, 4, 5, 6]} variant="outline" />
@@ -177,18 +180,20 @@ Customize the toolbar using the `activeActions`, `mainActionCount`, `size`, and 
 <SectionFive editor={editor} activeActions={['codeBlock', 'blockquote', 'horizontalRule']} mainActionCount={0} />
 ```
 
-To prevent focusing the Dropdown Menu Trigger after clicking a menu item, add:
+To prevent Dropdown Menu Trigger focus after selection:
 
 ```typescript
 onCloseAutoFocus={event => event.preventDefault()}
 ```
 
-## Key Behaviors
+## Key Features
 
-- Pressing `Enter` or creating a new block removes active formatting marks (bold, italic, strike, underline, code).
-- Set `shouldRerenderOnTransaction` to `false` for performance, but this may affect toolbar state updates.
+- Automatic formatting removal when pressing Enter or creating new blocks
+- Performance optimization through configurable `shouldRerenderOnTransaction`
+- Comprehensive image handling with upload support
+- Customizable toolbar with flexible section configuration
 
-## Other Projects
+## Related Projects
 
 - [React Fancy Switch](https://github.com/Aslam97/react-fancy-switch)
 - [React Confirm Dialog](https://github.com/Aslam97/react-confirm-dialog)
