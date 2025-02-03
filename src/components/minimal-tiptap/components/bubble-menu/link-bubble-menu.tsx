@@ -35,7 +35,7 @@ export const LinkBubbleMenu: React.FC<LinkBubbleMenuProps> = ({ editor }) => {
       }
       const { href } = editor.getAttributes('link')
 
-      if (!editor.isActive('link')) {
+      if (!editor.isActive('link') || !editor.isEditable) {
         return false
       }
 
