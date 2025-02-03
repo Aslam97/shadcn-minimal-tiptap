@@ -21,6 +21,10 @@ export const Selection = Extension.create({
               return null
             }
 
+            if (!editor.isEditable) {
+              return null
+            }
+
             return DecorationSet.create(state.doc, [
               Decoration.inline(state.selection.from, state.selection.to, {
                 class: 'selection'
