@@ -124,7 +124,7 @@ export const SectionOne: React.FC<SectionOneProps> = React.memo(
             <CaretDownIcon className="size-5" />
           </ToolbarButton>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" className="w-full">
+        <DropdownMenuContent align="start" className="w-full" onCloseAutoFocus={(e) => e.preventDefault()}>
           {filteredActions.map(renderMenuItem)}
         </DropdownMenuContent>
       </DropdownMenu>
