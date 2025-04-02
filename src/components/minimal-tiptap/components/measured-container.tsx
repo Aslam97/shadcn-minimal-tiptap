@@ -8,7 +8,6 @@ interface MeasuredContainerProps<T extends React.ElementType> {
 }
 
 export const MeasuredContainer = <T extends React.ElementType>({
-  ref,
   as: Component,
   name,
   children,
@@ -17,8 +16,6 @@ export const MeasuredContainer = <T extends React.ElementType>({
 }: MeasuredContainerProps<T> & React.ComponentProps<T>) => {
   const innerRef = React.useRef<HTMLElement>(null)
   const rect = useContainerSize(innerRef.current)
-
-  React.useImperativeHandle(ref, () => innerRef.current as HTMLElement)
 
   const customStyle = {
     [`--${name}-width`]: `${rect.width}px`,
