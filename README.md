@@ -9,6 +9,7 @@ The Minimal Tiptap Editor is a lightweight, customizable rich text editor compon
 ## Table of Contents
 
 - [Minimal Tiptap Editor](#minimal-tiptap-editor)
+
   - [Overview](#overview)
   - [Table of Contents](#table-of-contents)
   - [Installation](#installation)
@@ -23,6 +24,12 @@ The Minimal Tiptap Editor is a lightweight, customizable rich text editor compon
   - [Key Features](#key-features)
   - [Related Projects](#related-projects)
   - [License](#license)
+
+## Tailwind 4 & React 19 Support
+
+There is an open PR for migrating this project to **Tailwind CSS v4** and **React 19**, but it has not been merged since I am not currently using these versions.
+
+If you want to use Tailwind 4 and React 19, you can check out the [`tailwind-v4`](https://github.com/Aslam97/shadcn-minimal-tiptap/pull/91) branch. Contributions and feedback are welcome!
 
 ## Installation
 
@@ -89,7 +96,7 @@ export const App = () => {
       placeholder="Enter your description..."
       autofocus={true}
       editable={true}
-      editorClassName="focus:outline-none"
+      editorClassName="focus:outline-hidden"
     />
   )
 }
