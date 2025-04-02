@@ -170,7 +170,7 @@ export const SectionThree: React.FC<SectionThreeProps> = ({
         <ToolbarButton
           tooltip="Text color"
           aria-label="Text color"
-          className="w-12"
+          className="gap-0"
           size={size}
           variant={variant}
         >

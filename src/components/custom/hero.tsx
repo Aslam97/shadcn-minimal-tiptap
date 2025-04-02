@@ -14,7 +14,7 @@ export function Hero() {
       <p className="mb-6 text-xl">
         A minimal Tiptap editor with a focus on simplicity and extensibility.
       </p>
-      <div className="flex flex-col justify-center gap-x-2 space-y-4 sm:flex-row sm:space-y-0">
+      <div className="flex flex-col justify-center space-y-4 gap-x-2 sm:flex-row sm:space-y-0">
         <Button
           className="bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-200"
           onClick={() => setMode(mode === "dark" ? "light" : "dark")}

@@ -1,4 +1,3 @@
-import * as React from "react"
 import "@/components/minimal-tiptap/styles/index.css"
 
 import type { Content, Editor } from "@tiptap/react"
@@ -19,7 +18,7 @@ export interface MinimalTiptapProps
 }
 
 const Toolbar = ({ editor }: { editor: Editor }) => (
-  <div className="shrink-0 overflow-x-auto border-t border-border p-2">
+  <div className="border-border flex h-12 shrink-0 overflow-x-auto border-t p-2">
     <div className="flex w-max items-center gap-px">
       <SectionTwo
         editor={editor}
@@ -30,10 +29,13 @@ const Toolbar = ({ editor }: { editor: Editor }) => (
   </div>
 )
 
-export const MinimalTiptapOne = React.forwardRef<
-  HTMLDivElement,
-  MinimalTiptapProps
->(({ value, onChange, className, editorContentClassName, ...props }, ref) => {
+export const MinimalTiptapOne = ({
+  value,
+  onChange,
+  className,
+  editorContentClassName,
+  ...props
+}: MinimalTiptapProps) => {
   const editor = useMinimalTiptapEditor({
     value,
     onUpdate: onChange,
@@ -48,9 +50,8 @@ export const MinimalTiptapOne = React.forwardRef<
     <MeasuredContainer
       as="div"
       name="editor"
-      ref={ref}
       className={cn(
-        "flex h-auto min-h-72 w-full flex-col rounded-md border border-input shadow-sm focus-within:border-primary",
+        "border-input focus-within:border-primary flex h-auto min-h-72 w-full flex-col rounded-md border shadow-xs",
         className
       )}
     >
@@ -62,7 +63,7 @@ export const MinimalTiptapOne = React.forwardRef<
       <LinkBubbleMenu editor={editor} />
     </MeasuredContainer>
   )
-})
+}
 
 MinimalTiptapOne.displayName = "MinimalTiptapOne"
 
