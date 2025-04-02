@@ -129,10 +129,10 @@ export const SectionOne: React.FC<SectionOneProps> = React.memo(
             tooltip="Text styles"
             aria-label="Text styles"
             pressed={editor.isActive("heading")}
-            className="w-12"
             disabled={editor.isActive("codeBlock")}
             size={size}
             variant={variant}
+            className="gap-0"
           >
             <LetterCaseCapitalizeIcon className="size-5" />
             <CaretDownIcon className="size-5" />

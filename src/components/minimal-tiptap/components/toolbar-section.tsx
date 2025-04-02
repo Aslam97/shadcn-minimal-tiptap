@@ -101,7 +101,7 @@ export const ToolbarSection: React.FC<ToolbarSectionProps> = ({
               isActive={isDropdownActive}
               tooltip={dropdownTooltip}
               aria-label={dropdownTooltip}
-              className={cn(dropdownClassName)}
+              className={cn("gap-0", dropdownClassName)}
               size={size}
               variant={variant}
             >

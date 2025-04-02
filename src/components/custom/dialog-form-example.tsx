@@ -104,7 +104,7 @@ export function DialogFormExample() {
                         output="html"
                         placeholder="Type your description here..."
                         editable={true}
-                        editorClassName="focus:outline-none px-5 py-4 h-full grow"
+                        editorClassName="focus:outline-hidden px-5 py-4 h-full grow"
                       />
                     </FormControl>
                     <FormMessage />

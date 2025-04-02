@@ -6,7 +6,7 @@ module.exports = {
     "plugin:@typescript-eslint/recommended",
     "plugin:react-hooks/recommended",
     "plugin:import/typescript",
-    "plugin:tailwindcss/recommended",
+    // "plugin:tailwindcss/recommended",
   ],
   ignorePatterns: ["dist", ".eslintrc.cjs"],
   parser: "@typescript-eslint/parser",
