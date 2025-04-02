@@ -1,17 +1,17 @@
-import * as React from 'react'
-import { NodeViewWrapper, type NodeViewProps } from '@tiptap/react'
-import type { ElementDimensions } from '../hooks/use-drag-resize'
-import { useDragResize } from '../hooks/use-drag-resize'
-import { ResizeHandle } from './resize-handle'
-import { cn } from '@/lib/utils'
-import { Controlled as ControlledZoom } from 'react-medium-image-zoom'
-import { ActionButton, ActionWrapper, ImageActions } from './image-actions'
-import { useImageActions } from '../hooks/use-image-actions'
-import { blobUrlToBase64, randomId } from '../../../utils'
-import { InfoCircledIcon, TrashIcon } from '@radix-ui/react-icons'
-import { ImageOverlay } from './image-overlay'
-import { Spinner } from '../../../components/spinner'
-import type { UploadReturnType } from '../image'
+import * as React from "react"
+import { NodeViewWrapper, type NodeViewProps } from "@tiptap/react"
+import type { ElementDimensions } from "../hooks/use-drag-resize"
+import { useDragResize } from "../hooks/use-drag-resize"
+import { ResizeHandle } from "./resize-handle"
+import { cn } from "@/lib/utils"
+import { Controlled as ControlledZoom } from "react-medium-image-zoom"
+import { ActionButton, ActionWrapper, ImageActions } from "./image-actions"
+import { useImageActions } from "../hooks/use-image-actions"
+import { blobUrlToBase64, randomId } from "../../../utils"
+import { InfoCircledIcon, TrashIcon } from "@radix-ui/react-icons"
+import { ImageOverlay } from "./image-overlay"
+import { Spinner } from "../../../components/spinner"
+import type { UploadReturnType } from "../image"
 
 const MAX_HEIGHT = 600
 const MIN_HEIGHT = 120
@@ -27,16 +27,26 @@ interface ImageState {
 }
 
 const normalizeUploadResponse = (res: UploadReturnType) => ({
-  src: typeof res === 'string' ? res : res.src,
-  id: typeof res === 'string' ? randomId() : res.id
+  src: typeof res === "string" ? res : res.src,
+  id: typeof res === "string" ? randomId() : res.id,
 })
 
-export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, selected, updateAttributes }) => {
-  const { src: initialSrc, width: initialWidth, height: initialHeight, fileName } = node.attrs
+export const ImageViewBlock: React.FC<NodeViewProps> = ({
+  editor,
+  node,
+  selected,
+  updateAttributes,
+}) => {
+  const {
+    src: initialSrc,
+    width: initialWidth,
+    height: initialHeight,
+    fileName,
+  } = node.attrs
   const uploadAttemptedRef = React.useRef(false)
 
   const initSrc = React.useMemo(() => {
-    if (typeof initialSrc === 'string') {
+    if (typeof initialSrc === "string") {
       return initialSrc
     }
     return initialSrc.src
@@ -48,11 +58,13 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, selected
     imageLoaded: false,
     isZoomed: false,
     error: false,
-    naturalSize: { width: initialWidth, height: initialHeight }
+    naturalSize: { width: initialWidth, height: initialHeight },
   })
 
   const containerRef = React.useRef<HTMLDivElement>(null)
-  const [activeResizeHandle, setActiveResizeHandle] = React.useState<'left' | 'right' | null>(null)
+  const [activeResizeHandle, setActiveResizeHandle] = React.useState<
+    "left" | "right" | null
+  >(null)
 
   const onDimensionsChange = React.useCallback(
     ({ width, height }: ElementDimensions) => {
@@ -61,20 +73,33 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, selected
     [updateAttributes]
   )
 
-  const aspectRatio = imageState.naturalSize.width / imageState.naturalSize.height
+  const aspectRatio =
+    imageState.naturalSize.width / imageState.naturalSize.height
   const maxWidth = MAX_HEIGHT * aspectRatio
   const containerMaxWidth = containerRef.current
-    ? parseFloat(getComputedStyle(containerRef.current).getPropertyValue('--editor-width'))
+    ? parseFloat(
+        getComputedStyle(containerRef.current).getPropertyValue(
+          "--editor-width"
+        )
+      )
     : Infinity
 
-  const { isLink, onView, onDownload, onCopy, onCopyLink, onRemoveImg } = useImageActions({
-    editor,
-    node,
-    src: imageState.src,
-    onViewClick: isZoomed => setImageState(prev => ({ ...prev, isZoomed }))
-  })
+  const { isLink, onView, onDownload, onCopy, onCopyLink, onRemoveImg } =
+    useImageActions({
+      editor,
+      node,
+      src: imageState.src,
+      onViewClick: (isZoomed) =>
+        setImageState((prev) => ({ ...prev, isZoomed })),
+    })
 
-  const { currentWidth, currentHeight, updateDimensions, initiateResize, isResizing } = useDragResize({
+  const {
+    currentWidth,
+    currentHeight,
+    updateDimensions,
+    initiateResize,
+    isResizing,
+  } = useDragResize({
     initialWidth: initialWidth ?? imageState.naturalSize.width,
     initialHeight: initialHeight ?? imageState.naturalSize.height,
     contentWidth: imageState.naturalSize.width,
@@ -83,7 +108,7 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, selected
     onDimensionsChange,
     minWidth: MIN_WIDTH,
     minHeight: MIN_HEIGHT,
-    maxWidth: containerMaxWidth > 0 ? containerMaxWidth : maxWidth
+    maxWidth: containerMaxWidth > 0 ? containerMaxWidth : maxWidth,
   })
 
   const shouldMerge = React.useMemo(() => currentWidth <= 180, [currentWidth])
@@ -93,36 +118,37 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, selected
       const img = ev.target as HTMLImageElement
       const newNaturalSize = {
         width: img.naturalWidth,
-        height: img.naturalHeight
+        height: img.naturalHeight,
       }
-      setImageState(prev => ({
+      setImageState((prev) => ({
         ...prev,
         naturalSize: newNaturalSize,
-        imageLoaded: true
+        imageLoaded: true,
       }))
       updateAttributes({
         width: img.width || newNaturalSize.width,
         height: img.height || newNaturalSize.height,
         alt: img.alt,
-        title: img.title
+        title: img.title,
       })
 
       if (!initialWidth) {
-        updateDimensions(state => ({ ...state, width: newNaturalSize.width }))
+        updateDimensions((state) => ({ ...state, width: newNaturalSize.width }))
       }
     },
     [initialWidth, updateAttributes, updateDimensions]
   )
 
   const handleImageError = React.useCallback(() => {
-    setImageState(prev => ({ ...prev, error: true, imageLoaded: true }))
+    setImageState((prev) => ({ ...prev, error: true, imageLoaded: true }))
   }, [])
 
   const handleResizeStart = React.useCallback(
-    (direction: 'left' | 'right') => (event: React.PointerEvent<HTMLDivElement>) => {
-      setActiveResizeHandle(direction)
-      initiateResize(direction)(event)
-    },
+    (direction: "left" | "right") =>
+      (event: React.PointerEvent<HTMLDivElement>) => {
+        setActiveResizeHandle(direction)
+        initiateResize(direction)(event)
+      },
     [initiateResize]
   )
 
@@ -138,27 +164,29 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, selected
 
   React.useEffect(() => {
     const handleImage = async () => {
-      if (!initSrc.startsWith('blob:') || uploadAttemptedRef.current) {
+      if (!initSrc.startsWith("blob:") || uploadAttemptedRef.current) {
         return
       }
 
       uploadAttemptedRef.current = true
-      const imageExtension = editor.options.extensions.find(ext => ext.name === 'image')
+      const imageExtension = editor.options.extensions.find(
+        (ext) => ext.name === "image"
+      )
       const { uploadFn } = imageExtension?.options ?? {}
 
       if (!uploadFn) {
         try {
           const base64 = await blobUrlToBase64(initSrc)
-          setImageState(prev => ({ ...prev, src: base64 }))
+          setImageState((prev) => ({ ...prev, src: base64 }))
           updateAttributes({ src: base64 })
         } catch {
-          setImageState(prev => ({ ...prev, error: true }))
+          setImageState((prev) => ({ ...prev, error: true }))
         }
         return
       }
 
       try {
-        setImageState(prev => ({ ...prev, isServerUploading: true }))
+        setImageState((prev) => ({ ...prev, isServerUploading: true }))
         const response = await fetch(initSrc)
         const blob = await response.blob()
         const file = new File([blob], fileName, { type: blob.type })
@@ -166,18 +194,18 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, selected
         const url = await uploadFn(file, editor)
         const normalizedData = normalizeUploadResponse(url)
 
-        setImageState(prev => ({
+        setImageState((prev) => ({
           ...prev,
           ...normalizedData,
-          isServerUploading: false
+          isServerUploading: false,
         }))
 
         updateAttributes(normalizedData)
       } catch (error) {
-        setImageState(prev => ({
+        setImageState((prev) => ({
           ...prev,
           error: true,
-          isServerUploading: false
+          isServerUploading: false,
         }))
       }
     }
@@ -186,20 +214,28 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, selected
   }, [editor, fileName, initSrc, updateAttributes])
 
   return (
-    <NodeViewWrapper ref={containerRef} data-drag-handle className="relative text-center leading-none">
+    <NodeViewWrapper
+      ref={containerRef}
+      data-drag-handle
+      className="relative text-center leading-none"
+    >
       <div
         className="group/node-image relative mx-auto rounded-md object-contain"
         style={{
           maxWidth: `min(${maxWidth}px, 100%)`,
           width: currentWidth,
           maxHeight: MAX_HEIGHT,
-          aspectRatio: `${imageState.naturalSize.width} / ${imageState.naturalSize.height}`
+          aspectRatio: `${imageState.naturalSize.width} / ${imageState.naturalSize.height}`,
         }}
       >
         <div
-          className={cn('relative flex h-full cursor-default flex-col items-center gap-2 rounded', {
-            'outline outline-2 outline-offset-1 outline-primary': selected || isResizing
-          })}
+          className={cn(
+            "relative flex h-full cursor-default flex-col items-center gap-2 rounded",
+            {
+              "outline outline-2 outline-offset-1 outline-primary":
+                selected || isResizing,
+            }
+          )}
         >
           <div className="h-full contain-paint">
             <div className="relative h-full">
@@ -212,30 +248,37 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, selected
               {imageState.error && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
                   <InfoCircledIcon className="size-8 text-destructive" />
-                  <p className="mt-2 text-sm text-muted-foreground">Failed to load image</p>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    Failed to load image
+                  </p>
                 </div>
               )}
 
               <ControlledZoom
                 isZoomed={imageState.isZoomed}
-                onZoomChange={() => setImageState(prev => ({ ...prev, isZoomed: false }))}
+                onZoomChange={() =>
+                  setImageState((prev) => ({ ...prev, isZoomed: false }))
+                }
               >
                 <img
-                  className={cn('h-auto rounded object-contain transition-shadow', {
-                    'opacity-0': !imageState.imageLoaded || imageState.error
-                  })}
+                  className={cn(
+                    "h-auto rounded object-contain transition-shadow",
+                    {
+                      "opacity-0": !imageState.imageLoaded || imageState.error,
+                    }
+                  )}
                   style={{
                     maxWidth: `min(100%, ${maxWidth}px)`,
                     minWidth: `${MIN_WIDTH}px`,
-                    maxHeight: MAX_HEIGHT
+                    maxHeight: MAX_HEIGHT,
                   }}
                   width={currentWidth}
                   height={currentHeight}
                   src={imageState.src}
                   onError={handleImageError}
                   onLoad={handleImageLoad}
-                  alt={node.attrs.alt || ''}
-                  title={node.attrs.title || ''}
+                  alt={node.attrs.alt || ""}
+                  title={node.attrs.title || ""}
                   id={node.attrs.id}
                 />
               </ControlledZoom>
@@ -243,42 +286,51 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, selected
 
             {imageState.isServerUploading && <ImageOverlay />}
 
-            {editor.isEditable && imageState.imageLoaded && !imageState.error && !imageState.isServerUploading && (
-              <>
-                <ResizeHandle
-                  onPointerDown={handleResizeStart('left')}
-                  className={cn('left-1', {
-                    hidden: isResizing && activeResizeHandle === 'right'
-                  })}
-                  isResizing={isResizing && activeResizeHandle === 'left'}
-                />
-                <ResizeHandle
-                  onPointerDown={handleResizeStart('right')}
-                  className={cn('right-1', {
-                    hidden: isResizing && activeResizeHandle === 'left'
-                  })}
-                  isResizing={isResizing && activeResizeHandle === 'right'}
-                />
-              </>
-            )}
+            {editor.isEditable &&
+              imageState.imageLoaded &&
+              !imageState.error &&
+              !imageState.isServerUploading && (
+                <>
+                  <ResizeHandle
+                    onPointerDown={handleResizeStart("left")}
+                    className={cn("left-1", {
+                      hidden: isResizing && activeResizeHandle === "right",
+                    })}
+                    isResizing={isResizing && activeResizeHandle === "left"}
+                  />
+                  <ResizeHandle
+                    onPointerDown={handleResizeStart("right")}
+                    className={cn("right-1", {
+                      hidden: isResizing && activeResizeHandle === "left",
+                    })}
+                    isResizing={isResizing && activeResizeHandle === "right"}
+                  />
+                </>
+              )}
           </div>
 
           {imageState.error && (
             <ActionWrapper>
-              <ActionButton icon={<TrashIcon className="size-4" />} tooltip="Remove image" onClick={onRemoveImg} />
+              <ActionButton
+                icon={<TrashIcon className="size-4" />}
+                tooltip="Remove image"
+                onClick={onRemoveImg}
+              />
             </ActionWrapper>
           )}
 
-          {!isResizing && !imageState.error && !imageState.isServerUploading && (
-            <ImageActions
-              shouldMerge={shouldMerge}
-              isLink={isLink}
-              onView={onView}
-              onDownload={onDownload}
-              onCopy={onCopy}
-              onCopyLink={onCopyLink}
-            />
-          )}
+          {!isResizing &&
+            !imageState.error &&
+            !imageState.isServerUploading && (
+              <ImageActions
+                shouldMerge={shouldMerge}
+                isLink={isLink}
+                onView={onView}
+                onDownload={onDownload}
+                onCopy={onCopy}
+                onCopyLink={onCopyLink}
+              />
+            )}
         </div>
       </div>
     </NodeViewWrapper>

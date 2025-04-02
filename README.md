@@ -37,7 +37,7 @@ npm install @tiptap/extension-code-block-lowlight lowlight react-medium-image-zo
 Add the `TooltipProvider` to your application's root component (e.g., `App.tsx` or `main.tsx`):
 
 ```tsx
-import { TooltipProvider } from '@/components/ui/tooltip'
+import { TooltipProvider } from "@/components/ui/tooltip"
 
 export const App = () => {
   return (
@@ -72,12 +72,12 @@ The following Shadcn UI components are required:
 2. Implement the component in your React application:
 
 ```tsx
-import { useState } from 'react'
-import { Content } from '@tiptap/react'
-import { MinimalTiptapEditor } from './minimal-tiptap'
+import { useState } from "react"
+import { Content } from "@tiptap/react"
+import { MinimalTiptapEditor } from "./minimal-tiptap"
 
 export const App = () => {
-  const [value, setValue] = useState<Content>('')
+  const [value, setValue] = useState<Content>("")
 
   return (
     <MinimalTiptapEditor
@@ -119,13 +119,13 @@ Configure the Image extension with custom options:
 
 ```typescript
 Image.configure({
-  allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif'],
+  allowedMimeTypes: ["image/jpeg", "image/png", "image/gif"],
   onImageRemove: handleImageRemove,
   maxFileSize: 5 * 1024 * 1024, // 5MB
   uploadFn: customImageUploader,
   onActionSuccess: handleActionSuccess,
   onActionError: handleActionError,
-  onValidationError: handleValidationError
+  onValidationError: handleValidationError,
 })
 ```
 
@@ -137,11 +137,11 @@ Implement a custom upload handler:
 const customImageUploader = async (file: File, editor: Editor) => {
   // Implement upload logic
   // Return the uploaded image URL
-  return 'https://example.com/uploaded-image.jpg'
+  return "https://example.com/uploaded-image.jpg"
 }
 
 Image.configure({
-  uploadFn: customImageUploader
+  uploadFn: customImageUploader,
 })
 ```
 
@@ -152,13 +152,13 @@ Implement comprehensive error handling:
 ```typescript
 Image.configure({
   onActionError: (error, props) => {
-    console.error('Image upload failed:', error, props)
+    console.error("Image upload failed:", error, props)
     // Implement user notification
   },
-  onValidationError: errors => {
-    console.error('Image validation failed:', errors)
+  onValidationError: (errors) => {
+    console.error("Image validation failed:", errors)
     // Display validation feedback
-  }
+  },
 })
 ```
 
