@@ -8,7 +8,9 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "build-registry": "npx tsx scripts/build.ts",
+    "host-registry": "npx http-server registry"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -40,6 +42,7 @@
     "@vercel/analytics": "^1.5.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "glob": "^11.0.2",
     "lowlight": "^3.3.0",
     "lucide-react": "^0.436.0",
     "next-themes": "^0.3.0",
@@ -54,6 +57,7 @@
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.16",
+    "@types/glob": "^8.1.0",
     "@types/node": "^20.17.30",
     "@types/react": "^18.3.20",
     "@types/react-dom": "^18.3.5",
