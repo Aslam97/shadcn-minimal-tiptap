@@ -18,7 +18,7 @@ const registryConfigs: RegistryConfig[] = [
     {
         type: "registry:ui",
         path: "./src/components/minimal-tiptap/**/*",
-        targetFunction: (path: string) => path.replace("src/components/minimal-tiptap", "src/components/ui/minimal-tiptap"),
+        targetFunction: (path: string) => path.replace("src/components/minimal-tiptap", "components/ui/minimal-tiptap"),
     },
 ];
 
