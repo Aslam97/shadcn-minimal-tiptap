@@ -33,6 +33,14 @@ If you want to use Tailwind 4 and React 19, you can check out the [`tailwind-v4`
 
 ## Installation
 
+If you are using shadcn/ui in your project, you can install the component directly from the registry. 
+
+```bash
+npx shadcn@2.1.8 add https://raw.githubusercontent.com/Aslam97/shadcn-minimal-tiptap/main/registry/block-registry.json
+```
+
+## Manual Installation
+
 1. Install the required dependencies:
 
 ```bash
@@ -199,6 +207,32 @@ onCloseAutoFocus={event => event.preventDefault()}
 - Performance optimization through configurable `shouldRerenderOnTransaction`
 - Comprehensive image handling with upload support
 - Customizable toolbar with flexible section configuration
+
+## Development
+
+Build component registry after updating the component:
+
+```bash
+npm run build-registry
+```
+
+Host the registry locally:
+
+```bash
+npm run host-registry
+```
+
+Use the local registry in a project:
+
+```bash
+npx shadcn@2.1.8 add http://127.0.0.1:8080/block-registry.json -o
+```
+
+Or initialize a new project with the local registry:
+
+```bash
+npx shadcn@2.1.8 init http://127.0.0.1:8080/block-registry.json
+```
 
 ## Official Tiptap Template
 
