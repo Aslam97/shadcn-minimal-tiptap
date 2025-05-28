@@ -200,6 +200,10 @@ onCloseAutoFocus={event => event.preventDefault()}
 - Comprehensive image handling with upload support
 - Customizable toolbar with flexible section configuration
 
+## Official Tiptap Template
+
+For a more comprehensive Tiptap editor template, check out the official [Tiptap Template](https://tiptap.dev/docs/ui-components/templates/simple-editor).
+
 ## Related Projects
 
 - [React Fancy Switch](https://github.com/Aslam97/react-fancy-switch)
