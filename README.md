@@ -234,6 +234,10 @@ Or initialize a new project with the local registry:
 npx shadcn@2.1.8 init http://127.0.0.1:8080/block-registry.json
 ```
 
+## Official Tiptap Template
+
+For a more comprehensive Tiptap editor template, check out the official [Tiptap Template](https://tiptap.dev/docs/ui-components/templates/simple-editor).
+
 ## Related Projects
 
 - [React Fancy Switch](https://github.com/Aslam97/react-fancy-switch)
