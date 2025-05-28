@@ -33,7 +33,7 @@ If you want to use Tailwind 4 and React 19, you can check out the [`tailwind-v4`
 
 ## Installation
 
-If you are using shadcn/ui in your project, you can install the component directly from the registry. 
+If you are using shadcn/ui in your project, you can install the component directly from the registry.
 
 ```bash
 npx shadcn@2.1.8 add https://raw.githubusercontent.com/Aslam97/shadcn-minimal-tiptap/main/registry/block-registry.json
@@ -233,6 +233,10 @@ Or initialize a new project with the local registry:
 ```bash
 npx shadcn@2.1.8 init http://127.0.0.1:8080/block-registry.json
 ```
+
+## Official Tiptap Template
+
+For a more comprehensive Tiptap editor template, check out the official [Tiptap Template](https://tiptap.dev/docs/ui-components/templates/simple-editor).
 
 ## Related Projects
 
