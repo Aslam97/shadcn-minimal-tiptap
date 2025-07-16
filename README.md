@@ -36,7 +36,7 @@ If you want to use Tailwind 4 and React 19, you can check out the [`tailwind-v4`
 If you are using shadcn/ui in your project, you can install the component directly from the registry. 
 
 ```bash
-npx shadcn@2.1.8 add https://raw.githubusercontent.com/Aslam97/shadcn-minimal-tiptap/main/registry/block-registry.json
+npx shadcn@latest add https://raw.githubusercontent.com/Aslam97/shadcn-minimal-tiptap/main/registry/block-registry.json
 ```
 
 ## Manual Installation
