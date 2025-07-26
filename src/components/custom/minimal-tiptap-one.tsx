@@ -51,7 +51,8 @@ export const MinimalTiptapOne = ({
       as="div"
       name="editor"
       className={cn(
-        "border-input focus-within:border-primary flex h-auto min-h-72 w-full flex-col rounded-md border shadow-xs",
+        "border-input flex h-auto min-h-72 w-full flex-col rounded-md border shadow-xs",
+        "focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px]",
         className
       )}
     >

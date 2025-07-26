@@ -86,9 +86,8 @@ export const ToolbarSection: React.FC<ToolbarSectionProps> = ({
     [editor]
   )
 
-  const isDropdownActive = React.useMemo(
-    () => dropdownActions.some((action) => action.isActive(editor)),
-    [dropdownActions, editor]
+  const isDropdownActive = dropdownActions.some((action) =>
+    action.isActive(editor)
   )
 
   return (

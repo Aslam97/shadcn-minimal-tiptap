@@ -12,7 +12,7 @@ const features = [
     background: (
       <MinimalTiptapOne
         throttleDelay={1000}
-        className={cn("h-full min-h-56 w-full rounded-xl")}
+        className={cn("h-full min-h-56 w-full min-w-0 rounded-xl")}
         editorContentClassName="overflow-auto h-full"
         output="html"
         placeholder="Comment here..."
@@ -27,7 +27,7 @@ const features = [
     background: (
       <MinimalTiptapEditor
         throttleDelay={2000}
-        className={cn("h-full min-h-56 w-full rounded-xl")}
+        className={cn("h-full min-h-56 w-full min-w-0 rounded-xl")}
         editorContentClassName="overflow-auto h-full"
         output="html"
         placeholder="Type your description here..."
@@ -43,7 +43,7 @@ const features = [
       <MinimalTiptapThree
         value={Content}
         throttleDelay={3000}
-        className={cn("h-full min-h-56 w-full rounded-xl")}
+        className={cn("h-full min-h-56 w-full min-w-0 rounded-xl")}
         editorContentClassName="overflow-auto h-full"
         output="json"
         onChange={(value) => {

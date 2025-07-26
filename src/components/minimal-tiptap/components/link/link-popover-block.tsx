@@ -39,27 +39,23 @@ export const LinkPopoverBlock: React.FC<LinkPopoverBlockProps> = ({
   }, [url])
 
   return (
-    <div className="bg-background flex h-10 overflow-hidden rounded p-2 shadow-lg">
+    <div className="bg-background flex overflow-hidden rounded p-2 shadow-lg">
       <div className="inline-flex items-center gap-1">
-        <ToolbarButton
-          tooltip="Edit link"
-          onClick={onEdit}
-          className="w-auto px-2"
-        >
+        <ToolbarButton tooltip="Edit link" onClick={onEdit}>
           Edit link
         </ToolbarButton>
-        <Separator orientation="vertical" className="mx-2" />
+        <Separator orientation="vertical" />
         <ToolbarButton
           tooltip="Open link in a new tab"
           onClick={handleOpenLink}
         >
-          <ExternalLinkIcon className="size-4" />
+          <ExternalLinkIcon />
         </ToolbarButton>
-        <Separator orientation="vertical" className="mx-2" />
+        <Separator orientation="vertical" />
         <ToolbarButton tooltip="Clear link" onClick={onClear}>
-          <LinkBreak2Icon className="size-4" />
+          <LinkBreak2Icon />
         </ToolbarButton>
-        <Separator orientation="vertical" className="mx-2" />
+        <Separator orientation="vertical" />
         <ToolbarButton
           tooltip={copyTitle}
           onClick={handleCopy}
@@ -69,7 +65,7 @@ export const LinkPopoverBlock: React.FC<LinkPopoverBlockProps> = ({
             },
           }}
         >
-          <CopyIcon className="size-4" />
+          <CopyIcon />
         </ToolbarButton>
       </div>
     </div>
