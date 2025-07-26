@@ -1,6 +1,5 @@
 import * as React from "react"
 import type { Editor } from "@tiptap/react"
-import type { Level } from "@tiptap/extension-heading"
 import type { FormatAction } from "../../types"
 import type { VariantProps } from "class-variance-authority"
 import type { toggleVariants } from "@/components/ui/toggle"
@@ -15,6 +14,7 @@ import {
 import { ToolbarButton } from "../toolbar-button"
 import { ShortcutKey } from "../shortcut-key"
 
+type Level = 1 | 2 | 3 | 4 | 5 | 6
 interface TextStyle
   extends Omit<
     FormatAction,

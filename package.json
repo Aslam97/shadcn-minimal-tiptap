@@ -28,7 +28,6 @@
     "@radix-ui/react-tooltip": "^1.2.7",
     "@tiptap/extension-code-block-lowlight": "^3.0.7",
     "@tiptap/extension-color": "^3.0.7",
-    "@tiptap/extension-heading": "^3.0.7",
     "@tiptap/extension-horizontal-rule": "^3.0.7",
     "@tiptap/extension-image": "^3.0.7",
     "@tiptap/extension-text-style": "^3.0.7",

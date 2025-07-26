@@ -25,12 +25,6 @@ The Minimal Tiptap Editor is a lightweight, customizable rich text editor compon
   - [Related Projects](#related-projects)
   - [License](#license)
 
-## Tailwind 4 & React 19 Support
-
-There is an open PR for migrating this project to **Tailwind CSS v4** and **React 19**, but it has not been merged since I am not currently using these versions.
-
-If you want to use Tailwind 4 and React 19, you can check out the [`tailwind-v4`](https://github.com/Aslam97/shadcn-minimal-tiptap/pull/91) branch. Contributions and feedback are welcome!
-
 ## Installation
 
 If you are using shadcn/ui in your project, you can install the component directly from the registry. 
@@ -44,7 +38,7 @@ npx shadcn@latest add https://raw.githubusercontent.com/Aslam97/shadcn-minimal-t
 1. Install the required dependencies:
 
 ```bash
-npm install @tiptap/extension-code-block-lowlight lowlight react-medium-image-zoom @tiptap/extension-color @tiptap/extension-heading @tiptap/extension-horizontal-rule @tiptap/extension-image @tiptap/extension-link @tiptap/extension-placeholder @tiptap/extension-text-style @tiptap/extension-typography @tiptap/pm @tiptap/react @tiptap/starter-kit @tiptap/extension-underline
+npm install lowlight react-medium-image-zoom @radix-ui/react-icons @tiptap/extension-code-block-lowlight @tiptap/extension-color @tiptap/extension-horizontal-rule @tiptap/extension-image @tiptap/extension-text-style @tiptap/extension-typography @tiptap/extensions @tiptap/pm @tiptap/react @tiptap/starter-kit
 ```
 
 2. Configure the `TooltipProvider`:
@@ -225,13 +219,13 @@ npm run host-registry
 Use the local registry in a project:
 
 ```bash
-npx shadcn@2.1.8 add http://127.0.0.1:8080/block-registry.json -o
+npx shadcn@latest add http://127.0.0.1:8080/block-registry.json -o
 ```
 
 Or initialize a new project with the local registry:
 
 ```bash
-npx shadcn@2.1.8 init http://127.0.0.1:8080/block-registry.json
+npx shadcn@latest init http://127.0.0.1:8080/block-registry.json
 ```
 
 ## Official Tiptap Template
