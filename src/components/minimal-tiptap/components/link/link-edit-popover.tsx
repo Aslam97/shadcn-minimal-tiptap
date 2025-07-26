@@ -62,7 +62,7 @@ const LinkEditPopover = ({ editor, size, variant }: LinkEditPopoverProps) => {
           <Link2Icon className="size-5" />
         </ToolbarButton>
       </PopoverTrigger>
-      <PopoverContent className="w-full min-w-80" align="end" side="bottom">
+      <PopoverContent align="end" side="bottom">
         <LinkEditBlock onSave={onSetLink} defaultText={text} />
       </PopoverContent>
     </Popover>

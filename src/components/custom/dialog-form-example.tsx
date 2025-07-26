@@ -54,66 +54,70 @@ export function DialogFormExample() {
       <DialogTrigger asChild>
         <Button variant="outline">Dialog</Button>
       </DialogTrigger>
-      <DialogContent className="max-w-fit">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Create a new post</DialogTitle>
           <DialogDescription>
             Fill in the form below to create a new post.
           </DialogDescription>
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="w-full space-y-6"
-            >
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Title</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="Title"
-                        className={cn("w-full", {
-                          "border-destructive focus-visible:ring-0":
-                            form.formState.errors.title,
-                        })}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+        </DialogHeader>
 
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="sr-only">Description</FormLabel>
-                    <FormControl>
-                      <MinimalTiptapEditor
-                        {...field}
-                        throttleDelay={0}
-                        className={cn("h-full min-h-56 w-full rounded-xl", {
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="w-full space-y-6"
+          >
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Title</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder="Title"
+                      className={cn("w-full", {
+                        "border-destructive focus-visible:ring-0":
+                          form.formState.errors.title,
+                      })}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="sr-only">Description</FormLabel>
+                  <FormControl>
+                    <MinimalTiptapEditor
+                      {...field}
+                      throttleDelay={0}
+                      className={cn(
+                        "h-full min-h-56 w-full min-w-0 rounded-xl",
+                        {
                           "border-destructive focus-within:border-destructive":
                             form.formState.errors.description,
-                        })}
-                        editorContentClassName="overflow-auto h-full flex grow"
-                        output="html"
-                        placeholder="Type your description here..."
-                        editable={true}
-                        editorClassName="focus:outline-none px-5 py-4 h-full grow"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </form>
-          </Form>
-        </DialogHeader>
+                        }
+                      )}
+                      editorContentClassName="overflow-auto h-full flex grow"
+                      output="html"
+                      placeholder="Type your description here..."
+                      editable={true}
+                      editorClassName="focus:outline-hidden px-5 py-4 h-full grow"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </form>
+        </Form>
 
         <DialogFooter>
           <Button

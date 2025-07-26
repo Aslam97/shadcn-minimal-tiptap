@@ -86,9 +86,8 @@ export const ToolbarSection: React.FC<ToolbarSectionProps> = ({
     [editor]
   )
 
-  const isDropdownActive = React.useMemo(
-    () => dropdownActions.some((action) => action.isActive(editor)),
-    [dropdownActions, editor]
+  const isDropdownActive = dropdownActions.some((action) =>
+    action.isActive(editor)
   )
 
   return (
@@ -101,7 +100,7 @@ export const ToolbarSection: React.FC<ToolbarSectionProps> = ({
               isActive={isDropdownActive}
               tooltip={dropdownTooltip}
               aria-label={dropdownTooltip}
-              className={cn(dropdownClassName)}
+              className={cn("gap-0", dropdownClassName)}
               size={size}
               variant={variant}
             >

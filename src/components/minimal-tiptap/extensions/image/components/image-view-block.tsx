@@ -201,7 +201,7 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({
         }))
 
         updateAttributes(normalizedData)
-      } catch (error) {
+      } catch {
         setImageState((prev) => ({
           ...prev,
           error: true,
@@ -232,7 +232,7 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({
           className={cn(
             "relative flex h-full cursor-default flex-col items-center gap-2 rounded",
             {
-              "outline outline-2 outline-offset-1 outline-primary":
+              "outline-primary outline-2 outline-offset-1":
                 selected || isResizing,
             }
           )}
@@ -247,8 +247,8 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({
 
               {imageState.error && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <InfoCircledIcon className="size-8 text-destructive" />
-                  <p className="mt-2 text-sm text-muted-foreground">
+                  <InfoCircledIcon className="text-destructive size-8" />
+                  <p className="text-muted-foreground mt-2 text-sm">
                     Failed to load image
                   </p>
                 </div>
@@ -312,7 +312,7 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({
           {imageState.error && (
             <ActionWrapper>
               <ActionButton
-                icon={<TrashIcon className="size-4" />}
+                icon={<TrashIcon />}
                 tooltip="Remove image"
                 onClick={onRemoveImg}
               />

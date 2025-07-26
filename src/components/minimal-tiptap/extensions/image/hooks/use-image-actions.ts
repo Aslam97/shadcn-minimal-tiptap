@@ -24,7 +24,7 @@ export const useImageActions = ({
   src,
   onViewClick,
 }: UseImageActionsProps) => {
-  const isLink = React.useMemo(() => isUrl(src), [src])
+  const isLink = isUrl(src)
 
   const onView = React.useCallback(() => {
     onViewClick(true)

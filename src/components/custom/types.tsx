@@ -12,12 +12,12 @@ const features = [
     background: (
       <MinimalTiptapOne
         throttleDelay={1000}
-        className={cn("h-full min-h-56 w-full rounded-xl")}
+        className={cn("h-full min-h-56 w-full min-w-0 rounded-xl")}
         editorContentClassName="overflow-auto h-full"
         output="html"
         placeholder="Comment here..."
         editable={true}
-        editorClassName="focus:outline-none px-5 py-4 h-full"
+        editorClassName="focus:outline-hidden px-5 py-4 h-full"
       />
     ),
   },
@@ -27,12 +27,12 @@ const features = [
     background: (
       <MinimalTiptapEditor
         throttleDelay={2000}
-        className={cn("h-full min-h-56 w-full rounded-xl")}
+        className={cn("h-full min-h-56 w-full min-w-0 rounded-xl")}
         editorContentClassName="overflow-auto h-full"
         output="html"
         placeholder="Type your description here..."
         editable={true}
-        editorClassName="focus:outline-none px-5 py-4 h-full"
+        editorClassName="focus:outline-hidden px-5 py-4 h-full"
       />
     ),
   },
@@ -43,15 +43,15 @@ const features = [
       <MinimalTiptapThree
         value={Content}
         throttleDelay={3000}
-        className={cn("h-full min-h-56 w-full rounded-xl")}
+        className={cn("h-full min-h-56 w-full min-w-0 rounded-xl")}
         editorContentClassName="overflow-auto h-full"
         output="json"
         onChange={(value) => {
-          console.log(value)
+          console.log("Updated value:", value)
         }}
         placeholder="This is your placeholder..."
         editable={true}
-        editorClassName="focus:outline-none px-5 py-4 h-full"
+        editorClassName="focus:outline-hidden px-5 py-4 h-full"
       />
     ),
   },

@@ -2,17 +2,14 @@ import * as React from "react"
 import type { Editor } from "@tiptap/react"
 import type { Content, UseEditorOptions } from "@tiptap/react"
 import { StarterKit } from "@tiptap/starter-kit"
-import { useEditor } from "@tiptap/react"
+import { useEditor, useEditorState } from "@tiptap/react"
 import { Typography } from "@tiptap/extension-typography"
-import { Placeholder } from "@tiptap/extension-placeholder"
-import { Underline } from "@tiptap/extension-underline"
 import { TextStyle } from "@tiptap/extension-text-style"
+import { Placeholder, Selection } from "@tiptap/extensions"
 import {
-  Link,
   Image,
   HorizontalRule,
   CodeBlockLowlight,
-  Selection,
   Color,
   UnsetAllMarks,
   ResetMarksOnEnter,
@@ -54,18 +51,35 @@ const createExtensions = ({
   uploader?: (file: File) => Promise<string>
 }) => [
   StarterKit.configure({
-    horizontalRule: false,
-    codeBlock: false,
-    paragraph: { HTMLAttributes: { class: "text-node" } },
-    heading: { HTMLAttributes: { class: "heading-node" } },
     blockquote: { HTMLAttributes: { class: "block-node" } },
+    // bold
     bulletList: { HTMLAttributes: { class: "list-node" } },
-    orderedList: { HTMLAttributes: { class: "list-node" } },
     code: { HTMLAttributes: { class: "inline", spellcheck: "false" } },
+    codeBlock: false,
+    // document
     dropcursor: { width: 2, class: "ProseMirror-dropcursor border" },
+    // gapcursor
+    // hardBreak
+    heading: { HTMLAttributes: { class: "heading-node" } },
+    // undoRedo
+    horizontalRule: false,
+    // italic
+    // listItem
+    // listKeymap
+    link: {
+      enableClickSelection: true,
+      openOnClick: false,
+      HTMLAttributes: {
+        class: "link",
+      },
+    },
+    orderedList: { HTMLAttributes: { class: "list-node" } },
+    paragraph: { HTMLAttributes: { class: "text-node" } },
+    // strike
+    // text
+    // underline
+    // trailingNode
   }),
-  Link,
-  Underline,
   Image.configure({
     allowedMimeTypes: ["image/*"],
     maxFileSize: 5 * 1024 * 1024,
@@ -205,13 +219,14 @@ export const useMinimalTiptapEditor = ({
   )
 
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: createExtensions({ placeholder, uploader }),
     editorProps: {
       attributes: {
         autocomplete: "off",
         autocorrect: "off",
         autocapitalize: "off",
-        class: cn("focus:outline-none", editorClassName),
+        class: cn("focus:outline-hidden", editorClassName),
       },
     },
     onUpdate: ({ editor }) => handleUpdate(editor),
@@ -220,7 +235,26 @@ export const useMinimalTiptapEditor = ({
     ...props,
   })
 
-  return editor
+  const { editor: mainEditor } = useEditorState({
+    editor,
+    selector(context) {
+      if (!context.editor) {
+        return {
+          editor: null,
+          editorState: undefined,
+          canCommand: undefined,
+        }
+      }
+
+      return {
+        editor: context.editor,
+        editorState: context.editor.state,
+        canCommand: context.editor.can,
+      }
+    },
+  })
+
+  return mainEditor
 }
 
 export default useMinimalTiptapEditor

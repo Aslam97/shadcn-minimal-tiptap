@@ -115,7 +115,7 @@ export const ExampleForm: React.FC = () => {
                   immediatelyRender={true}
                   editable={true}
                   injectCSS={true}
-                  editorClassName="focus:outline-none p-5"
+                  editorClassName="focus:outline-hidden p-5"
                 />
               </FormControl>
               <FormMessage />

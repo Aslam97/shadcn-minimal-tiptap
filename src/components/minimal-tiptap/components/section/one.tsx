@@ -1,6 +1,5 @@
 import * as React from "react"
 import type { Editor } from "@tiptap/react"
-import type { Level } from "@tiptap/extension-heading"
 import type { FormatAction } from "../../types"
 import type { VariantProps } from "class-variance-authority"
 import type { toggleVariants } from "@/components/ui/toggle"
@@ -15,6 +14,7 @@ import {
 import { ToolbarButton } from "../toolbar-button"
 import { ShortcutKey } from "../shortcut-key"
 
+type Level = 1 | 2 | 3 | 4 | 5 | 6
 interface TextStyle
   extends Omit<
     FormatAction,
@@ -81,70 +81,73 @@ interface SectionOneProps extends VariantProps<typeof toggleVariants> {
   activeLevels?: Level[]
 }
 
-export const SectionOne: React.FC<SectionOneProps> = React.memo(
-  ({ editor, activeLevels = [1, 2, 3, 4, 5, 6], size, variant }) => {
-    const filteredActions = React.useMemo(
-      () =>
-        formatActions.filter(
-          (action) => !action.level || activeLevels.includes(action.level)
-        ),
-      [activeLevels]
-    )
-
-    const handleStyleChange = React.useCallback(
-      (level?: Level) => {
-        if (level) {
-          editor.chain().focus().toggleHeading({ level }).run()
-        } else {
-          editor.chain().focus().setParagraph().run()
-        }
-      },
-      [editor]
-    )
-
-    const renderMenuItem = React.useCallback(
-      ({ label, element: Element, level, className, shortcuts }: TextStyle) => (
-        <DropdownMenuItem
-          key={label}
-          onClick={() => handleStyleChange(level)}
-          className={cn("flex flex-row items-center justify-between gap-4", {
-            "bg-accent": level
-              ? editor.isActive("heading", { level })
-              : editor.isActive("paragraph"),
-          })}
-          aria-label={label}
-        >
-          <Element className={className}>{label}</Element>
-          <ShortcutKey keys={shortcuts} />
-        </DropdownMenuItem>
+export const SectionOne: React.FC<SectionOneProps> = ({
+  editor,
+  activeLevels = [1, 2, 3, 4, 5, 6],
+  size,
+  variant,
+}) => {
+  const filteredActions = React.useMemo(
+    () =>
+      formatActions.filter(
+        (action) => !action.level || activeLevels.includes(action.level)
       ),
-      [editor, handleStyleChange]
-    )
+    [activeLevels]
+  )
 
-    return (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <ToolbarButton
-            isActive={editor.isActive("heading")}
-            tooltip="Text styles"
-            aria-label="Text styles"
-            pressed={editor.isActive("heading")}
-            className="w-12"
-            disabled={editor.isActive("codeBlock")}
-            size={size}
-            variant={variant}
-          >
-            <LetterCaseCapitalizeIcon className="size-5" />
-            <CaretDownIcon className="size-5" />
-          </ToolbarButton>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" className="w-full">
-          {filteredActions.map(renderMenuItem)}
-        </DropdownMenuContent>
-      </DropdownMenu>
-    )
-  }
-)
+  const handleStyleChange = React.useCallback(
+    (level?: Level) => {
+      if (level) {
+        editor.chain().focus().toggleHeading({ level }).run()
+      } else {
+        editor.chain().focus().setParagraph().run()
+      }
+    },
+    [editor]
+  )
+
+  const renderMenuItem = React.useCallback(
+    ({ label, element: Element, level, className, shortcuts }: TextStyle) => (
+      <DropdownMenuItem
+        key={label}
+        onClick={() => handleStyleChange(level)}
+        className={cn("flex flex-row items-center justify-between gap-4", {
+          "bg-accent": level
+            ? editor.isActive("heading", { level })
+            : editor.isActive("paragraph"),
+        })}
+        aria-label={label}
+      >
+        <Element className={className}>{label}</Element>
+        <ShortcutKey keys={shortcuts} />
+      </DropdownMenuItem>
+    ),
+    [editor, handleStyleChange]
+  )
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <ToolbarButton
+          isActive={editor.isActive("heading")}
+          tooltip="Text styles"
+          aria-label="Text styles"
+          pressed={editor.isActive("heading")}
+          disabled={editor.isActive("codeBlock")}
+          size={size}
+          variant={variant}
+          className="gap-0"
+        >
+          <LetterCaseCapitalizeIcon className="size-5" />
+          <CaretDownIcon className="size-5" />
+        </ToolbarButton>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start" className="w-full">
+        {filteredActions.map(renderMenuItem)}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
 
 SectionOne.displayName = "SectionOne"
 
