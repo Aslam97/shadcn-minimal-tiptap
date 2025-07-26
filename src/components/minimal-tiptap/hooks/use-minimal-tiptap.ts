@@ -4,15 +4,12 @@ import type { Content, UseEditorOptions } from "@tiptap/react"
 import { StarterKit } from "@tiptap/starter-kit"
 import { useEditor } from "@tiptap/react"
 import { Typography } from "@tiptap/extension-typography"
-import { Placeholder } from "@tiptap/extension-placeholder"
-import { Underline } from "@tiptap/extension-underline"
 import { TextStyle } from "@tiptap/extension-text-style"
+import { Placeholder, Selection } from "@tiptap/extensions"
 import {
-  Link,
   Image,
   HorizontalRule,
   CodeBlockLowlight,
-  Selection,
   Color,
   UnsetAllMarks,
   ResetMarksOnEnter,
@@ -54,18 +51,35 @@ const createExtensions = ({
   uploader?: (file: File) => Promise<string>
 }) => [
   StarterKit.configure({
-    horizontalRule: false,
-    codeBlock: false,
-    paragraph: { HTMLAttributes: { class: "text-node" } },
-    heading: { HTMLAttributes: { class: "heading-node" } },
     blockquote: { HTMLAttributes: { class: "block-node" } },
+    // bold
     bulletList: { HTMLAttributes: { class: "list-node" } },
-    orderedList: { HTMLAttributes: { class: "list-node" } },
     code: { HTMLAttributes: { class: "inline", spellcheck: "false" } },
+    codeBlock: false,
+    // document
     dropcursor: { width: 2, class: "ProseMirror-dropcursor border" },
+    // gapcursor
+    // hardBreak
+    heading: { HTMLAttributes: { class: "heading-node" } },
+    // undoRedo
+    horizontalRule: false,
+    // italic
+    // listItem
+    // listKeymap
+    link: {
+      enableClickSelection: true,
+      openOnClick: false,
+      HTMLAttributes: {
+        class: "link",
+      },
+    },
+    orderedList: { HTMLAttributes: { class: "list-node" } },
+    paragraph: { HTMLAttributes: { class: "text-node" } },
+    // strike
+    // text
+    // underline
+    // trailingNode
   }),
-  Link,
-  Underline,
   Image.configure({
     allowedMimeTypes: ["image/*"],
     maxFileSize: 5 * 1024 * 1024,
@@ -206,7 +220,6 @@ export const useMinimalTiptapEditor = ({
 
   const editor = useEditor({
     immediatelyRender: false,
-    // shouldRerenderOnTransaction: false,
     extensions: createExtensions({ placeholder, uploader }),
     editorProps: {
       attributes: {
