@@ -41,14 +41,6 @@ npx shadcn@latest add https://raw.githubusercontent.com/Aslam97/shadcn-minimal-t
 npm install lowlight react-medium-image-zoom @radix-ui/react-icons @tiptap/extension-code-block-lowlight @tiptap/extension-color @tiptap/extension-horizontal-rule @tiptap/extension-image @tiptap/extension-text-style @tiptap/extension-typography @tiptap/extensions @tiptap/pm @tiptap/react @tiptap/starter-kit
 ```
 
-## Tailwind CSS Setup
-
-Ensure you reference your Tailwind CSS entry point in `/minimal-tiptap/styles/index.css`:
-
-```
-@reference "path-to-your-entry-point-tailwind.css";
-```
-
 2. Configure the `TooltipProvider`:
 
 Add the `TooltipProvider` to your application's root component (e.g., `App.tsx` or `main.tsx`):
@@ -64,6 +56,14 @@ export const App = () => {
     </TooltipProvider>
   )
 }
+```
+
+## Tailwind CSS Setup
+
+Ensure you reference your Tailwind CSS entry point in `/minimal-tiptap/styles/index.css`:
+
+```
+@reference "path-to-your-entry-point-tailwind.css";
 ```
 
 ## Dependencies
