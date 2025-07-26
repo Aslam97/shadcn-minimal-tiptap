@@ -2,7 +2,7 @@ import * as React from "react"
 import type { Editor } from "@tiptap/react"
 import type { Content, UseEditorOptions } from "@tiptap/react"
 import { StarterKit } from "@tiptap/starter-kit"
-import { useEditor } from "@tiptap/react"
+import { useEditor, useEditorState } from "@tiptap/react"
 import { Typography } from "@tiptap/extension-typography"
 import { TextStyle } from "@tiptap/extension-text-style"
 import { Placeholder, Selection } from "@tiptap/extensions"
@@ -235,7 +235,26 @@ export const useMinimalTiptapEditor = ({
     ...props,
   })
 
-  return editor
+  const { editor: mainEditor } = useEditorState({
+    editor,
+    selector(context) {
+      if (!context.editor) {
+        return {
+          editor: null,
+          editorState: undefined,
+          canCommand: undefined,
+        }
+      }
+
+      return {
+        editor: context.editor,
+        editorState: context.editor.state,
+        canCommand: context.editor.can,
+      }
+    },
+  })
+
+  return mainEditor
 }
 
 export default useMinimalTiptapEditor

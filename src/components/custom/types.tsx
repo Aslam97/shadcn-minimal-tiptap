@@ -47,7 +47,7 @@ const features = [
         editorContentClassName="overflow-auto h-full"
         output="json"
         onChange={(value) => {
-          console.log(value)
+          console.log("Updated value:", value)
         }}
         placeholder="This is your placeholder..."
         editable={true}
