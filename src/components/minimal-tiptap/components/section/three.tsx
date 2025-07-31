@@ -155,7 +155,18 @@ export const SectionThree: React.FC<SectionThreeProps> = ({
   const handleColorChange = React.useCallback(
     (value: string) => {
       setSelectedColor(value)
-      editor.chain().setColor(value).run()
+      if (editor.state.storedMarks) {
+        const textStyleMarkType = editor.schema.marks.textStyle
+        if (textStyleMarkType) {
+          editor.view.dispatch(
+            editor.state.tr.removeStoredMark(textStyleMarkType)
+          )
+        }
+      }
+
+      setTimeout(() => {
+        editor.chain().setColor(value).run()
+      }, 0)
     },
     [editor]
   )
