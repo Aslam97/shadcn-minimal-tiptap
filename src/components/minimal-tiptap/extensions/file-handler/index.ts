@@ -27,14 +27,14 @@ const FileHandlePlugin = (options: FileHandlePluginOptions) => {
 
     props: {
       handleDrop(view, event) {
-        event.preventDefault()
-        event.stopPropagation()
-
         const { dataTransfer } = event
 
         if (!dataTransfer?.files.length) {
-          return
+          return false
         }
+
+        event.preventDefault()
+        event.stopPropagation()
 
         const pos = view.posAtCoords({
           left: event.clientX,
@@ -57,17 +57,19 @@ const FileHandlePlugin = (options: FileHandlePluginOptions) => {
         if (validFiles.length > 0 && onDrop) {
           onDrop(editor, validFiles, pos?.pos ?? 0)
         }
+
+        return true
       },
 
       handlePaste(_, event) {
-        event.preventDefault()
-        event.stopPropagation()
-
         const { clipboardData } = event
 
         if (!clipboardData?.files.length) {
-          return
+          return false
         }
+
+        event.preventDefault()
+        event.stopPropagation()
 
         const [validFiles, errors] = filterFiles(
           Array.from(clipboardData.files),
@@ -86,6 +88,8 @@ const FileHandlePlugin = (options: FileHandlePluginOptions) => {
         if (validFiles.length > 0 && onPaste) {
           onPaste(editor, validFiles, html)
         }
+
+        return true
       },
     },
   })
